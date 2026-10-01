@@ -1,0 +1,7 @@
+# Fetched every run; the Action caches it between runs
+data/cache/
+# Built every run and deployed straight to GitHub Pages
+site/data/
+.claude/
+__pycache__/
+*.pyc

@@ -1,0 +1,85 @@
+{
+  "_comment": "Every number the model uses lives here. Change a weight, push, and the next build uses it. Decision numbers (D2, D9...) refer to the feasibility study.",
+
+  "leagues": [
+    {
+      "slug": "jadl",
+      "name": "Jessica Alba Dynasty League",
+      "sleeper_league_id": "1312061337769091072",
+      "manager_names": {
+        "572154314147561472": "Jebus",
+        "600292303692689408": "Lee",
+        "600803296654979072": "Alex",
+        "600805479135911936": "Dave",
+        "600979696255041536": "Mike",
+        "601466211523428352": "Chris",
+        "601492329282453504": "Ross",
+        "601535536053678080": "Neil",
+        "601674687197544448": "Rich",
+        "602040508755283968": "Gareth"
+      },
+      "_qb_premium": "Test-set lesson 2 (T1, B): JADL pays more for starting QBs than the Superflex market does. 1.10 is a first guess for Matt to review.",
+      "qb_premium": 1.10
+    }
+  ],
+
+  "_horizons": "D2. Shares of each ingredient at the three anchor points. The slider on the site blends between them. Each column adds up to 1.",
+  "horizons": {
+    "win_now":   { "points_this_season": 0.70, "points_years_1_3": 0.00, "points_years_4_plus": 0.00, "market": 0.30 },
+    "balanced":  { "points_this_season": 0.25, "points_years_1_3": 0.25, "points_years_4_plus": 0.00, "market": 0.50 },
+    "long_term": { "points_this_season": 0.05, "points_years_1_3": 0.15, "points_years_4_plus": 0.20, "market": 0.60 }
+  },
+
+  "_market": "D3. Dynasty market = FantasyCalc (real trades) and DynastyProcess (experts), matched by rank then blended. Win Now uses FantasyCalc's redraft value as its market.",
+  "market": {
+    "fantasycalc_weight": 0.5,
+    "dynastyprocess_weight": 0.5
+  },
+
+  "_points": "D4. Baseline points per game = projection blended with the last three seasons (50/30/20). A past season played for a different NFL team counts at role_change_weight.",
+  "points": {
+    "projection_weight": 0.6,
+    "history_weights": [0.5, 0.3, 0.2],
+    "role_change_weight": 0.5,
+    "min_games_for_history": 6,
+    "games_per_future_season": 15,
+    "future_seasons": 6,
+    "last_regular_week": 17
+  },
+
+  "_age_curves": "D5. Measured from Sleeper season stats: year-on-year change in half-PPR points per game for players who cleared both bars in both seasons. 'overrides' replaces a measured multiplier (1 = peak), e.g. {\"RB\": {\"30\": 0.5}}.",
+  "age_curves": {
+    "first_season": 2012,
+    "min_games": 8,
+    "min_ppg": 5.0,
+    "min_pairs_per_age": 10,
+    "overrides": {}
+  },
+
+  "_injuries": "D11. Win Now only: the rest-of-season points are scaled by the player's Sleeper status. Suspensions are treated like injuries (test-set lesson 10).",
+  "injury_win_now_factor": {
+    "Questionable": 0.97,
+    "Doubtful": 0.90,
+    "Out": 0.92,
+    "IR": 0.60,
+    "PUP": 0.60,
+    "NFI": 0.60,
+    "Sus": 0.75
+  },
+
+  "_picks": "D9 and test-set lessons 3-5. Picks are valued by overall pick number on the market's 12-team charts. Future years lose 10% a year, adjusted by Matt's class rating (-2 to +2). Only picks up to long_term_boost_through_overall get the Long-Term boost.",
+  "picks": {
+    "future_year_discount": 0.10,
+    "class_rating_step": 0.10,
+    "class_ratings": { "2027": 0, "2028": 0, "2029": 0 },
+    "long_term_boost": 0.15,
+    "long_term_boost_through_overall": 13,
+    "years_ahead": 3
+  },
+
+  "_kdef": "D12. Kickers and defences get a small points-only value: points above replacement for the rest of the season times value_per_point, capped.",
+  "kdef": {
+    "value_per_point": 6,
+    "value_cap": 700
+  }
+}

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trade Lab values &middot; JADL</title>
+<meta name="description" content="Dynasty player and pick values for Sleeper leagues, built every four hours.">
+<meta name="theme-color" content="#13285E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="wrap">
+    <h1>Trade Lab<small id="leaguename">Player and pick values</small></h1>
+    <span class="spacer"></span>
+    <span class="pill" id="status"><span class="dot" aria-hidden="true"></span><span>Loading&hellip;</span></span>
+  </div>
+</header>
+<nav class="tabs" aria-label="Sections">
+  <div class="wrap" role="tablist">
+    <button role="tab" aria-selected="true" aria-controls="p-players" id="t-players">Players</button>
+    <button role="tab" aria-selected="false" aria-controls="p-picks" id="t-picks">Picks</button>
+    <button role="tab" aria-selected="false" aria-controls="p-curves" id="t-curves">Age curves</button>
+    <button role="tab" aria-selected="false" aria-controls="p-how" id="t-how">How it works</button>
+  </div>
+</nav>
+
+<main class="wrap">
+  <section class="panel" id="p-players" role="tabpanel" aria-labelledby="t-players">
+    <p class="lead">Every player's value to a manager at the horizon you choose. Tap a row to see what the value is made of.</p>
+    <div class="card controls">
+      <label>Search<input type="search" id="q" placeholder="Player or NFL team" autocomplete="off"></label>
+      <label>Position<span class="chips" id="pos"></span></label>
+      <label>Owner<select id="owner"></select></label>
+      <label class="horizon">Horizon: <output id="hzname">Balanced</output>
+        <input type="range" id="hz" min="0" max="100" value="50" step="1" aria-describedby="hzends">
+        <span class="ends" id="hzends"><span>Win Now</span><span>Balanced</span><span>Long-Term</span></span>
+      </label>
+    </div>
+    <div class="card tablewrap">
+      <table id="players">
+        <thead><tr>
+          <th class="r">#</th>
+          <th><button data-sort="name">Player</button></th>
+          <th class="hide-sm"><button data-sort="owner">Owner</button></th>
+          <th aria-sort="descending"><button data-sort="v">Value</button></th>
+          <th class="r hide-sm"><button data-sort="win">Win Now</button></th>
+          <th class="r hide-sm"><button data-sort="bal">Balanced</button></th>
+          <th class="r hide-sm"><button data-sort="lt">Long-Term</button></th>
+          <th class="r hide-sm"><button data-sort="fc">FantasyCalc</button></th>
+          <th class="r hide-sm"><button data-sort="dp">DynastyProcess</button></th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+      <div class="more" id="more" hidden><button type="button">Show more</button></div>
+    </div>
+    <p class="attrib">Market values from <a href="https://fantasycalc.com" target="_blank" rel="noopener">FantasyCalc.com</a> and <a href="https://github.com/dynastyprocess/data" target="_blank" rel="noopener">DynastyProcess</a>; projections and stats from Sleeper.</p>
+  </section>
+
+  <section class="panel" id="p-picks" role="tabpanel" aria-labelledby="t-picks" hidden>
+    <p class="lead">Picks are valued by overall pick number on the market's 12-team charts, so a 10-team 2.01 counts as a late 1st. Future years lose 10% a year until your class ratings say otherwise. Exact slots arrive once a draft order is set.</p>
+    <div class="cols">
+      <div class="card tablewrap">
+        <table id="pickvalues"><thead><tr>
+          <th>Pick</th><th class="r">Overall</th><th class="r">Win Now</th><th class="r">Balanced</th><th class="r">Long-Term</th>
+        </tr></thead><tbody></tbody></table>
+      </div>
+      <div class="card tablewrap">
+        <table id="pickowners"><thead><tr>
+          <th>Owner</th><th>Picks held</th><th class="r">Balanced total</th>
+        </tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+    <p class="attrib">Pick values blend <a href="https://fantasycalc.com" target="_blank" rel="noopener">FantasyCalc.com</a> and <a href="https://github.com/dynastyprocess/data" target="_blank" rel="noopener">DynastyProcess</a>. Owned picks are valued at an unknown slot until the slot projection (D8) arrives in Phase 3.</p>
+  </section>
+
+  <section class="panel" id="p-curves" role="tabpanel" aria-labelledby="t-curves" hidden>
+    <p class="lead" id="curvelead">How each position's points per game change with age, measured from every season since 2012. 1.0 is the peak. These drive the Long-Term values; check them and set any overrides in <code>model.config.json</code>.</p>
+    <div class="multiples" id="curves"></div>
+    <p><button class="btn" type="button" id="curvetable-toggle" aria-expanded="false">Show as a table</button></p>
+    <div class="card tablewrap" id="curvetable" hidden></div>
+  </section>
+
+  <section class="panel" id="p-how" role="tabpanel" aria-labelledby="t-how" hidden>
+    <div class="card prose" id="how"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Values use data from <a href="https://fantasycalc.com" target="_blank" rel="noopener">FantasyCalc.com</a>,
+    <a href="https://github.com/dynastyprocess/data" target="_blank" rel="noopener">DynastyProcess</a> (GPL-3.0) and the
+    <a href="https://docs.sleeper.com/" target="_blank" rel="noopener">Sleeper API</a>.
+    <span id="built"></span>
+  </div>
+</footer>
+<script src="assets/app.js"></script>
+</body>
+</html>

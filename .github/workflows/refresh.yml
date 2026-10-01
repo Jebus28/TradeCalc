@@ -1,0 +1,97 @@
+name: Refresh values
+
+on:
+  schedule:
+    # Every four hours. FantasyCalc asks for at least an hour between refreshes.
+    - cron: "23 */4 * * *"
+    # Once a month, a small commit so GitHub doesn't pause the schedule
+    # (it does that to public repos with no commits for 60 days).
+    - cron: "41 3 1 * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/**"
+      - "site/**"
+      - "model.config.json"
+      - ".github/workflows/**"
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# One build at a time; a newer one replaces whatever is waiting.
+concurrency:
+  group: refresh
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      fetch: ${{ steps.fetch.outcome }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Sleeper's player list and DynastyProcess's files are fetched at most once
+      # a day; the cache carries them between runs.
+      - uses: actions/cache@v4
+        with:
+          path: data/cache
+          key: cache-${{ github.run_id }}
+          restore-keys: cache-
+
+      - name: Pull the latest data
+        id: fetch
+        continue-on-error: true
+        run: python scripts/fetch_data.py
+
+      - name: Build the values
+        run: python scripts/build_values.py
+
+      - name: Commit new past seasons and the monthly keep-alive
+        run: |
+          if [ "${{ github.event.schedule }}" = "41 3 1 * *" ]; then
+            date -u '+%Y-%m-%d %H:%M UTC' > data/keepalive.txt
+          fi
+          git config user.name "TradeCalc bot"
+          git config user.email "actions@github.com"
+          git add data/history
+          if [ -f data/keepalive.txt ]; then git add data/keepalive.txt; fi
+          if git diff --staged --quiet; then
+            echo "Nothing to commit."
+          else
+            git commit -m "Data: $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git push || { git pull --rebase origin main && git push; }
+          fi
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+  # The site still goes out with the last good data, but a failed source turns
+  # the run red so GitHub emails the repo owner.
+  alert:
+    needs: [build, deploy]
+    if: needs.build.outputs.fetch == 'failure'
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "::error::A data source failed to download. The How it works tab on the site names it."
+          exit 1
