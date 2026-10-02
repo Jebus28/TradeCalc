@@ -329,8 +329,11 @@
         ]
       },
       "notes": "Batch 2. Age: a veteran RB for a 2nd.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Fair. Unlikely to happen: Ross would want more than one 2nd. That doesn't mean the calculator is wrong.",
+      "matt_now": [
+        "Fair"
+      ],
+      "unlikely": "Ross would want more than one 2nd."
     },
     {
       "id": "N11",
@@ -358,8 +361,10 @@
         ]
       },
       "notes": "Batch 2. Age: an old star TE for a young RB, one for one.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Clear win Neil",
+      "matt_now": [
+        "Clear win: Neil"
+      ]
     },
     {
       "id": "N12",
@@ -397,8 +402,10 @@
         ]
       },
       "notes": "Batch 2. Age and QBs: an elite 30-year-old QB for a young QB and two 1sts.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Edge Alex",
+      "matt_now": [
+        "Slight edge: Alex"
+      ]
     },
     {
       "id": "N13",
@@ -432,8 +439,11 @@
         ]
       },
       "notes": "Batch 2. A starting WR in his prime for future picks.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Lee, edge to clear win",
+      "matt_now": [
+        "Slight edge: Lee",
+        "Clear win: Lee"
+      ]
     },
     {
       "id": "N14",
@@ -442,7 +452,7 @@
       "kind": "current",
       "a": {
         "manager": "Lee",
-        "motive": "Contending, with QBs to spare; wants a WR who starts now.",
+        "motive": "Contending; wants a WR who starts now. (Matt: Lee is actually short of starting QBs.)",
         "gets": [
           {
             "player": "8167",
@@ -461,8 +471,11 @@
         ]
       },
       "notes": "Batch 2. QBs: a young backup QB for a starting WR.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Lee clear win, but unlikely to happen as Lee is short of starting QBs",
+      "matt_now": [
+        "Clear win: Lee"
+      ],
+      "unlikely": "Lee is short of starting QBs, so wouldn't give up Cam Ward."
     },
     {
       "id": "N15",
@@ -490,8 +503,10 @@
         ]
       },
       "notes": "Batch 2. QBs: a contender's third QB for a starting WR.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Ross fleece",
+      "matt_now": [
+        "Fleece: Ross"
+      ]
     },
     {
       "id": "N16",
@@ -523,9 +538,11 @@
           }
         ]
       },
-      "notes": "Batch 2. Age: an RB in his prime for a young RB and a 2nd.",
-      "matt_now_text": "",
-      "matt_now": []
+      "notes": "Batch 2. Age: an RB in his prime for a young RB and a 2nd. Matt: Chris would overvalue Jonah Coleman, his own player; that's a manager tendency, not a calculator problem.",
+      "matt_now_text": "Fair, but Chris would overvalue Jonah Coleman. No need to change the calculator.",
+      "matt_now": [
+        "Fair"
+      ]
     },
     {
       "id": "N17",
@@ -554,8 +571,11 @@
         ]
       },
       "notes": "Batch 2. Age: a 33-year-old WR for one 2nd (compare N5, two 2nds).",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Dave, edge to clear win",
+      "matt_now": [
+        "Slight edge: Dave",
+        "Clear win: Dave"
+      ]
     },
     {
       "id": "T3",
