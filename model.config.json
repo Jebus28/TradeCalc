@@ -18,15 +18,15 @@
         "601674687197544448": "Rich",
         "602040508755283968": "Gareth"
       },
-      "_qb_premium": "Test-set lesson 2 (T1, B): JADL pays more for starting QBs than the Superflex market does. 1.10 is a first guess for Matt to review.",
-      "qb_premium": 1.10
+      "_qb_premium": "Test-set lesson 2 (T1, B): JADL pays more for starting QBs than the Superflex market does. Raised from 1.10 to 1.30 on 2 October 2026 after current trade N4 (Drake Maye), to be checked by the second batch.",
+      "qb_premium": 1.30
     }
   ],
 
-  "_horizons": "D2. Shares of each ingredient at the three anchor points. The slider on the site blends between them. Each row adds up to 1. Picks have no points of their own: they get the market share of their value at Win Now and all of it at Balanced and Long-Term.",
+  "_horizons": "D2. Shares of each ingredient at the three anchor points. The slider on the site blends between them. Each row adds up to 1. Picks have no points of their own: they get the market share of their value at Win Now and all of it at Balanced and Long-Term. Balanced changed on 2 October 2026 from 0.25/0.25/0/0.50 after current trades N1-N9: this season's points made veterans beat picks and young players, because the market had already priced their age. To be checked by the second batch.",
   "horizons": {
     "win_now":   { "points_this_season": 0.70, "points_years_1_3": 0.00, "points_years_4_plus": 0.00, "market": 0.30 },
-    "balanced":  { "points_this_season": 0.25, "points_years_1_3": 0.25, "points_years_4_plus": 0.00, "market": 0.50 },
+    "balanced":  { "points_this_season": 0.05, "points_years_1_3": 0.25, "points_years_4_plus": 0.10, "market": 0.60 },
     "long_term": { "points_this_season": 0.05, "points_years_1_3": 0.15, "points_years_4_plus": 0.20, "market": 0.60 }
   },
 
