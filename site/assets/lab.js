@@ -49,6 +49,10 @@ function buildFields() {
     { title: "Market and QBs", note: BASE._market, items: [
       { path: ["market", "fantasycalc_weight"], label: "FantasyCalc share of the market (DynastyProcess gets the rest)", step: 0.05, min: 0, max: 1 },
       { path: ["qb_premium"], label: "League QB premium (×)", step: 0.05, min: 0.5, max: 2, file: `leagues → ${DATA.meta.slug} → qb_premium` },
+      ...(BASE.qb_premium_ages ? [
+        { path: ["qb_premium_ages", "full_until"], label: "QB premium in full up to age", step: 1, min: 20, max: 40 },
+        { path: ["qb_premium_ages", "none_from"], label: "QB premium gone by age", step: 1, min: 20, max: 45 },
+      ] : []),
     ] },
     { title: "Picks", note: BASE._picks, items: [
       { path: ["picks", "future_year_discount"], label: "Discount for each year further out", step: 0.05, min: 0, max: 0.5 },

@@ -1193,11 +1193,242 @@
           }
         ]
       },
-      "notes": "Batch 4. Two for one: a veteran TE and a WR for a young WR.",
+      "notes": "Batch 4. Two for one: a veteran TE and a WR for a young WR. Matt: it's not that he overvalues Burden; Andrews and/or Wan'Dale Robinson are overvalued by the model.",
       "matt_now_text": "Jebus fleece. Definitely do.",
       "matt_now": [
         "Fleece: Jebus"
       ]
+    },
+    {
+      "id": "N34",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Lee",
+        "motive": "Contending and short of starting QBs.",
+        "gets": [
+          {
+            "player": "3294",
+            "name": "Dak Prescott"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Dave",
+        "motive": "Contending with three starting QBs; would take a 1st for the oldest.",
+        "gets": [
+          {
+            "pick": "2029 1st",
+            "from": "Lee",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 5. QB age taper: a 33-year-old starting QB for a 1st.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N35",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Lee",
+        "motive": "Contending and short of starting QBs.",
+        "gets": [
+          {
+            "player": "5849",
+            "name": "Kyler Murray"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Chris",
+        "motive": "Contending with three starting QBs; wants RB help now and a pick.",
+        "gets": [
+          {
+            "player": "4866",
+            "name": "Saquon Barkley"
+          },
+          {
+            "pick": "2029 1st",
+            "from": "Lee",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 5. QB age taper: a 29-year-old QB for an RB and a 1st.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N36",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Lee",
+        "motive": "Contending and short of starting QBs; would pay a top WR for an elite QB.",
+        "gets": [
+          {
+            "player": "4046",
+            "name": "Patrick Mahomes"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Mike",
+        "motive": "Contending with three starting QBs; wants a top WR and a pick.",
+        "gets": [
+          {
+            "player": "6794",
+            "name": "Justin Jefferson"
+          },
+          {
+            "pick": "2029 1st",
+            "from": "Lee",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 5. QB age taper: a 31-year-old star QB for a star WR and a 1st.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N37",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Lee",
+        "motive": "Contending and short of starting QBs.",
+        "gets": [
+          {
+            "player": "6770",
+            "name": "Joe Burrow"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Chris",
+        "motive": "Contending with three starting QBs; wants a WR now and a young QB for later.",
+        "gets": [
+          {
+            "player": "7547",
+            "name": "Amon-Ra St. Brown"
+          },
+          {
+            "player": "12522",
+            "name": "Cam Ward"
+          }
+        ]
+      },
+      "notes": "Batch 5. QB age taper: a 29-year-old QB for a WR and a young QB.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N38",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Lee",
+        "motive": "Contending and short of starting QBs; wants cover.",
+        "gets": [
+          {
+            "player": "3257",
+            "name": "Jacoby Brissett"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Ross",
+        "motive": "Rebuilding; would sell a 33-year-old QB for picks.",
+        "gets": [
+          {
+            "pick": "2027 3rd",
+            "from": "Lee",
+            "tier": "mid"
+          },
+          {
+            "pick": "2028 3rd",
+            "from": "Lee",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 5. QB age taper: a 33-year-old backup QB for two 3rds.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N39",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Mike",
+        "motive": "Contending; wants WR depth.",
+        "gets": [
+          {
+            "player": "8126",
+            "name": "Wan'Dale Robinson"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Jebus",
+        "motive": "Rebuilding; would turn a 25-year-old WR into a pick.",
+        "gets": [
+          {
+            "pick": "2028 2nd",
+            "from": "Mike",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 5. Wan'Dale Robinson on his own, for a 2nd (from N33).",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N40",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Dave",
+        "motive": "Contending; wants a veteran TE for the run-in.",
+        "gets": [
+          {
+            "player": "5012",
+            "name": "Mark Andrews"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Jebus",
+        "motive": "Rebuilding; would sell a 31-year-old TE for picks.",
+        "gets": [
+          {
+            "pick": "2028 2nd",
+            "from": "Dave",
+            "tier": "mid"
+          },
+          {
+            "pick": "2027 3rd",
+            "from": "Ross",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 5. Mark Andrews on his own, for a 2nd and a 3rd (compare N23 and N33).",
+      "matt_now_text": "",
+      "matt_now": []
     },
     {
       "id": "T3",

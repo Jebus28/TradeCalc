@@ -24,17 +24,20 @@
         "Gareth": "building", "Neil": "building",
         "Ross": "rebuilding", "Rich": "rebuilding", "Jebus": "rebuilding"
       },
-      "_qb_premium": "Test-set lesson 2 (T1, B): JADL pays more for starting QBs than the Superflex market does. Raised from 1.10 to 1.30 on 2 October 2026 after current trade N4 (Drake Maye), to be checked by the second batch.",
-      "qb_premium": 1.30
+      "_qb_premium": "Test-set lesson 2 (T1, B): JADL pays more for starting QBs than the Superflex market does. Raised from 1.10 to 1.30 on 2 October 2026 after current trade N4 (Drake Maye), then to 1.50 after batches 3 and 4 (N18, N22, N26, N29). It fades with age: see qb_premium_ages.",
+      "qb_premium": 1.50
     }
   ],
 
-  "_horizons": "D2. Shares of each ingredient at the three anchor points. The slider on the site blends between them. Each row adds up to 1. Picks have no points of their own: they get the market share of their value at Win Now and all of it at Balanced and Long-Term. Balanced changed on 2 October 2026 from 0.25/0.25/0/0.50 after current trades N1-N9: this season's points made veterans beat picks and young players, because the market had already priced their age. To be checked by the second batch.",
+  "_horizons": "D2. Shares of each ingredient at the three anchor points. The slider on the site blends between them. Each row adds up to 1. Picks have no points of their own: they get the market share of their value at Win Now and all of it at Balanced and Long-Term. Balanced changed on 2 October 2026 from 0.25/0.25/0/0.50 after current trades N1-N9: this season's points made veterans beat picks and young players, because the market had already priced their age. Batch 2 broadly confirmed it.",
   "horizons": {
     "win_now":   { "points_this_season": 0.70, "points_years_1_3": 0.00, "points_years_4_plus": 0.00, "market": 0.30 },
     "balanced":  { "points_this_season": 0.05, "points_years_1_3": 0.25, "points_years_4_plus": 0.10, "market": 0.60 },
     "long_term": { "points_this_season": 0.05, "points_years_1_3": 0.15, "points_years_4_plus": 0.20, "market": 0.60 }
   },
+
+  "_qb_premium_ages": "The league QB premium is for young QBs: full up to full_until, fading in a straight line to nothing at none_from. Added 2 October 2026 after N27 (Mayfield, 31) and N28 (Stafford, 38), where the premium made older QBs too valuable. To be checked by batch 5.",
+  "qb_premium_ages": { "full_until": 29, "none_from": 33 },
 
   "_situation_horizons": "Where each situation sits on the horizon slider (0 = Win Now, 50 = Balanced, 100 = Long-Term). Matt: building is between Balanced and Long-Term. The model lab judges current test trades at these horizons.",
   "situation_horizons": { "contending": 0, "building": 75, "rebuilding": 100 },
@@ -99,7 +102,8 @@
 
   "_star": "D6, refined after test trades T1, T4, A and C. Pieces below the quality line count for less: a piece worth half the line counts value x 0.5^strength. The line is the value of the last starter if every team in the league filled its starting lineup (x quality_line_share_of_starters). With extra_pieces_only, only the side sending more pieces is touched, and only its weakest pieces beyond the other side's count, so 1-for-1 trades are never changed. Each step of a manager's star slider adds slider_step to strength.",
   "star": {
-    "strength": 1.0,
+    "_strength": "Switched off (0) on 2 October 2026. Across 33 current trades the rule never turned a miss into an agreement, and it caused misses in N23, N24 and N30. The market already prices stars above the sum of lesser players. Set back to 1.0 to restore it.",
+    "strength": 0,
     "slider_step": 0.25,
     "_quality_line_share_of_starters": "Was 1.0 (the 90th player, about a late 1st). Lowered to 1.5 on 2 October 2026 (about the 135th player, a mid-to-late 2nd) after N5 and N16, where Matt counts a single decent extra piece at close to full value.",
     "quality_line_share_of_starters": 1.5,
