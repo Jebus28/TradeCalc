@@ -44,11 +44,16 @@ def fetch_players():
     raw = get_json(f"{SLEEPER}/players/nfl")
     slim = {}
     for pid, p in raw.items():
-        if p.get("position") not in ALL_POS:
-            continue
+        pos = p.get("position")
+        if pos not in ALL_POS:
+            # Two-way players such as Travis Hunter are listed at their
+            # defensive position; use their fantasy position instead.
+            pos = next((f for f in p.get("fantasy_positions") or [] if f in ALL_POS), None)
+            if not pos:
+                continue
         slim[pid] = {
             "name": p.get("full_name") or f"{p.get('first_name', '')} {p.get('last_name', '')}".strip() or pid,
-            "pos": p.get("position"),
+            "pos": pos,
             "team": p.get("team"),
             "birth": p.get("birth_date"),
             "age": p.get("age"),

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trade Lab analyser &middot; JADL</title>
+<meta name="description" content="Build a dynasty trade by hand and see who wins it on each manager's own horizon.">
+<meta name="theme-color" content="#13285E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<header class="masthead">
+  <div class="wrap">
+    <h1>Trade Lab<small id="leaguename">Trade analyser</small></h1>
+    <span class="spacer"></span>
+    <span class="pill" id="status"><span class="dot" aria-hidden="true"></span><span>Loading&hellip;</span></span>
+  </div>
+</header>
+<nav class="tabs" aria-label="Pages">
+  <div class="wrap">
+    <a href="trade.html" aria-current="page">Trade analyser</a>
+    <a href="index.html">Values</a>
+    <a href="lab.html">Model lab</a>
+  </div>
+</nav>
+
+<main class="wrap">
+  <p class="lead">Add what each side gets. Each manager judges the trade on their own horizon and settings, so a contender and a rebuilder can both come out ahead.</p>
+
+  <datalist id="managers"></datalist>
+  <div class="sides">
+    <section class="card side" id="side-a" aria-labelledby="name-a-label"></section>
+    <section class="card side" id="side-b" aria-labelledby="name-b-label"></section>
+  </div>
+
+  <div class="actions">
+    <button class="btn" type="button" id="swap">Swap sides</button>
+    <button class="btn" type="button" id="clear">Clear</button>
+    <button class="btn" type="button" id="copy">Copy link</button>
+    <span class="note" id="copied" role="status"></span>
+  </div>
+
+  <section class="card verdict" id="verdict" aria-live="polite"></section>
+
+  <p class="attrib">Values from <a href="https://fantasycalc.com" target="_blank" rel="noopener">FantasyCalc.com</a> and <a href="https://github.com/dynastyprocess/data" target="_blank" rel="noopener">DynastyProcess</a>; projections and stats from Sleeper. General mode: settings are entered by hand. Rosters, roster fit and the balancer arrive with the Sleeper link.</p>
+</main>
+
+<template id="side-tpl">
+  <header class="sidehead">
+    <label class="sidename"><span class="vh" data-id="name-label">Manager</span><input type="text" data-field="name" list="managers" autocomplete="off" spellcheck="false"></label>
+    <span class="note">gets</span>
+  </header>
+  <div class="combo">
+    <label class="vh" data-id="search-label">Add a player or pick</label>
+    <input type="search" data-field="search" placeholder="Add a player or pick (e.g. 2027 1st)" autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list">
+    <ul class="results" role="listbox" hidden></ul>
+  </div>
+  <ul class="assets"></ul>
+  <div class="settings">
+    <label class="horizon"><span>Horizon: <output data-out="hz">Balanced</output></span>
+      <input type="range" data-field="hz" min="0" max="100" value="50" step="1">
+      <span class="ends"><span>Win Now</span><span>Balanced</span><span>Long-Term</span></span>
+    </label>
+    <div class="sliders" data-group="main"></div>
+    <details>
+      <summary>More settings</summary>
+      <div class="sliders" data-group="more"></div>
+    </details>
+  </div>
+</template>
+
+<footer>
+  <div class="wrap">
+    Values use data from <a href="https://fantasycalc.com" target="_blank" rel="noopener">FantasyCalc.com</a>,
+    <a href="https://github.com/dynastyprocess/data" target="_blank" rel="noopener">DynastyProcess</a> (GPL-3.0) and the
+    <a href="https://docs.sleeper.com/" target="_blank" rel="noopener">Sleeper API</a>.
+    <span id="built"></span>
+  </div>
+</footer>
+<script src="assets/model.js"></script>
+<script src="assets/shared.js"></script>
+<script src="assets/trade.js"></script>
+</body>
+</html>

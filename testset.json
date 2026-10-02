@@ -1,0 +1,178 @@
+{
+  "_comment": "Matt's test set (D16), from the feasibility study. The model lab replays these trades with today's values. 'gets' lists what each side received. Players use their Sleeper ID (name alongside for reading). A pick already used gives the player chosen under 'became'; the lab can value it as that player or as the same slot in the next draft. matt_now lists the verdicts that count as agreeing with Matt: 'Fair', or 'Slight edge: X', 'Clear win: X', 'Fleece: X'. horizon is each side's situation at the time: win_now, balanced or long_term.",
+  "trades": [
+    {
+      "id": "T3", "date": "Dec 2025", "league": "jadl",
+      "a": { "manager": "Jebus", "horizon": "long_term", "gets": [
+        { "pick": "2027 1st", "from": "Lee" } ] },
+      "b": { "manager": "Lee", "horizon": "win_now", "gets": [
+        { "player": "4866", "name": "Saquon Barkley" } ] },
+      "situation": "Lee contending, Jebus rebuilding",
+      "matt_then": "Slight edge Jebus",
+      "matt_now_text": "Unchanged",
+      "matt_now": ["Slight edge: Jebus"],
+      "notes": "Matt rates the pick above Saquon overall, closer to the Long-Term view. Check pick values and the 2027 class rating."
+    },
+    {
+      "id": "T2", "date": "Apr 2026", "league": "jadl",
+      "a": { "manager": "Jebus", "horizon": "long_term", "gets": [
+        { "player": "11560", "name": "Caleb Williams" },
+        { "player": "8126", "name": "Wan'Dale Robinson" },
+        { "pick": "2028 1st", "from": "Chris" } ] },
+      "b": { "manager": "Chris", "horizon": "win_now", "gets": [
+        { "player": "4881", "name": "Lamar Jackson" },
+        { "player": "5859", "name": "A.J. Brown" },
+        { "player": "DEN", "name": "Denver Broncos" },
+        { "pick": "2026 2.10", "became": "13345", "name": "Jonah Coleman" } ] },
+      "situation": "Chris contending, Jebus rebuilding",
+      "matt_then": "Fair",
+      "matt_now_text": "Fair, perhaps a slight edge Chris (injuries since, plus who the 2.10 became)",
+      "matt_now": ["Fair", "Slight edge: Chris"],
+      "notes": "Check the QB age curve and the 2028 1st."
+    },
+    {
+      "id": "T4", "date": "Dec 2025", "league": "jadl",
+      "a": { "manager": "Jebus", "horizon": "long_term", "gets": [
+        { "player": "12530", "name": "Travis Hunter" },
+        { "pick": "2026 1.10", "became": "13346", "name": "Denzel Boston" },
+        { "pick": "2026 2.10", "became": "13345", "name": "Jonah Coleman" },
+        { "pick": "2026 2.03", "became": "13276", "name": "Omar Cooper" },
+        { "pick": "2027 1st", "from": "Mike" },
+        { "pick": "2027 2nd", "from": "Mike" },
+        { "pick": "2028 1st", "from": "Mike" } ] },
+      "b": { "manager": "Mike", "horizon": "win_now", "gets": [
+        { "player": "2216", "name": "Mike Evans" },
+        { "player": "4892", "name": "Baker Mayfield" },
+        { "player": "9509", "name": "Bijan Robinson" },
+        { "pick": "2026 5.03", "became": "13420", "name": "Bryce Lance" },
+        { "pick": "2027 5th", "from": "Jebus" } ] },
+      "situation": "Mike contending, Jebus rebuilding",
+      "matt_then": "Balanced",
+      "matt_now_text": "Mike's side (Hunter's role change and injury; picks may land later than hoped)",
+      "matt_now": ["Slight edge: Mike", "Clear win: Mike"],
+      "notes": "Three 1sts plus a high-value player should balance a star; a plain exponent was too strong when the extra pieces are good ones (D6 refinement)."
+    },
+    {
+      "id": "T1", "date": "Jun 2026", "league": "jadl",
+      "a": { "manager": "Lee", "horizon": "win_now", "gets": [
+        { "player": "6797", "name": "Justin Herbert" },
+        { "player": "9997", "name": "Zay Flowers" } ] },
+      "b": { "manager": "Ross", "horizon": "long_term", "gets": [
+        { "player": "3257", "name": "Jacoby Brissett" },
+        { "player": "7569", "name": "Nico Collins" },
+        { "pick": "2027 2nd", "from": "Lee" },
+        { "pick": "2028 1st", "from": "Lee" },
+        { "pick": "2028 2nd", "from": "Lee" },
+        { "pick": "2029 2nd", "from": "Lee" } ] },
+      "situation": "Lee contending; Ross in the middle, trading for the long term",
+      "matt_then": "Lee wins at Win Now and Balanced, maybe Long-Term too",
+      "matt_now_text": "Still Lee, despite Herbert's slow start",
+      "matt_now": ["Slight edge: Lee", "Clear win: Lee", "Fleece: Lee"],
+      "notes": "Biggest miss in the study: JADL prizes a good young QB, and consolidating against low picks should count more."
+    },
+    {
+      "id": "A", "date": "Jul 2025", "league": "jadl",
+      "a": { "manager": "Alex", "horizon": "win_now", "gets": [
+        { "player": "6786", "name": "CeeDee Lamb" } ] },
+      "b": { "manager": "Ross", "horizon": "long_term", "gets": [
+        { "player": "10229", "name": "Rashee Rice" },
+        { "pick": "2026 1.05", "became": "13294", "name": "Makai Lemon" },
+        { "pick": "2026 1.06", "became": "13281", "name": "Jordyn Tyson" } ] },
+      "situation": "Alex contending; Ross moving to the future",
+      "matt_then": "Slight edge Alex (2026 class seen as weak)",
+      "matt_now_text": "Slight edge Alex",
+      "matt_now": ["Slight edge: Alex"],
+      "notes": "The model favoured the pile over the star. Fixes: the D6 refinement, and a negative rating for the 2026 class."
+    },
+    {
+      "id": "B", "date": "Oct 2025", "league": "jadl",
+      "a": { "manager": "Chris", "horizon": "win_now", "gets": [
+        { "player": "11560", "name": "Caleb Williams" } ] },
+      "b": { "manager": "Neil", "horizon": "balanced", "gets": [
+        { "pick": "2026 2.01", "became": "13275", "name": "Ty Simpson" },
+        { "pick": "2027 1st", "from": "Chris" } ] },
+      "situation": "Chris building to contend this year; Neil hard to read",
+      "matt_then": "Chris by a mile (Fleece)",
+      "matt_now_text": "Still Chris",
+      "matt_now": ["Clear win: Chris", "Fleece: Chris"],
+      "notes": "A young Superflex QB beating picks again points to the league QB premium. Neil consistently overrates picks."
+    },
+    {
+      "id": "C", "date": "Oct 2025", "league": "jadl",
+      "a": { "manager": "Dave", "horizon": "win_now", "gets": [
+        { "player": "7526", "name": "Jaylen Waddle" },
+        { "pick": "2026 3.02", "became": "13274", "name": "Germie Bernard" },
+        { "pick": "2027 5th", "from": "Rich" } ] },
+      "b": { "manager": "Rich", "horizon": "long_term", "gets": [
+        { "pick": "2027 1st", "from": "Dave" } ] },
+      "situation": "Dave contending; Rich rebuilding",
+      "matt_then": "Edge Dave",
+      "matt_now_text": "Still Dave",
+      "matt_now": ["Slight edge: Dave", "Clear win: Dave"],
+      "notes": "The 3rd and 5th were worth almost nothing, so this was Waddle for a 1st likely to land late. Projecting a contender's pick late (D8) comes with the Sleeper link in Phase 3."
+    },
+    {
+      "id": "D", "date": "Jun 2025 (mid-draft)", "league": "jadl",
+      "a": { "manager": "Lee", "horizon": "win_now", "gets": [
+        { "pick": "2025 1.05", "became": "12522", "name": "Cam Ward" } ] },
+      "b": { "manager": "Alex", "horizon": "win_now", "gets": [
+        { "player": "5850", "name": "Josh Jacobs" },
+        { "pick": "2025 3.09", "became": "12469", "name": "Dylan Sampson" } ] },
+      "situation": "Both contending. Lee needed a QB, Alex an RB",
+      "matt_then": "Fair",
+      "matt_now_text": "Fair, but Lee picked badly. Without Jacobs's suspension, an edge to Alex",
+      "matt_now": ["Fair", "Slight edge: Alex"],
+      "notes": "Judging the pick by the player Lee chose is hindsight; the tool shouldn't do that. Try the lab's 'same slot in the next draft' option."
+    },
+    {
+      "id": "E", "date": "Mar 2025", "league": "jadl",
+      "a": { "manager": "Dave", "horizon": "win_now", "gets": [
+        { "pick": "2025 2.01", "became": "12518", "name": "Tyler Warren" } ] },
+      "b": { "manager": "Ross", "horizon": "win_now", "gets": [
+        { "pick": "2026 2.08", "became": "13337", "name": "Emmett Johnson" },
+        { "pick": "2027 3rd", "from": "Dave" } ] },
+      "situation": "Dave looking to contend; Ross contending",
+      "matt_then": "Dave, but close",
+      "matt_now_text": "Fair",
+      "matt_now": ["Fair"],
+      "notes": "Matt judges this as picks: 2.01 in a 10-team league is the 11th pick, a late 1st on 12-team charts. Try the lab's 'same slot in the next draft' option."
+    },
+    {
+      "id": "F", "date": "Apr 2026", "league": "jadl",
+      "a": { "manager": "Chris", "horizon": "win_now", "gets": [
+        { "player": "5022", "name": "Dallas Goedert" } ] },
+      "b": { "manager": "Ross", "horizon": "long_term", "gets": [
+        { "pick": "2026 3.01", "became": "13272", "name": "Carson Beck" } ] },
+      "situation": "Chris contending; Ross looking to the future",
+      "matt_then": "Chris, clearly more than fair but not by a lot",
+      "matt_now_text": "Unchanged",
+      "matt_now": ["Slight edge: Chris"],
+      "notes": "An obvious Chris win even for a rebuilding Ross: a 3rd is worth little even long term."
+    },
+    {
+      "id": "G", "date": "Nov 2025", "league": "jadl",
+      "a": { "manager": "Lee", "horizon": "win_now", "gets": [
+        { "player": "7021", "name": "Rico Dowdle" } ] },
+      "b": { "manager": "Ross", "horizon": "long_term", "gets": [
+        { "pick": "2026 2.09", "became": "13414", "name": "Kaelon Black" } ] },
+      "situation": "Lee contending; Ross looking to the future",
+      "matt_then": "Lee, just over fair",
+      "matt_now_text": "Unchanged",
+      "matt_now": ["Slight edge: Lee"],
+      "notes": "The 2.09 is the 19th pick overall, a mid 2nd on a 12-team chart."
+    },
+    {
+      "id": "H", "date": "Aug 2026 (before roster cuts)", "league": "jadl",
+      "a": { "manager": "Dave", "horizon": "win_now", "gets": [
+        { "pick": "2027 3rd", "from": "Ross" } ] },
+      "b": { "manager": "Ross", "horizon": "long_term", "gets": [
+        { "player": "8111", "name": "Cade Otton" },
+        { "player": "9479", "name": "Darnell Washington" } ] },
+      "situation": "Dave contending; Ross rebuilding and short of a starting TE",
+      "matt_then": "Dave",
+      "matt_now_text": "Unchanged",
+      "matt_now": ["Slight edge: Dave", "Clear win: Dave", "Fleece: Dave"],
+      "notes": "Dave would have cut both players anyway, so this was close to a free 3rd. The roster crunch rule needs rosters, so it comes in Phase 3."
+    }
+  ]
+}

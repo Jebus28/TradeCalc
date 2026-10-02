@@ -3,11 +3,11 @@
 Layer 1  points value  - projected points above a replacement starter, in the
                          league's own scoring, for this season, seasons 1-3
                          ahead and 4+ ahead (age-curved).
-Layer 2  market value  - FantasyCalc and DynastyProcess, matched by rank and
-                         blended.
-Then the three anchor values (Win Now, Balanced, Long-Term) are the
-model.config.json blend of those ingredients. The site's slider blends
-between the anchors; the sliders for each manager come in Phase 2.
+Layer 2  market value  - FantasyCalc and DynastyProcess, matched by rank.
+The site does layers 3 and 4 in the browser (site/assets/model.js): the
+horizon blend, manager sliders, the star value rule and verdicts. That way
+the model lab can re-run them with other weights. The build also copies
+testset.json for the lab.
 
 Run:  python scripts/build_values.py
 """
@@ -18,7 +18,7 @@ import os
 import re
 import statistics
 
-from common import (ALL_POS, CACHE, HISTORY, SITE_DATA, SKILL, config,
+from common import (ALL_POS, CACHE, HISTORY, ROOT, SITE_DATA, SKILL, config,
                     league_format, load, save)
 
 FLEX_SLOTS = {
@@ -375,10 +375,9 @@ def build_league(lg, cfg, shared):
         skill = {pid: v for pid, v in vals.items() if v > 0 and players[pid]["pos"] in SKILL}
         mapped[name] = rank_map(skill, curve) if skill else {}
 
-    # ---- the three anchor values
-    hz = cfg["horizons"]
-    qb_premium = lg.get("qb_premium", 1.0)
+    # ---- each player's ingredients; the site blends them by horizon
     kd = cfg["kdef"]
+    rookie_exp = cfg["sliders"]["rookie_max_years_exp"]
     rows = []
     owner_of = {}
     names = lg.get("manager_names", {})
@@ -391,33 +390,30 @@ def build_league(lg, cfg, shared):
         pos = p["pos"]
         if pos in ("K", "DEF"):
             par = comp["points_this_season"].get(pid, 0)
-            v = min(kd["value_cap"], par * kd["value_per_point"])
-            vals = {"win_now": v, "balanced": v, "long_term": v}
+            ing = {"kd": round(min(kd["value_cap"], par * kd["value_per_point"]))}
         else:
-            vals = {}
-            for h, w in hz.items():
-                m = fc_redraft.get(pid, 0) if h == "win_now" else market.get(pid, 0)
-                v = w["market"] * m + sum(w[c] * mapped[c].get(pid, 0) for c in mapped)
-                vals[h] = v * (qb_premium if pos == "QB" else 1.0)
-        if max(vals.values()) < 1 and pid not in owner_of:
+            ing = {
+                "fc": fc.get(pid), "dp": round(dp_m[pid]) if pid in dp_m else None,
+                "red": fc_redraft.get(pid),
+                "p_now": round(mapped["points_this_season"].get(pid, 0)),
+                "p_13": round(mapped["points_years_1_3"].get(pid, 0)),
+                "p_4": round(mapped["points_years_4_plus"].get(pid, 0)),
+            }
+        if not any(ing.values()) and pid not in owner_of:
             continue
         ros, games, age = detail.get(pid, (0, 0, None))
         rows.append({
             "id": pid, "name": p["name"], "pos": pos, "team": p["team"],
             "age": round(age, 1) if age else None, "inj": p.get("injury"),
             "owner": owner_of.get(pid),
-            "win": round(vals["win_now"]), "bal": round(vals["balanced"]), "lt": round(vals["long_term"]),
-            "fc": fc.get(pid), "dp": round(dp_m[pid]) if pid in dp_m else None,
-            "red": fc_redraft.get(pid),
+            **({"rk": True} if p.get("exp") is not None and p["exp"] <= rookie_exp else {}),
+            **ing,
             "ppg": round(baseline[pid], 2) if pid in baseline else None,
             "proj": round(proj_ppg[pid], 2) if pid in proj_ppg else None,
             "hist": round(hist_ppg[pid], 2) if pid in hist_ppg else None,
             "ros": round(ros, 1),
-            "p_now": round(mapped["points_this_season"].get(pid, 0)),
-            "p_13": round(mapped["points_years_1_3"].get(pid, 0)),
-            "p_4": round(mapped["points_years_4_plus"].get(pid, 0)),
         })
-    rows.sort(key=lambda r: -r["bal"])
+    rows.sort(key=lambda r: -(r.get("fc") or r.get("dp") or r.get("kd") or 0))
 
     picks, owned = build_picks(lg, cfg, data, fmt, fc_dyn, dp_rows, vkey, season, names, users)
 
@@ -428,7 +424,7 @@ def build_league(lg, cfg, shared):
             "format": fmt, "starting_slots": league.get("roster_positions"),
             "scoring": {k: scoring.get(k) for k in ("pass_td", "pass_yd", "rec", "bonus_rec_te", "rush_yd", "rec_yd") if k in scoring},
             "replacement_ppg": {k: round(v, 2) for k, v in repl.items()},
-            "qb_premium": qb_premium,
+            "qb_premium": lg.get("qb_premium", 1.0),
             "counts": {"players": len(rows), "fantasycalc": len(fc), "dynastyprocess": len(dp),
                        "dynastyprocess_unmatched": dp_unmatched, "both_sources": len(set(fc) & set(dp))},
             "notes": notes,
@@ -440,8 +436,9 @@ def build_league(lg, cfg, shared):
 
 
 def build_picks(lg, cfg, data, fmt, fc_dyn, dp_rows, vkey, season, names, users):
+    """Market value of every slot in the next draft, plus who owns which pick.
+    The site applies the yearly discount, class ratings and Long-Term boost."""
     pc = cfg["picks"]
-    hz = cfg["horizons"]
     teams = fmt["teams"]
     league = data["league"]
     rounds = (league.get("settings") or {}).get("draft_rounds") or 4
@@ -462,31 +459,33 @@ def build_picks(lg, cfg, data, fmt, fc_dyn, dp_rows, vkey, season, names, users)
                 dp_rows_p[key] = float(r[vkey])
     fc_pts = pick_curve(fc_rows, first_year, fmt["fc_teams"])
     dp_pts = pick_curve(dp_rows_p, first_year, 12)  # experts chart in 12s
-    wf, wd = cfg["market"]["fantasycalc_weight"], cfg["market"]["dynastyprocess_weight"]
 
-    def base_value(overall):
-        a = interp(fc_pts, overall) if fc_pts else None
-        b = interp(dp_pts, overall) if dp_pts else None
-        if a is not None and b is not None:
-            return (wf * a + wd * b) / (wf + wd)
-        return a if a is not None else (b or 0)
+    def through_round(pts):
+        """A source only speaks for the rounds it charts (FantasyCalc stops early)."""
+        return math.ceil(pts[-1][0] / teams) * teams if pts else 0
 
-    slots = tier_slots(teams)
-    out = []
-    for k in range(pc["years_ahead"]):
-        year = first_year + k
-        factor = (1 - pc["future_year_discount"]) ** k * (1 + pc["class_rating_step"] * pc["class_ratings"].get(str(year), 0))
-        for rnd in range(1, rounds + 1):
-            groups = dict(slots)
-            groups["any"] = list(range(1, teams + 1))
-            for tier, members in groups.items():
-                overalls = [(rnd - 1) * teams + s for s in members]
-                v = statistics.fmean(base_value(n) for n in overalls) * factor
-                mid = statistics.fmean(overalls)
-                boost = 1 + pc["long_term_boost"] if mid <= pc["long_term_boost_through_overall"] else 1
-                out.append({"year": year, "round": rnd, "tier": tier,
-                            "overall": [min(overalls), max(overalls)],
-                            "win": round(v * hz["win_now"]["market"]), "bal": round(v), "lt": round(v * boost)})
+    fc_last, dp_last = through_round(fc_pts), through_round(dp_pts)
+
+    def charted(pts, last, other, other_last, n):
+        """Past the last round a source charts, carry its curve on with the
+        other source's shape, so values fall smoothly instead of jumping."""
+        if n <= last:
+            return round(interp(pts, n))
+        if not pts or not other or n > other_last or interp(other, last) <= 0:
+            return None
+        return round(interp(pts, last) * interp(other, n) / interp(other, last))
+
+    out = {
+        "first_year": first_year,
+        "years": [first_year + k for k in range(pc["years_ahead"])],
+        "rounds": rounds,
+        "teams": teams,
+        "tiers": tier_slots(teams),
+        "slots": [{"overall": n,
+                   "fc": charted(fc_pts, fc_last, dp_pts, dp_last, n),
+                   "dp": charted(dp_pts, dp_last, fc_pts, fc_last, n)}
+                  for n in range(1, rounds * teams + 1)],
+    }
 
     # who owns which pick in this league
     by_roster = {r["roster_id"]: names.get(r.get("owner_id")) or users.get(r.get("owner_id")) or f"Team {r['roster_id']}"
@@ -523,6 +522,7 @@ def main():
         "curves": measure_age_curves(players, history, cfg["age_curves"]),
     }
     failures = load(os.path.join(CACHE, "fetch_failures.json"), [])
+    testset = load(os.path.join(ROOT, "testset.json"), {"trades": []})
     built = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     index = []
     for lg in cfg["leagues"]:
@@ -530,11 +530,20 @@ def main():
         out["meta"]["built"] = built
         out["meta"]["fetch_failures"] = failures
         out["age_curves"] = shared["curves"]
-        out["config"] = {k: cfg[k] for k in ("horizons", "market", "points", "picks", "injury_win_now_factor", "kdef")}
+        # Everything but the league list, notes included: the lab shows them.
+        out["config"] = {k: v for k, v in cfg.items() if k != "leagues"}
+        trades = [t for t in testset["trades"] if t.get("league") == lg["slug"]]
+        for t in trades:
+            for side in ("a", "b"):
+                for asset in t[side]["gets"]:
+                    pid = asset.get("player") or asset.get("became")
+                    if pid and pid not in players:
+                        out["meta"]["notes"].append(f"Test trade {t['id']}: {asset.get('name', pid)} isn't in Sleeper's player list.")
         save(os.path.join(SITE_DATA, f"values-{lg['slug']}.json"), out)
+        save(os.path.join(SITE_DATA, f"testset-{lg['slug']}.json"), {"trades": trades})
         index.append({"slug": lg["slug"], "name": lg["name"], "built": built})
-        top = ", ".join(f"{r['name']} {r['bal']}" for r in out["players"][:5])
-        print(f"{lg['slug']}: {len(out['players'])} players, {len(out['picks'])} pick values. Top: {top}")
+        top = ", ".join(f"{r['name']} {r['fc']}" for r in out["players"][:5])
+        print(f"{lg['slug']}: {len(out['players'])} players, {len(trades)} test trades. Top on FantasyCalc: {top}")
     save(os.path.join(SITE_DATA, "index.json"), {"built": built, "leagues": index})
     for pos, c in shared["curves"].items():
         print(f"age curve {pos}: peak {c['peak_age']}, cliff {c['cliff_age']}")

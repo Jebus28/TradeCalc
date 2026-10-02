@@ -19,16 +19,21 @@
     <span class="pill" id="status"><span class="dot" aria-hidden="true"></span><span>Loading&hellip;</span></span>
   </div>
 </header>
-<nav class="tabs" aria-label="Sections">
-  <div class="wrap" role="tablist">
+<nav class="tabs" aria-label="Pages">
+  <div class="wrap">
+    <a href="trade.html">Trade analyser</a>
+    <a href="index.html" aria-current="page">Values</a>
+    <a href="lab.html">Model lab</a>
+  </div>
+</nav>
+
+<main class="wrap">
+  <div class="seg" role="tablist" aria-label="Sections">
     <button role="tab" aria-selected="true" aria-controls="p-players" id="t-players">Players</button>
     <button role="tab" aria-selected="false" aria-controls="p-picks" id="t-picks">Picks</button>
     <button role="tab" aria-selected="false" aria-controls="p-curves" id="t-curves">Age curves</button>
     <button role="tab" aria-selected="false" aria-controls="p-how" id="t-how">How it works</button>
   </div>
-</nav>
-
-<main class="wrap">
   <section class="panel" id="p-players" role="tabpanel" aria-labelledby="t-players">
     <p class="lead">Every player's value to a manager at the horizon you choose. Tap a row to see what the value is made of.</p>
     <div class="card controls">
@@ -74,7 +79,7 @@
         </tr></thead><tbody></tbody></table>
       </div>
     </div>
-    <p class="attrib">Pick values blend <a href="https://fantasycalc.com" target="_blank" rel="noopener">FantasyCalc.com</a> and <a href="https://github.com/dynastyprocess/data" target="_blank" rel="noopener">DynastyProcess</a>. Owned picks are valued at an unknown slot until the slot projection (D8) arrives in Phase 3.</p>
+    <p class="attrib">Pick values blend <a href="https://fantasycalc.com" target="_blank" rel="noopener">FantasyCalc.com</a> and <a href="https://github.com/dynastyprocess/data" target="_blank" rel="noopener">DynastyProcess</a>. Owned picks are valued at an unknown slot until the slot projection (D8) arrives in Phase 3. Rounds FantasyCalc doesn't chart use DynastyProcess alone.</p>
   </section>
 
   <section class="panel" id="p-curves" role="tabpanel" aria-labelledby="t-curves" hidden>
@@ -97,6 +102,8 @@
     <span id="built"></span>
   </div>
 </footer>
+<script src="assets/model.js"></script>
+<script src="assets/shared.js"></script>
 <script src="assets/app.js"></script>
 </body>
 </html>

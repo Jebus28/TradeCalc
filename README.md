@@ -1,7 +1,15 @@
 # Trade Lab
 
-Dynasty fantasy football values and (soon) a trade analyser for Sleeper leagues,
+Dynasty fantasy football values and a trade analyser for Sleeper leagues,
 starting with the Jessica Alba Dynasty League. It costs nothing to run.
+
+The site has three pages:
+
+- **Trade analyser** (`trade.html`): build a trade by hand, set each
+  manager's horizon and sliders, and see the verdict from both sides.
+- **Values** (`index.html`): every player and pick at any horizon.
+- **Model lab** (`lab.html`): replays the test-set trades in `testset.json`
+  and scores the model against Matt's verdicts as you change the weights.
 
 The decisions behind the model are in the
 [feasibility study](https://claude.ai/code/artifact/0f7ab9b5-82fc-4d6b-90aa-ab92f8a083a9).
@@ -11,10 +19,12 @@ The decisions behind the model are in the
 1. `scripts/fetch_data.py` pulls everything into `data/`: leagues, players,
    projections and past stats from Sleeper; trade-market values from
    FantasyCalc; expert values and player IDs from DynastyProcess.
-2. `scripts/build_values.py` turns that into a value for every player and pick
-   at three horizons (Win Now, Balanced, Long-Term) and writes
-   `site/data/values-<league>.json`.
-3. GitHub Pages serves `site/`.
+2. `scripts/build_values.py` turns that into each player's ingredients (points
+   above replacement and market values) and each pick slot's market value, and
+   writes `site/data/values-<league>.json` plus the test set.
+3. GitHub Pages serves `site/`. In the browser, `site/assets/model.js` blends
+   the ingredients by horizon and applies the manager sliders, the star value
+   rule and the verdict bands.
 4. A scheduled Action runs steps 1 and 2 every four hours and publishes the result.
 
 ## Changing the model
@@ -23,9 +33,15 @@ Edit **`model.config.json`** and nothing else. Every weight the model uses is
 there, each with a note saying what it does and which decision it came from:
 the horizon mix, the FantasyCalc / DynastyProcess blend, how past seasons count,
 age-curve overrides, injury factors, pick discounts and draft-class ratings,
-the league QB premium, and kicker/defence values.
+the league QB premium, kicker/defence values, the star value rule, what each
+manager slider step does, and the verdict bands.
 
-Push the change and the site rebuilds within a couple of minutes.
+Push the change and the site rebuilds within a couple of minutes. To try a
+change first, use the model lab: it shows how the test-set verdicts move and
+lists your changes to copy.
+
+To add a test trade, add it to `testset.json` (the note at the top explains
+the format).
 
 To add a league, add an entry under `leagues` with its Sleeper league ID.
 

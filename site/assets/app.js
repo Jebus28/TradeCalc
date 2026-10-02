@@ -1,49 +1,25 @@
 "use strict";
 /* Trade Lab values page. Reads data/values-<league>.json built by
-   scripts/build_values.py and lets the reader slide between horizons. */
+   scripts/build_values.py and lets the reader slide between horizons.
+   Needs model.js and shared.js. */
 
-const $ = (s, el = document) => el.querySelector(s);
-const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const fmt = (n) => (n == null ? "–" : Math.round(n).toLocaleString("en-GB"));
 const POSITIONS = ["All", "QB", "RB", "WR", "TE", "K", "DEF"];
 const PAGE = 100;
 
 const state = { q: "", pos: "All", owner: "", hz: 50, sort: "v", dir: -1, limit: PAGE, open: new Set() };
-let DATA = null;
+let DATA = null, MODEL = null;
 
 /* Horizon slider: 0 = Win Now, 50 = Balanced, 100 = Long-Term; straight lines between anchors. */
-function valueAt(p, hz) {
-  if (hz <= 50) return p.win + (p.bal - p.win) * (hz / 50);
-  return p.bal + (p.lt - p.bal) * ((hz - 50) / 50);
-}
-function horizonName(hz) {
-  if (hz <= 10) return "Win Now";
-  if (hz < 40) return "Leaning Win Now";
-  if (hz <= 60) return "Balanced";
-  if (hz < 90) return "Leaning Long-Term";
-  return "Long-Term";
-}
+const valueAt = (p, hz) => along([p.win, p.bal, p.lt], hz);
 
 async function load() {
-  const slug = new URLSearchParams(location.search).get("league");
-  const index = await fetch("data/index.json", { cache: "no-cache" }).then((r) => r.json());
-  const lg = index.leagues.find((l) => l.slug === slug) || index.leagues[0];
-  DATA = await fetch(`data/values-${lg.slug}.json`, { cache: "no-cache" }).then((r) => r.json());
+  DATA = await loadLeague();
+  MODEL = makeModel(DATA, DATA.config);
+  DATA.players.forEach((p) => { [p.win, p.bal, p.lt] = [0, 50, 100].map((hz) => MODEL.value(MODEL.asset(p.id), hz)); });
   setup();
 }
 
 function setup() {
-  const m = DATA.meta;
-  $("#leaguename").textContent = `${m.league} · ${m.season} week ${m.week}`;
-  const built = new Date(m.built);
-  const hours = (Date.now() - built) / 36e5;
-  const when = built.toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
-  const pill = $("#status");
-  const problems = (m.fetch_failures || []).length;
-  pill.lastElementChild.textContent = problems ? `Updated ${when} · ${problems} source issue${problems > 1 ? "s" : ""}` : `Updated ${when}`;
-  if (problems || hours > 8) pill.classList.add("warn");
-  $("#built").textContent = `Last built ${built.toLocaleString("en-GB")}.`;
-
   $("#pos").innerHTML = POSITIONS.map((p) => `<button type="button" aria-pressed="${p === state.pos}" data-pos="${p}">${p}</button>`).join("");
   const owners = [...new Set(DATA.players.map((p) => p.owner).filter(Boolean))].sort();
   $("#owner").innerHTML = `<option value="">Everyone</option><option value="-">Free agents</option>` +
@@ -171,21 +147,22 @@ function toggleRow(e) {
 
 /* ------------------------------------------------------------ picks */
 
-const ORD = (n) => n + ({ 1: "st", 2: "nd", 3: "rd" }[n] || "th");
-const TIER = { early: "Early", mid: "Mid", late: "Late", any: "Unknown slot" };
-
 function renderPicks() {
-  $("#pickvalues tbody").innerHTML = DATA.picks.map((k) => `<tr>
-    <td>${k.tier === "any" ? `${k.year} ${ORD(k.round)} <span class="muted">(any slot)</span>` : `${k.year} ${TIER[k.tier]} ${ORD(k.round)}`}</td>
-    <td class="r num muted">${k.overall[0] === k.overall[1] ? k.overall[0] : k.overall.join("–")}</td>
-    <td class="r num">${fmt(k.win)}</td><td class="r num">${fmt(k.bal)}</td><td class="r num">${fmt(k.lt)}</td></tr>`).join("");
+  const rows = MODEL.pickRows();
+  $("#pickvalues tbody").innerHTML = rows.map((k) => {
+    const first = k.overall[0], last = k.overall[k.overall.length - 1];
+    return `<tr>
+    <td>${esc(k.name)}${k.tier === "any" ? ' <span class="muted">(any slot)</span>' : ""}</td>
+    <td class="r num muted">${first === last ? first : `${first}–${last}`}</td>
+    <td class="r num">${fmt(k.mk[0])}</td><td class="r num">${fmt(k.mk[1])}</td><td class="r num">${fmt(k.mk[2])}</td></tr>`;
+  }).join("");
   const anyVal = {};
-  DATA.picks.filter((k) => k.tier === "any").forEach((k) => { anyVal[`${k.year}-${k.round}`] = k.bal; });
+  rows.filter((k) => k.tier === "any").forEach((k) => { anyVal[`${k.year}-${k.round}`] = k.mk[1]; });
   const byOwner = {};
   DATA.owned_picks.forEach((k) => { (byOwner[k.owner] ||= []).push(k); });
-  const rows = Object.entries(byOwner).map(([o, list]) => ({ o, list, total: list.reduce((s, k) => s + (anyVal[`${k.year}-${k.round}`] || 0), 0) }))
+  const owners = Object.entries(byOwner).map(([o, list]) => ({ o, list, total: list.reduce((s, k) => s + (anyVal[`${k.year}-${k.round}`] || 0), 0) }))
     .sort((a, b) => b.total - a.total);
-  $("#pickowners tbody").innerHTML = rows.map(({ o, list, total }) => {
+  $("#pickowners tbody").innerHTML = owners.map(({ o, list, total }) => {
     const firsts = list.filter((k) => k.round <= 2).map((k) => `${k.year} ${ORD(k.round)}${k.from !== o ? ` (${esc(k.from)})` : ""}`).join(", ");
     return `<tr><td><b>${esc(o)}</b></td><td>${list.length} picks<br><span class="note">1sts and 2nds: ${firsts || "none"}</span></td><td class="r num">${fmt(total)}</td></tr>`;
   }).join("");
@@ -254,15 +231,11 @@ function renderHow() {
     <h3>This league</h3>
     <p>Format ${esc(m.format.key)}, ${m.format.teams} teams. Replacement starter, points per game: ${esc(repl)}.${m.qb_premium !== 1 ? ` QBs carry a league premium of ×${m.qb_premium}.` : ""}
     ${m.counts.both_sources} players are valued by both market sources; ${m.counts.fantasycalc} by FantasyCalc and ${m.counts.dynastyprocess} by DynastyProcess.</p>
-    <h3>Not in yet</h3>
-    <p>Manager sliders (rookie, pick and star value), the star value rule for trades, roster fit, slot projections for future picks and the trade builder come in Phases 2 and 3.</p>
+    <h3>Trades</h3>
+    <p>The <a href="trade.html">trade analyser</a> adds each manager's sliders and the star value rule on top of these values, and the <a href="lab.html">model lab</a> replays the test-set trades. Roster fit, slot projections for future picks and the balancer come with the Sleeper link in Phase 3.</p>
     ${m.notes.length || m.fetch_failures.length ? `<h3>Problems in this build</h3><p>${[...m.notes, ...m.fetch_failures.map((f) => `Fetching ${f} failed; the last good copy was used where there was one.`)].map(esc).join("<br>")}</p>` : ""}
     <h3>Sources</h3>
     <p>Trade-market values from <a href="https://fantasycalc.com" target="_blank" rel="noopener">FantasyCalc.com</a>. Expert values and the player ID map from <a href="https://github.com/dynastyprocess/data" target="_blank" rel="noopener">DynastyProcess</a>. Leagues, rosters, projections and stats from the <a href="https://docs.sleeper.com/" target="_blank" rel="noopener">Sleeper API</a>. Rebuilt every four hours.</p>`;
 }
 
-load().catch((err) => {
-  $("#status").classList.add("warn");
-  $("#status").lastElementChild.textContent = "Couldn't load values";
-  console.error(err);
-});
+load().catch(loadFailed);

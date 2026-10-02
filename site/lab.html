@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trade Lab model lab &middot; JADL</title>
+<meta name="description" content="Replays the test-set trades through the model so the weights can be tuned.">
+<meta name="theme-color" content="#13285E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body class="wide">
+<header class="masthead">
+  <div class="wrap">
+    <h1>Trade Lab<small id="leaguename">Model lab</small></h1>
+    <span class="spacer"></span>
+    <span class="pill" id="status"><span class="dot" aria-hidden="true"></span><span>Loading&hellip;</span></span>
+  </div>
+</header>
+<nav class="tabs" aria-label="Pages">
+  <div class="wrap">
+    <a href="trade.html">Trade analyser</a>
+    <a href="index.html">Values</a>
+    <a href="lab.html" aria-current="page">Model lab</a>
+  </div>
+</nav>
+
+<main class="wrap">
+  <p class="lead">Matt's test-set trades (D16), re-valued with today's values. Change a weight and every verdict updates. Nothing here changes the live site: copy the changes you like and they go into <code>model.config.json</code>.</p>
+
+  <div class="labgrid">
+    <aside class="card labsettings" aria-label="Model settings">
+      <div class="labbar">
+        <h2>Settings</h2>
+        <button class="btn" type="button" id="reset" disabled>Reset</button>
+        <button class="btn" type="button" id="copy" disabled>Copy changes</button>
+      </div>
+      <p class="note" id="changes" role="status">These are the values in model.config.json.</p>
+      <div id="fields"></div>
+    </aside>
+
+    <section class="labresults" aria-label="Test-set results">
+      <div class="card score">
+        <div class="scoreline" id="score" aria-live="polite"></div>
+        <div class="scoreopts">
+          <div>
+            <span class="optlabel" id="cmp-label">Compare Matt's view with</span>
+            <div class="seg small" role="radiogroup" aria-labelledby="cmp-label" id="compare">
+              <button type="button" role="radio" aria-checked="false" data-hz="0">Win Now</button>
+              <button type="button" role="radio" aria-checked="true" data-hz="50">Balanced</button>
+              <button type="button" role="radio" aria-checked="false" data-hz="100">Long-Term</button>
+            </div>
+          </div>
+          <label class="optlabel">Picks already used are valued as
+            <select id="used">
+              <option value="player">the player chosen</option>
+              <option value="slot">the same slot in the next draft</option>
+            </select>
+          </label>
+        </div>
+        <p class="note" id="lineinfo"></p>
+      </div>
+      <div class="card tablewrap">
+        <table id="lab">
+          <thead><tr>
+            <th>Trade</th><th>Matt now</th><th>Model</th>
+            <th class="r hide-sm">Win Now</th><th class="r hide-sm">Balanced</th><th class="r hide-sm">Long-Term</th>
+            <th class="hide-sm">Own horizons</th><th><span class="vh">Open</span></th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="note">Gaps are from the first-named manager's side: "Lee 9%" means Lee wins by 9%. Own horizons judges each side at its situation at the time (contending = Win Now, rebuilding = Long-Term, unclear = Balanced), with neutral sliders. Tap a trade for Matt's notes.</p>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    Values use data from <a href="https://fantasycalc.com" target="_blank" rel="noopener">FantasyCalc.com</a>,
+    <a href="https://github.com/dynastyprocess/data" target="_blank" rel="noopener">DynastyProcess</a> (GPL-3.0) and the
+    <a href="https://docs.sleeper.com/" target="_blank" rel="noopener">Sleeper API</a>.
+    <span id="built"></span>
+  </div>
+</footer>
+<script src="assets/model.js"></script>
+<script src="assets/shared.js"></script>
+<script src="assets/lab.js"></script>
+</body>
+</html>

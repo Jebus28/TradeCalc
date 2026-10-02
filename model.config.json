@@ -23,7 +23,7 @@
     }
   ],
 
-  "_horizons": "D2. Shares of each ingredient at the three anchor points. The slider on the site blends between them. Each column adds up to 1.",
+  "_horizons": "D2. Shares of each ingredient at the three anchor points. The slider on the site blends between them. Each row adds up to 1. Picks have no points of their own: they get the market share of their value at Win Now and all of it at Balanced and Long-Term.",
   "horizons": {
     "win_now":   { "points_this_season": 0.70, "points_years_1_3": 0.00, "points_years_4_plus": 0.00, "market": 0.30 },
     "balanced":  { "points_this_season": 0.25, "points_years_1_3": 0.25, "points_years_4_plus": 0.00, "market": 0.50 },
@@ -81,5 +81,35 @@
   "kdef": {
     "value_per_point": 6,
     "value_cap": 700
+  },
+
+  "_star": "D6, refined after test trades T1, T4, A and C. Pieces below the quality line count for less: a piece worth half the line counts value x 0.5^strength. The line is the value of the last starter if every team in the league filled its starting lineup (x quality_line_share_of_starters). With extra_pieces_only, only the side sending more pieces is touched, and only its weakest pieces beyond the other side's count, so 1-for-1 trades are never changed. Each step of a manager's star slider adds slider_step to strength.",
+  "star": {
+    "strength": 1.0,
+    "slider_step": 0.25,
+    "quality_line_share_of_starters": 1.0,
+    "extra_pieces_only": true
+  },
+
+  "_sliders": "Manager sliders, -2 to +2 with 0 = neutral. Rookie optimism: each step +/- rookie_step on players in their first season (years of experience up to rookie_max_years_exp) and on the next draft's picks up to rookie_pick_rounds. Pick optimism: +/- pick_step on picks, plus pick_step_extra_per_year of that for each year further out. D15 extras: risk tolerance (+/- risk_step on injured players and those within risk_years_before_cliff of their position's age cliff), market trust (the market's share of the mix x (1 +/- market_trust_step)), Superflex QB premium (+/- qb_step on QBs) and TE premium confidence (+/- te_step on TEs).",
+  "sliders": {
+    "rookie_step": 0.10,
+    "rookie_max_years_exp": 0,
+    "rookie_pick_rounds": 2,
+    "pick_step": 0.10,
+    "pick_step_extra_per_year": 0.25,
+    "risk_step": 0.10,
+    "risk_years_before_cliff": 1,
+    "market_trust_step": 0.20,
+    "qb_step": 0.05,
+    "te_step": 0.05
+  },
+
+  "_verdict": "D7. The gap is (what a side gets - what it gives) / the larger of the two, so it runs from -100% to +100%. Under fair_below is Fair; then Slight edge, Clear win, and Fleece from clear_below up. Grades: the first threshold the gap reaches, else F.",
+  "verdict": {
+    "fair_below": 0.05,
+    "slight_below": 0.15,
+    "clear_below": 0.30,
+    "grades": [[0.30, "A+"], [0.15, "A"], [0.05, "B+"], [-0.05, "B"], [-0.15, "C"], [-0.30, "D"]]
   }
 }
