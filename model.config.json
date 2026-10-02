@@ -49,6 +49,8 @@
   "points": {
     "_map_within_position": "Points are put on the market's scale by rank. Normally the rank is across all positions. For positions listed here, a player's points rank is matched against that position's own market values instead (the 3rd-best TE by points gets the 3rd-highest TE market value), so a productive older TE can't outrank the market's view of TEs.",
     "map_within_position": [],
+    "_starters_per_team": "Replacement level normally sits just below the league's starting slots (in JADL, 20 QBs: one QB and one Superflex per team). A position listed here uses this many per team instead. Matt: a contender carries three starting-calibre QBs to cover byes and injuries (only two start), so fewer QBs are left on waivers. Tested on 2 October 2026 at 2.5 and 3: mid-tier starters such as Daniel Jones and Brissett rose as Matt expects, but so did Cam Ward, Mayfield and Stafford, against Matt's views. The overall score didn't improve, so it's left off.",
+    "starters_per_team": {},
     "projection_weight": 0.6,
     "history_weights": [0.5, 0.3, 0.2],
     "role_change_weight": 0.5,

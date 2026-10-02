@@ -168,9 +168,11 @@ def starting_slots(league):
     return {s: n * teams for s, n in slots.items()}
 
 
-def replacement_levels(ppg, players, league):
+def replacement_levels(ppg, players, league, depth=None):
     """Fill every starting slot in the league from the best players, then take
-    the next three at each position as the replacement starter."""
+    the next three at each position as the replacement starter. depth can set
+    how many starters each team really carries at a position (e.g. three QBs
+    in Superflex); replacement then starts below that many."""
     open_slots = starting_slots(league)
     ranked = sorted((pid for pid in ppg if players[pid]["team"]), key=lambda pid: -ppg[pid])
     used = set()
@@ -188,9 +190,14 @@ def replacement_levels(ppg, players, league):
                 open_slots[slot] -= 1
                 used.add(pid)
                 break
+    teams = league.get("total_rosters") or 12
     repl = {}
     for pos in ALL_POS:
-        rest = [ppg[pid] for pid in ranked if pid not in used and players[pid]["pos"] == pos][:3]
+        at_pos = [pid for pid in ranked if players[pid]["pos"] == pos]
+        if (depth or {}).get(pos):
+            rest = [ppg[pid] for pid in at_pos[round(depth[pos] * teams):]][:3]
+        else:
+            rest = [ppg[pid] for pid in at_pos if pid not in used][:3]
         repl[pos] = statistics.fmean(rest) if rest else 0.0
     return repl
 
@@ -307,7 +314,7 @@ def build_league(lg, cfg, shared):
             baseline[pid] = a if a is not None else b
 
     alloc_ppg = {pid: proj_ppg.get(pid, baseline[pid]) for pid in baseline if players[pid]["pos"] in ALL_POS}
-    repl = replacement_levels(alloc_ppg, players, league)
+    repl = replacement_levels(alloc_ppg, players, league, pcfg.get("starters_per_team"))
 
     # ---- points above replacement for each horizon ingredient
     inj = cfg["injury_win_now_factor"]
