@@ -159,6 +159,7 @@ function tradeRow(t) {
       <p class="note">${t.situation ? `<b>Situation:</b> ${esc(t.situation)}.<br>` : ""}${[t.a, t.b].filter((s) => s.motive).map((s) => `<b>${esc(s.manager)}:</b> ${esc(s.motive)}<br>`).join("")}${t.matt_then ? `<b>Matt at the time:</b> ${esc(t.matt_then)}.<br>` : ""}${t.notes ? `<b>Notes:</b> ${esc(t.notes)}` : ""}</p></details>
       <div class="gets"><b>${esc(A)}</b> gets ${t.a.gets.map((x) => esc(assetText(x))).join(", ")}</div>
       <div class="gets"><b>${esc(B)}</b> gets ${t.b.gets.map((x) => esc(assetText(x))).join(", ")}</div>
+      ${t.unlikely ? `<div class="note"><span class="tag" title="${esc(t.unlikely)}">Wouldn't happen</span> ${esc(t.unlikely)}</div>` : ""}
       ${missing ? `<div class="note warntext">${missing} asset${missing > 1 ? "s" : ""} not found in this build.</div>` : ""}</td>`;
   if (!t.matt_now?.length) {
     return { status: null, html: `<tr class="lab-pending">${head}<td class="muted">Awaiting Matt's verdict</td>
