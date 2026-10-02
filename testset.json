@@ -859,7 +859,7 @@
         ]
       },
       "notes": "Batch 3. Weak pile for one pick: two old veterans for a 2nd.",
-      "matt_now_text": "Alex win. Would not do.",
+      "matt_now_text": "Alex win, because Aaron Jones alone is worth more than a 2nd; Kupp is largely irrelevant. Would not do.",
       "matt_now": [
         "Slight edge: Alex",
         "Clear win: Alex",
@@ -901,6 +901,284 @@
       "matt_now": [
         "Fair"
       ]
+    },
+    {
+      "id": "N26",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Lee",
+        "motive": "Contending and short of starting QBs.",
+        "gets": [
+          {
+            "player": "6804",
+            "name": "Jordan Love"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Dave",
+        "motive": "Contending with three starting QBs; would turn one into a WR.",
+        "gets": [
+          {
+            "player": "9997",
+            "name": "Zay Flowers"
+          }
+        ]
+      },
+      "notes": "Batch 4. QBs: a contender's spare starting QB for a WR.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N27",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Lee",
+        "motive": "Contending and short of starting QBs.",
+        "gets": [
+          {
+            "player": "4892",
+            "name": "Baker Mayfield"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Mike",
+        "motive": "Contending with three starting QBs; would take a 1st for the third.",
+        "gets": [
+          {
+            "pick": "2029 1st",
+            "from": "Lee",
+            "tier": "mid"
+          },
+          {
+            "pick": "2028 3rd",
+            "from": "Lee",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 4. QBs: a contender's third QB for a 1st.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N28",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Lee",
+        "motive": "Contending and short of starting QBs; wants a starter for this season.",
+        "gets": [
+          {
+            "player": "421",
+            "name": "Matthew Stafford"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Neil",
+        "motive": "Building; would sell a 38-year-old QB for a 1st.",
+        "gets": [
+          {
+            "pick": "2029 1st",
+            "from": "Lee",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 4. QBs and age: a 38-year-old starting QB for a 1st.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N29",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Lee",
+        "motive": "Contending and short of starting QBs; wants an elite one.",
+        "gets": [
+          {
+            "player": "4984",
+            "name": "Josh Allen"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Ross",
+        "motive": "Rebuilding; would take younger players and a 1st for his star.",
+        "gets": [
+          {
+            "player": "9997",
+            "name": "Zay Flowers"
+          },
+          {
+            "player": "12522",
+            "name": "Cam Ward"
+          },
+          {
+            "pick": "2029 1st",
+            "from": "Lee",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 4. QBs: an elite QB for a WR, a young QB and a 1st.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N30",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Chris",
+        "motive": "Contending; wants another RB who plays now.",
+        "gets": [
+          {
+            "player": "7543",
+            "name": "Travis Etienne"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Ross",
+        "motive": "Rebuilding; would sell a 27-year-old RB for a younger one and picks.",
+        "gets": [
+          {
+            "player": "12533",
+            "name": "Jacory Croskey-Merritt"
+          },
+          {
+            "pick": "2028 3rd",
+            "from": "Chris",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 4. Two for one: an RB for a younger RB and a 3rd.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N31",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Dave",
+        "motive": "Contending; wants a young WR who starts now.",
+        "gets": [
+          {
+            "player": "10229",
+            "name": "Rashee Rice"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Ross",
+        "motive": "Rebuilding; would take three picks for a 26-year-old WR.",
+        "gets": [
+          {
+            "pick": "2029 1st",
+            "from": "Dave",
+            "tier": "mid"
+          },
+          {
+            "pick": "2028 2nd",
+            "from": "Dave",
+            "tier": "mid"
+          },
+          {
+            "pick": "2028 3rd",
+            "from": "Dave",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 4. Pile: a WR for a 1st, a 2nd and a 3rd.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N32",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Alex",
+        "motive": "Contending; wants a WR1.",
+        "gets": [
+          {
+            "player": "8146",
+            "name": "Garrett Wilson"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Neil",
+        "motive": "Building; would turn one WR into a younger one and picks.",
+        "gets": [
+          {
+            "player": "11646",
+            "name": "Jalen Coker"
+          },
+          {
+            "pick": "2027 2nd",
+            "from": "Alex",
+            "tier": "mid"
+          },
+          {
+            "pick": "2029 2nd",
+            "from": "Alex",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 4. Pile: a WR1 for a young WR and two 2nds.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N33",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Mike",
+        "motive": "Contending; wants a starting TE and WR depth.",
+        "gets": [
+          {
+            "player": "5012",
+            "name": "Mark Andrews"
+          },
+          {
+            "player": "8126",
+            "name": "Wan'Dale Robinson"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Jebus",
+        "motive": "Rebuilding; would turn two veterans into a 22-year-old WR.",
+        "gets": [
+          {
+            "player": "12519",
+            "name": "Luther Burden"
+          }
+        ]
+      },
+      "notes": "Batch 4. Two for one: a veteran TE and a WR for a young WR.",
+      "matt_now_text": "",
+      "matt_now": []
     },
     {
       "id": "T3",
