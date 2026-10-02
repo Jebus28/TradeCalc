@@ -24,7 +24,7 @@
         "Gareth": "building", "Neil": "building",
         "Ross": "rebuilding", "Rich": "rebuilding", "Jebus": "rebuilding"
       },
-      "_qb_premium": "Test-set lesson 2 (T1, B): JADL pays more for starting QBs than the Superflex market does. Raised from 1.10 to 1.30 on 2 October 2026 after current trade N4 (Drake Maye), then to 1.50 after batches 3 and 4 (N18, N22, N26, N29). It fades with age: see qb_premium_ages.",
+      "_qb_premium": "Test-set lesson 2 (T1, B): JADL pays more for starting QBs than the Superflex market does. Raised from 1.10 to 1.30 on 2 October 2026 after current trade N4 (Drake Maye), then to 1.50 after batches 3 and 4 (N18, N22, N26, N29). Fading it out between ages 29 and 33 was tried and dropped after batch 5: it did no better on fresh trades. (The site still supports a qb_premium_ages setting, { \"full_until\": 29, \"none_from\": 33 }, if it's wanted again.)",
       "qb_premium": 1.50
     }
   ],
@@ -35,9 +35,6 @@
     "balanced":  { "points_this_season": 0.05, "points_years_1_3": 0.25, "points_years_4_plus": 0.10, "market": 0.60 },
     "long_term": { "points_this_season": 0.05, "points_years_1_3": 0.15, "points_years_4_plus": 0.20, "market": 0.60 }
   },
-
-  "_qb_premium_ages": "The league QB premium is for young QBs: full up to full_until, fading in a straight line to nothing at none_from. Added 2 October 2026 after N27 (Mayfield, 31) and N28 (Stafford, 38), where the premium made older QBs too valuable. To be checked by batch 5.",
-  "qb_premium_ages": { "full_until": 29, "none_from": 33 },
 
   "_situation_horizons": "Where each situation sits on the horizon slider (0 = Win Now, 50 = Balanced, 100 = Long-Term). Matt: building is between Balanced and Long-Term. The model lab judges current test trades at these horizons.",
   "situation_horizons": { "contending": 0, "building": 75, "rebuilding": 100 },
@@ -50,6 +47,8 @@
 
   "_points": "D4. Baseline points per game = projection blended with the last three seasons (50/30/20). A past season played for a different NFL team counts at role_change_weight.",
   "points": {
+    "_map_within_position": "Points are put on the market's scale by rank. Normally the rank is across all positions. For positions listed here, a player's points rank is matched against that position's own market values instead (the 3rd-best TE by points gets the 3rd-highest TE market value), so a productive older TE can't outrank the market's view of TEs.",
+    "map_within_position": [],
     "projection_weight": 0.6,
     "history_weights": [0.5, 0.3, 0.2],
     "role_change_weight": 0.5,

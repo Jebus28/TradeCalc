@@ -370,12 +370,19 @@ def build_league(lg, cfg, shared):
         a, b = fc.get(pid), dp_m.get(pid)
         market[pid] = (wf * a + wd * b) / (wf + wd) if a is not None and b is not None else (a if a is not None else b)
 
-    # ---- points ingredients onto the market's scale
+    # ---- points ingredients onto the market's scale: by rank across all
+    # positions, or within the position for those listed in the config
     curve = sorted(market.values(), reverse=True)
+    own = {pos: sorted((v for pid, v in market.items() if players[pid]["pos"] == pos), reverse=True)
+           for pos in pcfg.get("map_within_position", [])}
     mapped = {}
     for name, vals in comp.items():
         skill = {pid: v for pid, v in vals.items() if v > 0 and players[pid]["pos"] in SKILL}
         mapped[name] = rank_map(skill, curve) if skill else {}
+        for pos, pos_curve in own.items():
+            sub = {pid: v for pid, v in skill.items() if players[pid]["pos"] == pos}
+            if sub and pos_curve:
+                mapped[name].update(rank_map(sub, pos_curve))
 
     # ---- each player's ingredients; the site blends them by horizon
     kd = cfg["kdef"]
