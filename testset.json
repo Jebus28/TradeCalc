@@ -9,7 +9,7 @@
         { "player": "6786", "name": "CeeDee Lamb" },
         { "pick": "2027 1st", "from": "Alex" } ] },
       "notes": "Tests star value: a star for a good starter plus a 1st.",
-      "matt_now_text": "", "matt_now": []
+      "matt_now_text": "Fair", "matt_now": ["Fair"]
     },
     {
       "id": "N2", "date": "2 Oct 2026", "league": "jadl", "kind": "current",
@@ -19,7 +19,7 @@
         { "player": "8144", "name": "Chris Olave" },
         { "player": "8150", "name": "Kyren Williams" } ] },
       "notes": "Tests star value and the TE premium: an elite TE for two starters.",
-      "matt_now_text": "", "matt_now": []
+      "matt_now_text": "Fair", "matt_now": ["Fair"]
     },
     {
       "id": "N3", "date": "2 Oct 2026", "league": "jadl", "kind": "current",
@@ -29,7 +29,7 @@
         { "player": "7569", "name": "Nico Collins" },
         { "player": "10229", "name": "Rashee Rice" } ] },
       "notes": "Tests star value: a star WR for two good WRs, no picks.",
-      "matt_now_text": "", "matt_now": []
+      "matt_now_text": "Edge Ross", "matt_now": ["Slight edge: Ross"]
     },
     {
       "id": "N4", "date": "2 Oct 2026", "league": "jadl", "kind": "current",
@@ -37,9 +37,9 @@
         { "player": "11564", "name": "Drake Maye" } ] },
       "b": { "manager": "Alex", "horizon": "balanced", "gets": [
         { "player": "12507", "name": "Omarion Hampton" },
-        { "pick": "2027 1st", "from": "Gareth" } ] },
+        { "pick": "2027 1st", "from": "Gareth", "tier": "mid" } ] },
       "notes": "Tests the Superflex QB premium: a young starting QB for a young RB plus a 1st.",
-      "matt_now_text": "", "matt_now": []
+      "matt_now_text": "Gareth clear win (if the 1st is mid)", "matt_now": ["Clear win: Gareth"]
     },
     {
       "id": "N5", "date": "2 Oct 2026", "league": "jadl", "kind": "current",
@@ -49,7 +49,7 @@
         { "pick": "2027 2nd", "from": "Chris" },
         { "pick": "2028 2nd", "from": "Chris" } ] },
       "notes": "Tests an ageing starter against 2nds.",
-      "matt_now_text": "", "matt_now": []
+      "matt_now_text": "Fair", "matt_now": ["Fair"]
     },
     {
       "id": "N6", "date": "2 Oct 2026", "league": "jadl", "kind": "current",
@@ -58,7 +58,7 @@
       "b": { "manager": "Lee", "horizon": "balanced", "gets": [
         { "pick": "2028 1st", "from": "Alex" } ] },
       "notes": "Tests the RB age curve: a 30-year-old star RB for a future 1st.",
-      "matt_now_text": "", "matt_now": []
+      "matt_now_text": "Lee slight edge", "matt_now": ["Slight edge: Lee"]
     },
     {
       "id": "N7", "date": "2 Oct 2026", "league": "jadl", "kind": "current",
@@ -67,7 +67,7 @@
       "b": { "manager": "Gareth", "horizon": "balanced", "gets": [
         { "player": "6813", "name": "Jonathan Taylor" } ] },
       "notes": "Tests rookie values: a rookie RB for a proven RB, one for one.",
-      "matt_now_text": "", "matt_now": []
+      "matt_now_text": "Mike, edge to clear win, due to team situation", "matt_now": ["Slight edge: Mike", "Clear win: Mike"]
     },
     {
       "id": "N8", "date": "2 Oct 2026", "league": "jadl", "kind": "current",
@@ -77,17 +77,17 @@
         { "player": "4217", "name": "George Kittle" },
         { "pick": "2027 2nd", "from": "Neil" } ] },
       "notes": "Tests the TE age curve: a young TE for an old one plus a 2nd.",
-      "matt_now_text": "", "matt_now": []
+      "matt_now_text": "Neil clear win", "matt_now": ["Clear win: Neil"]
     },
     {
       "id": "N9", "date": "2 Oct 2026", "league": "jadl", "kind": "current",
       "a": { "manager": "Ross", "horizon": "balanced", "gets": [
-        { "pick": "2027 1st", "from": "Gareth" } ] },
+        { "pick": "2027 1st", "from": "Gareth", "tier": "mid" } ] },
       "b": { "manager": "Gareth", "horizon": "balanced", "gets": [
-        { "pick": "2028 1st", "from": "Ross" },
-        { "pick": "2028 2nd", "from": "Ross" } ] },
+        { "pick": "2028 1st", "from": "Ross", "tier": "mid" },
+        { "pick": "2028 2nd", "from": "Ross", "tier": "mid" } ] },
       "notes": "Tests pick values: a 1st now against next year's 1st and 2nd.",
-      "matt_now_text": "", "matt_now": []
+      "matt_now_text": "Gareth wins if both picks are mid", "matt_now": ["Slight edge: Gareth", "Clear win: Gareth", "Fleece: Gareth"]
     },
     {
       "id": "T3", "date": "Dec 2025", "league": "jadl", "kind": "past",
