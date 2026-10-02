@@ -62,7 +62,12 @@
     "min_games": 8,
     "min_ppg": 5.0,
     "min_pairs_per_age": 10,
-    "overrides": {}
+    "_overrides": "Added 2 October 2026 after current trades N6 and N11 (old players valued above Matt's view and the market). Only players who kept playing are measured, so the old end of each curve is too gentle and the data runs thin. From the age where a position has fewer than about 15 season pairs, the decline carries on steadily instead. RB from 30, WR from 32, TE from 29 (the measured TE curve is flat from 29 to 32). QBs are left as measured.",
+    "overrides": {
+      "RB": { "30": 0.56, "31": 0.45, "32": 0.36, "33": 0.28, "34": 0.22, "35": 0.17, "36": 0.13, "37": 0.10, "38": 0.08 },
+      "WR": { "32": 0.48, "33": 0.39, "34": 0.31, "35": 0.24, "36": 0.19, "37": 0.15, "38": 0.12 },
+      "TE": { "29": 0.86, "30": 0.82, "31": 0.76, "32": 0.68, "33": 0.59, "34": 0.50, "35": 0.42, "36": 0.35, "37": 0.29, "38": 0.24 }
+    }
   },
 
   "_injuries": "D11. Win Now only: the rest-of-season points are scaled by the player's Sleeper status. Suspensions are treated like injuries (test-set lesson 10).",
@@ -96,7 +101,8 @@
   "star": {
     "strength": 1.0,
     "slider_step": 0.25,
-    "quality_line_share_of_starters": 1.0,
+    "_quality_line_share_of_starters": "Was 1.0 (the 90th player, about a late 1st). Lowered to 1.5 on 2 October 2026 (about the 135th player, a mid-to-late 2nd) after N5 and N16, where Matt counts a single decent extra piece at close to full value.",
+    "quality_line_share_of_starters": 1.5,
     "extra_pieces_only": true
   },
 

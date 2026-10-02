@@ -148,7 +148,9 @@ def curve_at(curves, pos, age):
     if not cv or age is None:
         return 1.0
     m = cv["multiplier"]
-    a = max(21, min(38, age))
+    if age > 38:  # past the curve: keep declining at its last year's rate
+        return m["38"] * (m["38"] / m["37"]) ** (age - 38) if m["37"] else 0.0
+    a = max(21, age)
     lo = int(math.floor(a))
     hi = min(38, lo + 1)
     f = a - lo

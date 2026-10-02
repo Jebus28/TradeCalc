@@ -578,6 +578,309 @@
       ]
     },
     {
+      "id": "N18",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Lee",
+        "motive": "Contending and short of starting QBs; wants a proven young starter.",
+        "gets": [
+          {
+            "player": "8183",
+            "name": "Brock Purdy"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Rich",
+        "motive": "Rebuilding; would turn his QB into a younger QB, a 26-year-old WR and picks.",
+        "gets": [
+          {
+            "player": "12522",
+            "name": "Cam Ward"
+          },
+          {
+            "player": "9997",
+            "name": "Zay Flowers"
+          },
+          {
+            "pick": "2027 3rd",
+            "from": "Lee",
+            "tier": "mid"
+          },
+          {
+            "pick": "2028 3rd",
+            "from": "Lee",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 3. Star for a pile: a young starting QB for a QB, a WR and two 3rds.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N19",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Jebus",
+        "motive": "Rebuilding; would consolidate picks and prospects into one young star.",
+        "gets": [
+          {
+            "player": "13287",
+            "name": "Jeremiyah Love"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Gareth",
+        "motive": "Building; would take four young assets for one.",
+        "gets": [
+          {
+            "pick": "2027 1st",
+            "from": "Lee",
+            "tier": "mid"
+          },
+          {
+            "player": "12529",
+            "name": "TreVeyon Henderson"
+          },
+          {
+            "player": "13346",
+            "name": "Denzel Boston"
+          },
+          {
+            "player": "13276",
+            "name": "Omar Cooper"
+          }
+        ]
+      },
+      "notes": "Batch 3. Star for a pile: a rookie star RB for a 1st and three young players.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N20",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Dave",
+        "motive": "Contending; wants a top WR and has RBs to spare.",
+        "gets": [
+          {
+            "player": "8146",
+            "name": "Garrett Wilson"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Neil",
+        "motive": "Building; would turn one WR into a young RB and two picks.",
+        "gets": [
+          {
+            "player": "11584",
+            "name": "Bucky Irving"
+          },
+          {
+            "pick": "2028 2nd",
+            "from": "Dave",
+            "tier": "mid"
+          },
+          {
+            "pick": "2027 3rd",
+            "from": "Ross",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 3. Star for a pile: a WR1 for a young RB, a 2nd and a 3rd.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N21",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Jebus",
+        "motive": "Rebuilding; would turn picks into a 22-year-old star RB.",
+        "gets": [
+          {
+            "player": "12527",
+            "name": "Ashton Jeanty"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Ross",
+        "motive": "Rebuilding too; would take two 1sts and two prospects for one player.",
+        "gets": [
+          {
+            "pick": "2027 1st",
+            "from": "Mike",
+            "tier": "mid"
+          },
+          {
+            "pick": "2028 1st",
+            "from": "Dave",
+            "tier": "mid"
+          },
+          {
+            "player": "12530",
+            "name": "Travis Hunter"
+          },
+          {
+            "player": "12499",
+            "name": "Elic Ayomanor"
+          }
+        ]
+      },
+      "notes": "Batch 3. Star for a pile: a young star RB for two 1sts and two young WRs.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N22",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Lee",
+        "motive": "Contending and short of starting QBs; a TE helps too.",
+        "gets": [
+          {
+            "player": "5870",
+            "name": "Daniel Jones"
+          },
+          {
+            "player": "9480",
+            "name": "Brenton Strange"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Jebus",
+        "motive": "Rebuilding; would sell a 29-year-old QB and a TE for a 1st.",
+        "gets": [
+          {
+            "pick": "2029 1st",
+            "from": "Lee",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 3. A rebuilder sells a veteran QB and a TE to a contender for a 1st.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N23",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Mike",
+        "motive": "Contending; wants a second TE who can start.",
+        "gets": [
+          {
+            "player": "5012",
+            "name": "Mark Andrews"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Jebus",
+        "motive": "Rebuilding; would sell a 31-year-old TE for picks.",
+        "gets": [
+          {
+            "pick": "2028 2nd",
+            "from": "Mike",
+            "tier": "mid"
+          },
+          {
+            "pick": "2027 3rd",
+            "from": "Mike",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 3. A rebuilder sells a veteran TE to a contender for a 2nd and a 3rd.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N24",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Alex",
+        "motive": "Contending; wants depth for the run-in.",
+        "gets": [
+          {
+            "player": "4199",
+            "name": "Aaron Jones"
+          },
+          {
+            "player": "4039",
+            "name": "Cooper Kupp"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Jebus",
+        "motive": "Rebuilding; would turn two veterans into one pick.",
+        "gets": [
+          {
+            "pick": "2027 2nd",
+            "from": "Alex",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 3. Weak pile for one pick: two old veterans for a 2nd.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N25",
+      "date": "2 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Mike",
+        "motive": "Contending; would turn a young RB into two starters.",
+        "gets": [
+          {
+            "player": "8131",
+            "name": "Isaiah Likely"
+          },
+          {
+            "player": "8126",
+            "name": "Wan'Dale Robinson"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Jebus",
+        "motive": "Rebuilding; would turn two mid-20s starters into a younger RB.",
+        "gets": [
+          {
+            "player": "12481",
+            "name": "Cam Skattebo"
+          }
+        ]
+      },
+      "notes": "Batch 3. Two decent starters for one young player.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
       "id": "T3",
       "date": "Dec 2025",
       "league": "jadl",
