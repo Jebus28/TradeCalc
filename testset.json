@@ -617,8 +617,10 @@
         ]
       },
       "notes": "Batch 3. Star for a pile: a young starting QB for a QB, a WR and two 3rds.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Lee fleece",
+      "matt_now": [
+        "Fleece: Lee"
+      ]
     },
     {
       "id": "N19",
@@ -659,8 +661,11 @@
         ]
       },
       "notes": "Batch 3. Star for a pile: a rookie star RB for a 1st and three young players.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Gareth fleece. I would not do it.",
+      "matt_now": [
+        "Fleece: Gareth"
+      ],
+      "unlikely": "Jebus wouldn't: too much value going the other way, it would set the rebuild back, and RBs are the last thing you buy when moving from rebuilding to contending."
     },
     {
       "id": "N20",
@@ -698,8 +703,10 @@
         ]
       },
       "notes": "Batch 3. Star for a pile: a WR1 for a young RB, a 2nd and a 3rd.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Dave edge",
+      "matt_now": [
+        "Slight edge: Dave"
+      ]
     },
     {
       "id": "N21",
@@ -741,8 +748,11 @@
         ]
       },
       "notes": "Batch 3. Star for a pile: a young star RB for two 1sts and two young WRs.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Fair",
+      "matt_now": [
+        "Fair"
+      ],
+      "unlikely": "Jebus wouldn't buy an RB until he can realistically contend again."
     },
     {
       "id": "N22",
@@ -775,8 +785,10 @@
         ]
       },
       "notes": "Batch 3. A rebuilder sells a veteran QB and a TE to a contender for a 1st.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Lee fleece",
+      "matt_now": [
+        "Fleece: Lee"
+      ]
     },
     {
       "id": "N23",
@@ -810,8 +822,11 @@
         ]
       },
       "notes": "Batch 3. A rebuilder sells a veteran TE to a contender for a 2nd and a 3rd.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Fair to Jebus edge",
+      "matt_now": [
+        "Fair",
+        "Slight edge: Jebus"
+      ]
     },
     {
       "id": "N24",
@@ -844,8 +859,13 @@
         ]
       },
       "notes": "Batch 3. Weak pile for one pick: two old veterans for a 2nd.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Alex win. Would not do.",
+      "matt_now": [
+        "Slight edge: Alex",
+        "Clear win: Alex",
+        "Fleece: Alex"
+      ],
+      "unlikely": "Jebus wouldn't do it."
     },
     {
       "id": "N25",
@@ -877,8 +897,10 @@
         ]
       },
       "notes": "Batch 3. Two decent starters for one young player.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Fair. I would probably make this trade, as I have several TEs.",
+      "matt_now": [
+        "Fair"
+      ]
     },
     {
       "id": "T3",
