@@ -28,7 +28,7 @@
 </nav>
 
 <main class="wrap">
-  <p class="lead">Matt's test-set trades (D16), re-valued with today's values. Change a weight and every verdict updates. Nothing here changes the live site: copy the changes you like and they go into <code>model.config.json</code>.</p>
+  <p class="lead">Matt's test-set trades (D16). Current trades use today's players and picks and are judged as if offered today, so they test the values without hindsight. Change a weight and every verdict updates. Nothing here changes the live site: copy the changes you like and they go into <code>model.config.json</code>.</p>
 
   <div class="labgrid">
     <aside class="card labsettings" aria-label="Model settings">
@@ -62,8 +62,20 @@
         </div>
         <p class="note" id="lineinfo"></p>
       </div>
+      <h2 class="labhead">Current trades <span class="note">scored for Gate 2</span></h2>
       <div class="card tablewrap">
-        <table id="lab">
+        <table class="lab" id="lab-current">
+          <thead><tr>
+            <th>Trade</th><th>Matt</th><th>Model</th>
+            <th class="r hide-sm">Win Now</th><th class="r hide-sm">Balanced</th><th class="r hide-sm">Long-Term</th>
+            <th class="hide-sm">Own horizons</th><th><span class="vh">Open</span></th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <h2 class="labhead">Past trades <span class="note">background only, not scored: today's values carry hindsight</span></h2>
+      <div class="card tablewrap">
+        <table class="lab" id="lab-past">
           <thead><tr>
             <th>Trade</th><th>Matt now</th><th>Model</th>
             <th class="r hide-sm">Win Now</th><th class="r hide-sm">Balanced</th><th class="r hide-sm">Long-Term</th>
@@ -72,7 +84,7 @@
           <tbody></tbody>
         </table>
       </div>
-      <p class="note">Gaps are from the first-named manager's side: "Lee 9%" means Lee wins by 9%. Own horizons judges each side at its situation at the time (contending = Win Now, rebuilding = Long-Term, unclear = Balanced), with neutral sliders. Tap a trade for Matt's notes.</p>
+      <p class="note">Gaps are from the first-named manager's side: "Lee 9%" means Lee wins by 9%. Own horizons judges each side at its situation (contending = Win Now, rebuilding = Long-Term, unclear = Balanced), with neutral sliders. The model's verdict on a current trade stays hidden until Matt has judged it. Tap a trade for notes.</p>
     </section>
   </div>
 </main>

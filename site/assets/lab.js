@@ -149,36 +149,52 @@ function grade(label, accepted) {
 }
 const STATUS = { agree: "Agrees", close: "Close", miss: "Miss" };
 
+/* One table row; status is null while a current trade awaits Matt's verdict,
+   and then the model's answer stays hidden so it can't anchor him. */
+function tradeRow(t) {
+  const A = t.a.manager, B = t.b.manager;
+  const ka = t.a.gets.map(keyFor), kb = t.b.gets.map(keyFor);
+  const missing = [...ka, ...kb].filter((k) => !MODEL.asset(k)).length;
+  const head = `<td><details><summary><b>${esc(t.id)}</b> <span class="muted">${esc(t.date)}</span></summary>
+      <p class="note">${t.situation ? `<b>Situation:</b> ${esc(t.situation)}.<br>` : ""}${t.matt_then ? `<b>Matt at the time:</b> ${esc(t.matt_then)}.<br>` : ""}${t.notes ? `<b>Notes:</b> ${esc(t.notes)}` : ""}</p></details>
+      <div class="gets"><b>${esc(A)}</b> gets ${t.a.gets.map((x) => esc(assetText(x))).join(", ")}</div>
+      <div class="gets"><b>${esc(B)}</b> gets ${t.b.gets.map((x) => esc(assetText(x))).join(", ")}</div>
+      ${missing ? `<div class="note warntext">${missing} asset${missing > 1 ? "s" : ""} not found in this build.</div>` : ""}</td>`;
+  if (!t.matt_now?.length) {
+    return { status: null, html: `<tr class="lab-pending">${head}<td class="muted">Awaiting Matt's verdict</td>
+      <td colspan="6" class="muted">Hidden until Matt has judged it.</td></tr>` };
+  }
+  const short = (v) => (v.band === "fair" ? `Fair ${pct(v.gap)}` : `${v.gap > 0 ? A : B} ${pct(v.gap)}`);
+  const at = (hz) => MODEL.sideView(ka, kb, hz);
+  const cmp = at(ui.hz);
+  const label = MODEL.winnerLabel(cmp, A, B);
+  const st = grade(label, t.matt_now);
+  const va = MODEL.sideView(ka, kb, HZ[t.a.horizon]), vb = MODEL.sideView(kb, ka, HZ[t.b.horizon]);
+  const own = (name, h, v) => `<div><b>${esc(name)}</b> <span class="muted">(${ANCHOR_NAMES[h]})</span>: ${v.label} ${signedPct(v.gap)}</div>`;
+  const q = new URLSearchParams({ an: A, a: ka.join(","), ah: HZ[t.a.horizon], bn: B, b: kb.join(","), bh: HZ[t.b.horizon] });
+  return { status: st, html: `<tr class="lab-${st}">${head}
+    <td>${esc(t.matt_now_text)}<div class="note">Counts as agreeing: ${t.matt_now.map(esc).join(" or ")}</div></td>
+    <td><span class="chip ${st}">${STATUS[st]}</span><div><b>${esc(label)}</b> <span class="muted num">${pct(cmp.gap)}</span></div></td>
+    ${[0, 50, 100].map((hz) => `<td class="r num hide-sm${hz === ui.hz ? " cur" : ""}">${esc(short(at(hz)))}</td>`).join("")}
+    <td class="hide-sm small">${own(A, t.a.horizon, va)}${own(B, t.b.horizon, vb)}</td>
+    <td><a class="open" href="trade.html${location.search}#${q}" title="Open in the trade analyser">Open</a></td></tr>` };
+}
+
 function run() {
   MODEL = makeModel(DATA, CFG);
+  const current = TRADES.filter((t) => t.kind !== "past").map(tradeRow);
+  const past = TRADES.filter((t) => t.kind === "past").map(tradeRow);
+  $("#lab-current tbody").innerHTML = current.map((r) => r.html).join("") || '<tr><td colspan="8" class="muted">No current trades yet.</td></tr>';
+  $("#lab-past tbody").innerHTML = past.map((r) => r.html).join("");
+  const judged = current.filter((r) => r.status);
   const counts = { agree: 0, close: 0, miss: 0 };
-  const short = (v, A, B) => (v.band === "fair" ? `Fair ${pct(v.gap)}` : `${v.gap > 0 ? A : B} ${pct(v.gap)}`);
-  $("#lab tbody").innerHTML = TRADES.map((t) => {
-    const A = t.a.manager, B = t.b.manager;
-    const ka = t.a.gets.map(keyFor), kb = t.b.gets.map(keyFor);
-    const at = (hz) => MODEL.sideView(ka, kb, hz);
-    const cmp = at(ui.hz);
-    const label = MODEL.winnerLabel(cmp, A, B);
-    const st = grade(label, t.matt_now);
-    counts[st]++;
-    const va = MODEL.sideView(ka, kb, HZ[t.a.horizon]), vb = MODEL.sideView(kb, ka, HZ[t.b.horizon]);
-    const own = (name, h, v) => `<div><b>${esc(name)}</b> <span class="muted">(${ANCHOR_NAMES[h]})</span>: ${v.label} ${signedPct(v.gap)}</div>`;
-    const q = new URLSearchParams({ an: A, a: ka.join(","), ah: HZ[t.a.horizon], bn: B, b: kb.join(","), bh: HZ[t.b.horizon] });
-    const missing = [...ka, ...kb].filter((k) => !MODEL.asset(k)).length;
-    return `<tr class="lab-${st}">
-      <td><details><summary><b>${esc(t.id)}</b> <span class="muted">${esc(t.date)}</span></summary>
-        <p class="note"><b>Situation:</b> ${esc(t.situation)}.<br><b>Matt at the time:</b> ${esc(t.matt_then)}.<br><b>Notes:</b> ${esc(t.notes)}</p></details>
-        <div class="gets"><b>${esc(A)}</b> gets ${t.a.gets.map((x) => esc(assetText(x))).join(", ")}</div>
-        <div class="gets"><b>${esc(B)}</b> gets ${t.b.gets.map((x) => esc(assetText(x))).join(", ")}</div>
-        ${missing ? `<div class="note warntext">${missing} asset${missing > 1 ? "s" : ""} not found in this build.</div>` : ""}</td>
-      <td>${esc(t.matt_now_text)}<div class="note">Counts as agreeing: ${t.matt_now.map(esc).join(" or ")}</div></td>
-      <td><span class="chip ${st}">${STATUS[st]}</span><div><b>${esc(label)}</b> <span class="muted num">${pct(cmp.gap)}</span></div></td>
-      ${[0, 50, 100].map((hz) => `<td class="r num hide-sm${hz === ui.hz ? " cur" : ""}">${esc(short(at(hz), A, B))}</td>`).join("")}
-      <td class="hide-sm small">${own(A, t.a.horizon, va)}${own(B, t.b.horizon, vb)}</td>
-      <td><a class="open" href="trade.html${location.search}#${q}" title="Open in the trade analyser">Open</a></td></tr>`;
-  }).join("");
-  $("#score").innerHTML = `<b class="big">${counts.agree} of ${TRADES.length}</b> agree with Matt at ${horizonName(ui.hz)}
-    <span class="note">· ${counts.close} close (right side, different size) · ${counts.miss} miss${counts.miss === 1 ? "" : "es"}</span>`;
+  judged.forEach((r) => counts[r.status]++);
+  const waiting = current.length - judged.length;
+  const wait = waiting ? ` · ${waiting} awaiting Matt's verdict` : "";
+  $("#score").innerHTML = judged.length
+    ? `<b class="big">${counts.agree} of ${judged.length}</b> current trades agree with Matt at ${horizonName(ui.hz)}
+      <span class="note">· ${counts.close} close (right side, different size) · ${counts.miss} miss${counts.miss === 1 ? "" : "es"}${wait}</span>`
+    : `<b class="big">No current trades judged yet</b><span class="note">${wait}</span>`;
   $("#lineinfo").textContent = `Quality line at ${horizonName(ui.hz)}: ${fmt(MODEL.qualityLine(ui.hz))}, the value of the ${ORD(MODEL.starters)}-best player.`;
   Object.keys(HZ).forEach((h) => {
     const total = INGREDIENTS.reduce((s, [k]) => s + CFG.horizons[h][k], 0);

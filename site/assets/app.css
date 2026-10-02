@@ -248,12 +248,14 @@ body.wide{--maxw:1320px}
 .optlabel{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
 .optlabel select{font:14px "Public Sans",sans-serif;color:var(--ink);background:var(--surface-2);border:1px solid var(--line-strong);border-radius:8px;padding:6px 8px;text-transform:none;letter-spacing:0}
 .score .note{margin:10px 0 0}
-#lab td{vertical-align:top}
-#lab td.cur{background:var(--surface-2);font-weight:600}
-#lab .gets{font-size:13px;color:var(--ink-2);margin-top:4px}
-#lab .small{font-size:13px}
-#lab details summary{font-size:14px;color:var(--ink)}
-#lab details .note{max-width:52ch}
+.labhead{font-size:17px;margin:18px 0 8px}
+.labhead .note{font:400 13px "Public Sans",sans-serif;margin-left:6px}
+.lab td{vertical-align:top}
+.lab td.cur{background:var(--surface-2);font-weight:600}
+.lab .gets{font-size:13px;color:var(--ink-2);margin-top:4px}
+.lab .small{font-size:13px}
+.lab details summary{font-size:14px;color:var(--ink)}
+.lab details .note{max-width:52ch}
 .chip{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;margin-bottom:4px;white-space:nowrap}
 .chip.agree{background:var(--live-soft);color:var(--live)}
 .chip.close{background:var(--warn-soft);color:var(--warn)}

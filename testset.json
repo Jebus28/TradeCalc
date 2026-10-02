@@ -1,8 +1,96 @@
 {
-  "_comment": "Matt's test set (D16), from the feasibility study. The model lab replays these trades with today's values. 'gets' lists what each side received. Players use their Sleeper ID (name alongside for reading). A pick already used gives the player chosen under 'became'; the lab can value it as that player or as the same slot in the next draft. matt_now lists the verdicts that count as agreeing with Matt: 'Fair', or 'Slight edge: X', 'Clear win: X', 'Fleece: X'. horizon is each side's situation at the time: win_now, balanced or long_term.",
+  "_comment": "Matt's test set (D16), from the feasibility study. The model lab replays these trades with today's values. 'gets' lists what each side received. Players use their Sleeper ID (name alongside for reading). A pick already used gives the player chosen under 'became'; the lab can value it as that player or as the same slot in the next draft. matt_now lists the verdicts that count as agreeing with Matt: 'Fair', or 'Slight edge: X', 'Clear win: X', 'Fleece: X'. horizon is each side's situation at the time: win_now, balanced or long_term. kind 'past' = a real trade judged with hindsight, shown in the lab but not scored. kind 'current' = today's players and picks, judged as if offered today; these are scored for Gate 2. A current trade with an empty matt_now is awaiting Matt's verdict, and the lab hides the model's answer until it's filled in. Picks without a tier are an unknown slot.",
   "trades": [
     {
-      "id": "T3", "date": "Dec 2025", "league": "jadl",
+      "id": "N1", "date": "2 Oct 2026", "league": "jadl", "kind": "current",
+      "a": { "manager": "Alex", "horizon": "balanced", "gets": [
+        { "player": "9221", "name": "Jahmyr Gibbs" } ] },
+      "b": { "manager": "Dave", "horizon": "balanced", "gets": [
+        { "player": "6786", "name": "CeeDee Lamb" },
+        { "pick": "2027 1st", "from": "Alex" } ] },
+      "notes": "Tests star value: a star for a good starter plus a 1st.",
+      "matt_now_text": "", "matt_now": []
+    },
+    {
+      "id": "N2", "date": "2 Oct 2026", "league": "jadl", "kind": "current",
+      "a": { "manager": "Mike", "horizon": "balanced", "gets": [
+        { "player": "8130", "name": "Trey McBride" } ] },
+      "b": { "manager": "Chris", "horizon": "balanced", "gets": [
+        { "player": "8144", "name": "Chris Olave" },
+        { "player": "8150", "name": "Kyren Williams" } ] },
+      "notes": "Tests star value and the TE premium: an elite TE for two starters.",
+      "matt_now_text": "", "matt_now": []
+    },
+    {
+      "id": "N3", "date": "2 Oct 2026", "league": "jadl", "kind": "current",
+      "a": { "manager": "Ross", "horizon": "balanced", "gets": [
+        { "player": "9493", "name": "Puka Nacua" } ] },
+      "b": { "manager": "Mike", "horizon": "balanced", "gets": [
+        { "player": "7569", "name": "Nico Collins" },
+        { "player": "10229", "name": "Rashee Rice" } ] },
+      "notes": "Tests star value: a star WR for two good WRs, no picks.",
+      "matt_now_text": "", "matt_now": []
+    },
+    {
+      "id": "N4", "date": "2 Oct 2026", "league": "jadl", "kind": "current",
+      "a": { "manager": "Gareth", "horizon": "balanced", "gets": [
+        { "player": "11564", "name": "Drake Maye" } ] },
+      "b": { "manager": "Alex", "horizon": "balanced", "gets": [
+        { "player": "12507", "name": "Omarion Hampton" },
+        { "pick": "2027 1st", "from": "Gareth" } ] },
+      "notes": "Tests the Superflex QB premium: a young starting QB for a young RB plus a 1st.",
+      "matt_now_text": "", "matt_now": []
+    },
+    {
+      "id": "N5", "date": "2 Oct 2026", "league": "jadl", "kind": "current",
+      "a": { "manager": "Chris", "horizon": "balanced", "gets": [
+        { "player": "2133", "name": "Davante Adams" } ] },
+      "b": { "manager": "Rich", "horizon": "balanced", "gets": [
+        { "pick": "2027 2nd", "from": "Chris" },
+        { "pick": "2028 2nd", "from": "Chris" } ] },
+      "notes": "Tests an ageing starter against 2nds.",
+      "matt_now_text": "", "matt_now": []
+    },
+    {
+      "id": "N6", "date": "2 Oct 2026", "league": "jadl", "kind": "current",
+      "a": { "manager": "Alex", "horizon": "balanced", "gets": [
+        { "player": "4034", "name": "Christian McCaffrey" } ] },
+      "b": { "manager": "Lee", "horizon": "balanced", "gets": [
+        { "pick": "2028 1st", "from": "Alex" } ] },
+      "notes": "Tests the RB age curve: a 30-year-old star RB for a future 1st.",
+      "matt_now_text": "", "matt_now": []
+    },
+    {
+      "id": "N7", "date": "2 Oct 2026", "league": "jadl", "kind": "current",
+      "a": { "manager": "Mike", "horizon": "balanced", "gets": [
+        { "player": "13287", "name": "Jeremiyah Love" } ] },
+      "b": { "manager": "Gareth", "horizon": "balanced", "gets": [
+        { "player": "6813", "name": "Jonathan Taylor" } ] },
+      "notes": "Tests rookie values: a rookie RB for a proven RB, one for one.",
+      "matt_now_text": "", "matt_now": []
+    },
+    {
+      "id": "N8", "date": "2 Oct 2026", "league": "jadl", "kind": "current",
+      "a": { "manager": "Neil", "horizon": "balanced", "gets": [
+        { "player": "12506", "name": "Harold Fannin" } ] },
+      "b": { "manager": "Rich", "horizon": "balanced", "gets": [
+        { "player": "4217", "name": "George Kittle" },
+        { "pick": "2027 2nd", "from": "Neil" } ] },
+      "notes": "Tests the TE age curve: a young TE for an old one plus a 2nd.",
+      "matt_now_text": "", "matt_now": []
+    },
+    {
+      "id": "N9", "date": "2 Oct 2026", "league": "jadl", "kind": "current",
+      "a": { "manager": "Ross", "horizon": "balanced", "gets": [
+        { "pick": "2027 1st", "from": "Gareth" } ] },
+      "b": { "manager": "Gareth", "horizon": "balanced", "gets": [
+        { "pick": "2028 1st", "from": "Ross" },
+        { "pick": "2028 2nd", "from": "Ross" } ] },
+      "notes": "Tests pick values: a 1st now against next year's 1st and 2nd.",
+      "matt_now_text": "", "matt_now": []
+    },
+    {
+      "id": "T3", "date": "Dec 2025", "league": "jadl", "kind": "past",
       "a": { "manager": "Jebus", "horizon": "long_term", "gets": [
         { "pick": "2027 1st", "from": "Lee" } ] },
       "b": { "manager": "Lee", "horizon": "win_now", "gets": [
@@ -14,7 +102,7 @@
       "notes": "Matt rates the pick above Saquon overall, closer to the Long-Term view. Check pick values and the 2027 class rating."
     },
     {
-      "id": "T2", "date": "Apr 2026", "league": "jadl",
+      "id": "T2", "date": "Apr 2026", "league": "jadl", "kind": "past",
       "a": { "manager": "Jebus", "horizon": "long_term", "gets": [
         { "player": "11560", "name": "Caleb Williams" },
         { "player": "8126", "name": "Wan'Dale Robinson" },
@@ -31,7 +119,7 @@
       "notes": "Check the QB age curve and the 2028 1st."
     },
     {
-      "id": "T4", "date": "Dec 2025", "league": "jadl",
+      "id": "T4", "date": "Dec 2025", "league": "jadl", "kind": "past",
       "a": { "manager": "Jebus", "horizon": "long_term", "gets": [
         { "player": "12530", "name": "Travis Hunter" },
         { "pick": "2026 1.10", "became": "13346", "name": "Denzel Boston" },
@@ -53,7 +141,7 @@
       "notes": "Three 1sts plus a high-value player should balance a star; a plain exponent was too strong when the extra pieces are good ones (D6 refinement)."
     },
     {
-      "id": "T1", "date": "Jun 2026", "league": "jadl",
+      "id": "T1", "date": "Jun 2026", "league": "jadl", "kind": "past",
       "a": { "manager": "Lee", "horizon": "win_now", "gets": [
         { "player": "6797", "name": "Justin Herbert" },
         { "player": "9997", "name": "Zay Flowers" } ] },
@@ -71,7 +159,7 @@
       "notes": "Biggest miss in the study: JADL prizes a good young QB, and consolidating against low picks should count more."
     },
     {
-      "id": "A", "date": "Jul 2025", "league": "jadl",
+      "id": "A", "date": "Jul 2025", "league": "jadl", "kind": "past",
       "a": { "manager": "Alex", "horizon": "win_now", "gets": [
         { "player": "6786", "name": "CeeDee Lamb" } ] },
       "b": { "manager": "Ross", "horizon": "long_term", "gets": [
@@ -85,7 +173,7 @@
       "notes": "The model favoured the pile over the star. Fixes: the D6 refinement, and a negative rating for the 2026 class."
     },
     {
-      "id": "B", "date": "Oct 2025", "league": "jadl",
+      "id": "B", "date": "Oct 2025", "league": "jadl", "kind": "past",
       "a": { "manager": "Chris", "horizon": "win_now", "gets": [
         { "player": "11560", "name": "Caleb Williams" } ] },
       "b": { "manager": "Neil", "horizon": "balanced", "gets": [
@@ -98,7 +186,7 @@
       "notes": "A young Superflex QB beating picks again points to the league QB premium. Neil consistently overrates picks."
     },
     {
-      "id": "C", "date": "Oct 2025", "league": "jadl",
+      "id": "C", "date": "Oct 2025", "league": "jadl", "kind": "past",
       "a": { "manager": "Dave", "horizon": "win_now", "gets": [
         { "player": "7526", "name": "Jaylen Waddle" },
         { "pick": "2026 3.02", "became": "13274", "name": "Germie Bernard" },
@@ -112,7 +200,7 @@
       "notes": "The 3rd and 5th were worth almost nothing, so this was Waddle for a 1st likely to land late. Projecting a contender's pick late (D8) comes with the Sleeper link in Phase 3."
     },
     {
-      "id": "D", "date": "Jun 2025 (mid-draft)", "league": "jadl",
+      "id": "D", "date": "Jun 2025 (mid-draft)", "league": "jadl", "kind": "past",
       "a": { "manager": "Lee", "horizon": "win_now", "gets": [
         { "pick": "2025 1.05", "became": "12522", "name": "Cam Ward" } ] },
       "b": { "manager": "Alex", "horizon": "win_now", "gets": [
@@ -125,7 +213,7 @@
       "notes": "Judging the pick by the player Lee chose is hindsight; the tool shouldn't do that. Try the lab's 'same slot in the next draft' option."
     },
     {
-      "id": "E", "date": "Mar 2025", "league": "jadl",
+      "id": "E", "date": "Mar 2025", "league": "jadl", "kind": "past",
       "a": { "manager": "Dave", "horizon": "win_now", "gets": [
         { "pick": "2025 2.01", "became": "12518", "name": "Tyler Warren" } ] },
       "b": { "manager": "Ross", "horizon": "win_now", "gets": [
@@ -138,7 +226,7 @@
       "notes": "Matt judges this as picks: 2.01 in a 10-team league is the 11th pick, a late 1st on 12-team charts. Try the lab's 'same slot in the next draft' option."
     },
     {
-      "id": "F", "date": "Apr 2026", "league": "jadl",
+      "id": "F", "date": "Apr 2026", "league": "jadl", "kind": "past",
       "a": { "manager": "Chris", "horizon": "win_now", "gets": [
         { "player": "5022", "name": "Dallas Goedert" } ] },
       "b": { "manager": "Ross", "horizon": "long_term", "gets": [
@@ -150,7 +238,7 @@
       "notes": "An obvious Chris win even for a rebuilding Ross: a 3rd is worth little even long term."
     },
     {
-      "id": "G", "date": "Nov 2025", "league": "jadl",
+      "id": "G", "date": "Nov 2025", "league": "jadl", "kind": "past",
       "a": { "manager": "Lee", "horizon": "win_now", "gets": [
         { "player": "7021", "name": "Rico Dowdle" } ] },
       "b": { "manager": "Ross", "horizon": "long_term", "gets": [
@@ -162,7 +250,7 @@
       "notes": "The 2.09 is the 19th pick overall, a mid 2nd on a 12-team chart."
     },
     {
-      "id": "H", "date": "Aug 2026 (before roster cuts)", "league": "jadl",
+      "id": "H", "date": "Aug 2026 (before roster cuts)", "league": "jadl", "kind": "past",
       "a": { "manager": "Dave", "horizon": "win_now", "gets": [
         { "pick": "2027 3rd", "from": "Ross" } ] },
       "b": { "manager": "Ross", "horizon": "long_term", "gets": [
