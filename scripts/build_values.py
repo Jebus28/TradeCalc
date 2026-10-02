@@ -425,6 +425,7 @@ def build_league(lg, cfg, shared):
             "scoring": {k: scoring.get(k) for k in ("pass_td", "pass_yd", "rec", "bonus_rec_te", "rush_yd", "rec_yd") if k in scoring},
             "replacement_ppg": {k: round(v, 2) for k, v in repl.items()},
             "qb_premium": lg.get("qb_premium", 1.0),
+            "situations": lg.get("situations", {}),
             "counts": {"players": len(rows), "fantasycalc": len(fc), "dynastyprocess": len(dp),
                        "dynastyprocess_unmatched": dp_unmatched, "both_sources": len(set(fc) & set(dp))},
             "notes": notes,

@@ -1,5 +1,5 @@
 {
-  "_comment": "Matt's test set (D16), from the feasibility study. The model lab replays these trades with today's values. 'gets' lists what each side received. Players use their Sleeper ID (name alongside for reading). A pick already used gives the player chosen under 'became'; the lab can value it as that player or as the same slot in the next draft. matt_now lists the verdicts that count as agreeing with Matt: 'Fair', or 'Slight edge: X', 'Clear win: X', 'Fleece: X'. horizon is each side's situation at the time: win_now, balanced or long_term. kind 'past' = a real trade judged with hindsight, shown in the lab but not scored. kind 'current' = today's players and picks, judged as if offered today; these are scored for Gate 2. A current trade with an empty matt_now is awaiting Matt's verdict, and the lab hides the model's answer until it's filled in. Picks without a tier are an unknown slot. motive (optional) is why each side might make the trade. For current trades, horizon follows the manager's situation in model.config.json. unlikely (optional) says why Matt thinks the trade wouldn't happen; the verdict still counts as a value judgement.",
+  "_comment": "Matt's test set (D16), from the feasibility study. The model lab replays these trades with today's values. 'gets' lists what each side received. Players use their Sleeper ID (name alongside for reading). A pick already used gives the player chosen under 'became'; the lab can value it as that player or as the same slot in the next draft. matt_now lists the verdicts that count as agreeing with Matt: 'Fair', or 'Slight edge: X', 'Clear win: X', 'Fleece: X'. Past trades give each side's situation at the time as horizon: win_now, balanced or long_term. Current trades take it from the manager's situation in model.config.json. kind 'past' = a real trade judged with hindsight, shown in the lab but not scored. kind 'current' = today's players and picks, judged as if offered today; these are scored for Gate 2. A current trade with an empty matt_now is awaiting Matt's verdict, and the lab hides the model's answer until it's filled in. Picks without a tier are an unknown slot. motive (optional) is why each side might make the trade. unlikely (optional) says why Matt thinks the trade wouldn't happen; the verdict still counts as a value judgement.",
   "trades": [
     {
       "id": "N1",
@@ -8,7 +8,6 @@
       "kind": "current",
       "a": {
         "manager": "Alex",
-        "horizon": "win_now",
         "gets": [
           {
             "player": "9221",
@@ -18,7 +17,6 @@
       },
       "b": {
         "manager": "Dave",
-        "horizon": "win_now",
         "gets": [
           {
             "player": "6786",
@@ -43,7 +41,6 @@
       "kind": "current",
       "a": {
         "manager": "Mike",
-        "horizon": "win_now",
         "gets": [
           {
             "player": "8130",
@@ -53,7 +50,6 @@
       },
       "b": {
         "manager": "Chris",
-        "horizon": "win_now",
         "gets": [
           {
             "player": "8144",
@@ -78,7 +74,6 @@
       "kind": "current",
       "a": {
         "manager": "Ross",
-        "horizon": "long_term",
         "gets": [
           {
             "player": "9493",
@@ -88,7 +83,6 @@
       },
       "b": {
         "manager": "Mike",
-        "horizon": "win_now",
         "gets": [
           {
             "player": "7569",
@@ -113,7 +107,6 @@
       "kind": "current",
       "a": {
         "manager": "Gareth",
-        "horizon": "balanced",
         "gets": [
           {
             "player": "11564",
@@ -123,7 +116,6 @@
       },
       "b": {
         "manager": "Alex",
-        "horizon": "win_now",
         "gets": [
           {
             "player": "12507",
@@ -150,7 +142,6 @@
       "kind": "current",
       "a": {
         "manager": "Chris",
-        "horizon": "win_now",
         "gets": [
           {
             "player": "2133",
@@ -160,7 +151,6 @@
       },
       "b": {
         "manager": "Rich",
-        "horizon": "long_term",
         "gets": [
           {
             "pick": "2027 2nd",
@@ -185,7 +175,6 @@
       "kind": "current",
       "a": {
         "manager": "Alex",
-        "horizon": "win_now",
         "gets": [
           {
             "player": "4034",
@@ -195,7 +184,6 @@
       },
       "b": {
         "manager": "Lee",
-        "horizon": "win_now",
         "gets": [
           {
             "pick": "2028 1st",
@@ -217,7 +205,6 @@
       "kind": "current",
       "a": {
         "manager": "Mike",
-        "horizon": "win_now",
         "gets": [
           {
             "player": "13287",
@@ -227,7 +214,6 @@
       },
       "b": {
         "manager": "Gareth",
-        "horizon": "balanced",
         "gets": [
           {
             "player": "6813",
@@ -250,7 +236,6 @@
       "kind": "current",
       "a": {
         "manager": "Neil",
-        "horizon": "balanced",
         "gets": [
           {
             "player": "12506",
@@ -260,7 +245,6 @@
       },
       "b": {
         "manager": "Rich",
-        "horizon": "long_term",
         "gets": [
           {
             "player": "4217",
@@ -286,7 +270,6 @@
       "kind": "current",
       "a": {
         "manager": "Ross",
-        "horizon": "long_term",
         "gets": [
           {
             "pick": "2027 1st",
@@ -297,7 +280,6 @@
       },
       "b": {
         "manager": "Gareth",
-        "horizon": "balanced",
         "gets": [
           {
             "pick": "2028 1st",
@@ -327,7 +309,6 @@
       "kind": "current",
       "a": {
         "manager": "Mike",
-        "horizon": "win_now",
         "motive": "Contending; wants a dependable RB for the run-in.",
         "gets": [
           {
@@ -338,7 +319,6 @@
       },
       "b": {
         "manager": "Ross",
-        "horizon": "long_term",
         "motive": "Rebuilding; would turn a 28-year-old RB into a pick.",
         "gets": [
           {
@@ -359,7 +339,6 @@
       "kind": "current",
       "a": {
         "manager": "Dave",
-        "horizon": "win_now",
         "motive": "Contending, with RBs to spare; wants an elite TE this season.",
         "gets": [
           {
@@ -370,7 +349,6 @@
       },
       "b": {
         "manager": "Neil",
-        "horizon": "balanced",
         "motive": "Building; would swap a 32-year-old TE for a 24-year-old RB.",
         "gets": [
           {
@@ -390,7 +368,6 @@
       "kind": "current",
       "a": {
         "manager": "Alex",
-        "horizon": "win_now",
         "motive": "Contending; wants the best QB in the league for the title run.",
         "gets": [
           {
@@ -401,7 +378,6 @@
       },
       "b": {
         "manager": "Ross",
-        "horizon": "long_term",
         "motive": "Rebuilding; would take a young QB and two 1sts for his star.",
         "gets": [
           {
@@ -431,7 +407,6 @@
       "kind": "current",
       "a": {
         "manager": "Lee",
-        "horizon": "win_now",
         "motive": "Contending; wants a WR1-type for this season and next.",
         "gets": [
           {
@@ -442,7 +417,6 @@
       },
       "b": {
         "manager": "Ross",
-        "horizon": "long_term",
         "motive": "Rebuilding; would sell a 27-year-old WR for picks.",
         "gets": [
           {
@@ -468,7 +442,6 @@
       "kind": "current",
       "a": {
         "manager": "Lee",
-        "horizon": "win_now",
         "motive": "Contending, with QBs to spare; wants a WR who starts now.",
         "gets": [
           {
@@ -479,7 +452,6 @@
       },
       "b": {
         "manager": "Gareth",
-        "horizon": "balanced",
         "motive": "Building; wants a young QB to develop.",
         "gets": [
           {
@@ -499,7 +471,6 @@
       "kind": "current",
       "a": {
         "manager": "Alex",
-        "horizon": "win_now",
         "motive": "Contending with three starting QBs; would turn one into a WR.",
         "gets": [
           {
@@ -510,7 +481,6 @@
       },
       "b": {
         "manager": "Ross",
-        "horizon": "long_term",
         "motive": "Rebuilding; wants a young starting QB.",
         "gets": [
           {
@@ -530,7 +500,6 @@
       "kind": "current",
       "a": {
         "manager": "Chris",
-        "horizon": "win_now",
         "motive": "Contending; wants RB depth now.",
         "gets": [
           {
@@ -541,7 +510,6 @@
       },
       "b": {
         "manager": "Neil",
-        "horizon": "balanced",
         "motive": "Building; would take a 23-year-old RB and a pick for a 27-year-old.",
         "gets": [
           {
@@ -566,7 +534,6 @@
       "kind": "current",
       "a": {
         "manager": "Dave",
-        "horizon": "win_now",
         "motive": "Contending; wants a veteran WR for the run-in.",
         "gets": [
           {
@@ -577,7 +544,6 @@
       },
       "b": {
         "manager": "Rich",
-        "horizon": "long_term",
         "motive": "Rebuilding; would sell a 33-year-old WR for a pick.",
         "gets": [
           {

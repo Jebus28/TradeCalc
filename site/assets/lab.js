@@ -62,6 +62,11 @@ function buildFields() {
       { path: ["star", "quality_line_share_of_starters"], label: "Quality line, as a share of the league's starters", step: 0.1, min: 0.2, max: 3 },
       { path: ["star", "extra_pieces_only"], label: "Only the extra pieces on the bigger side", type: "checkbox" },
     ] },
+    { title: "Manager situations", note: BASE._situation_horizons, items: [
+      { path: ["situation_horizons", "contending"], label: "Contending: horizon (0 Win Now – 100 Long-Term)", step: 5, min: 0, max: 100 },
+      { path: ["situation_horizons", "building"], label: "Building: horizon", step: 5, min: 0, max: 100 },
+      { path: ["situation_horizons", "rebuilding"], label: "Rebuilding: horizon", step: 5, min: 0, max: 100 },
+    ] },
     { title: "Verdict bands", note: BASE._verdict, items: [
       { path: ["verdict", "fair_below"], label: "Fair under", step: 0.01, min: 0, max: 1 },
       { path: ["verdict", "slight_below"], label: "Slight edge under", step: 0.01, min: 0, max: 1 },
@@ -149,6 +154,14 @@ function grade(label, accepted) {
 }
 const STATUS = { agree: "Agrees", close: "Close", miss: "Miss" };
 
+/* A side's horizon: a current trade uses the manager's situation from
+   model.config.json; a past trade uses its situation at the time. */
+function sideHz(t, side) {
+  const s = DATA.meta.situations?.[side.manager];
+  if (t.kind !== "past" && s && CFG.situation_horizons?.[s] != null) return CFG.situation_horizons[s];
+  return HZ[side.horizon] ?? 50;
+}
+
 /* One table row; status is null while a current trade awaits Matt's verdict,
    and then the model's answer stays hidden so it can't anchor him. */
 function tradeRow(t) {
@@ -170,14 +183,15 @@ function tradeRow(t) {
   const cmp = at(ui.hz);
   const label = MODEL.winnerLabel(cmp, A, B);
   const st = grade(label, t.matt_now);
-  const va = MODEL.sideView(ka, kb, HZ[t.a.horizon]), vb = MODEL.sideView(kb, ka, HZ[t.b.horizon]);
-  const own = (name, h, v) => `<div><b>${esc(name)}</b> <span class="muted">(${ANCHOR_NAMES[h]})</span>: ${v.label} ${signedPct(v.gap)}</div>`;
-  const q = new URLSearchParams({ an: A, a: ka.join(","), ah: HZ[t.a.horizon], bn: B, b: kb.join(","), bh: HZ[t.b.horizon] });
+  const ha = sideHz(t, t.a), hb = sideHz(t, t.b);
+  const va = MODEL.sideView(ka, kb, ha), vb = MODEL.sideView(kb, ka, hb);
+  const own = (name, h, v) => `<div><b>${esc(name)}</b> <span class="muted">(${horizonName(h)})</span>: ${v.label} ${signedPct(v.gap)}</div>`;
+  const q = new URLSearchParams({ an: A, a: ka.join(","), ah: ha, bn: B, b: kb.join(","), bh: hb });
   return { status: st, html: `<tr class="lab-${st}">${head}
     <td>${esc(t.matt_now_text)}<div class="note">Counts as agreeing: ${t.matt_now.map(esc).join(" or ")}</div></td>
     <td><span class="chip ${st}">${STATUS[st]}</span><div><b>${esc(label)}</b> <span class="muted num">${pct(cmp.gap)}</span></div></td>
     ${[0, 50, 100].map((hz) => `<td class="r num hide-sm${hz === ui.hz ? " cur" : ""}">${esc(short(at(hz)))}</td>`).join("")}
-    <td class="hide-sm small">${own(A, t.a.horizon, va)}${own(B, t.b.horizon, vb)}</td>
+    <td class="hide-sm small">${own(A, ha, va)}${own(B, hb, vb)}</td>
     <td><a class="open" href="trade.html${location.search}#${q}" title="Open in the trade analyser">Open</a></td></tr>` };
 }
 

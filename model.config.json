@@ -22,7 +22,7 @@
       "situations": {
         "Alex": "contending", "Chris": "contending", "Dave": "contending", "Lee": "contending", "Mike": "contending",
         "Gareth": "building", "Neil": "building",
-        "Ross": "rebuilding", "Rich": "rebuilding"
+        "Ross": "rebuilding", "Rich": "rebuilding", "Jebus": "rebuilding"
       },
       "_qb_premium": "Test-set lesson 2 (T1, B): JADL pays more for starting QBs than the Superflex market does. Raised from 1.10 to 1.30 on 2 October 2026 after current trade N4 (Drake Maye), to be checked by the second batch.",
       "qb_premium": 1.30
@@ -36,8 +36,8 @@
     "long_term": { "points_this_season": 0.05, "points_years_1_3": 0.15, "points_years_4_plus": 0.20, "market": 0.60 }
   },
 
-  "_situation_horizons": "Where each situation sits on the horizon slider (0 = Win Now, 50 = Balanced, 100 = Long-Term). Building is a first guess at Balanced.",
-  "situation_horizons": { "contending": 0, "building": 50, "rebuilding": 100 },
+  "_situation_horizons": "Where each situation sits on the horizon slider (0 = Win Now, 50 = Balanced, 100 = Long-Term). Matt: building is between Balanced and Long-Term. The model lab judges current test trades at these horizons.",
+  "situation_horizons": { "contending": 0, "building": 75, "rebuilding": 100 },
 
   "_market": "D3. Dynasty market = FantasyCalc (real trades) and DynastyProcess (experts), matched by rank then blended. Win Now uses FantasyCalc's redraft value as its market.",
   "market": {
