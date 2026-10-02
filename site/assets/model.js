@@ -39,13 +39,23 @@ function makeModel(data, cfg) {
     ? (mkt.fantasycalc_weight * a + mkt.dynastyprocess_weight * b) / (mkt.fantasycalc_weight + mkt.dynastyprocess_weight)
     : a ?? b ?? 0);
 
+  /* The league QB premium is for young QBs: full up to full_until, fading
+     to nothing at none_from. Without the setting it applies at every age. */
+  function qbPremiumShare(age) {
+    const qa = cfg.qb_premium_ages;
+    if (!qa || age == null) return 1;
+    if (age <= qa.full_until) return 1;
+    if (age >= qa.none_from) return 0;
+    return (qa.none_from - age) / (qa.none_from - qa.full_until);
+  }
+
   /* Each anchor value is kept as a market part and a points part, so the
      market trust slider can move weight between them. wm is the market's
      share of the mix; null means the slider doesn't apply. */
   function playerParts(p) {
     if (p.pos === "K" || p.pos === "DEF") return { mk: [0, 0, 0], pts: [p.kd, p.kd, p.kd], wm: null };
     const dyn = blend(p.fc, p.dp);
-    const prem = p.pos === "QB" ? cfg.qb_premium : 1;
+    const prem = p.pos === "QB" ? 1 + (cfg.qb_premium - 1) * qbPremiumShare(p.age) : 1;
     return {
       mk: hzc.map((w, i) => w.market * (i === 0 ? p.red || 0 : dyn) * prem),
       pts: hzc.map((w) => (w.points_this_season * p.p_now + w.points_years_1_3 * p.p_13 + w.points_years_4_plus * p.p_4) * prem),
