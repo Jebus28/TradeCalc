@@ -1226,8 +1226,11 @@
         ]
       },
       "notes": "Batch 5. QB age taper: a 33-year-old starting QB for a 1st.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Lee fleece. Unlikely to happen as you need 3 starting QBs to be a contender.",
+      "matt_now": [
+        "Fleece: Lee"
+      ],
+      "unlikely": "A contender needs three starting QBs, so Dave wouldn't sell one."
     },
     {
       "id": "N35",
@@ -1260,8 +1263,11 @@
         ]
       },
       "notes": "Batch 5. QB age taper: a 29-year-old QB for an RB and a 1st.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Chris, edge to win. An RB suits his team need.",
+      "matt_now": [
+        "Slight edge: Chris",
+        "Clear win: Chris"
+      ]
     },
     {
       "id": "N36",
@@ -1294,8 +1300,10 @@
         ]
       },
       "notes": "Batch 5. QB age taper: a 31-year-old star QB for a star WR and a 1st.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Lee edge",
+      "matt_now": [
+        "Slight edge: Lee"
+      ]
     },
     {
       "id": "N37",
@@ -1327,8 +1335,10 @@
         ]
       },
       "notes": "Batch 5. QB age taper: a 29-year-old QB for a WR and a young QB.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Lee fleece",
+      "matt_now": [
+        "Fleece: Lee"
+      ]
     },
     {
       "id": "N38",
@@ -1362,8 +1372,10 @@
         ]
       },
       "notes": "Batch 5. QB age taper: a 33-year-old backup QB for two 3rds.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Lee clear win",
+      "matt_now": [
+        "Clear win: Lee"
+      ]
     },
     {
       "id": "N39",
@@ -1392,8 +1404,10 @@
         ]
       },
       "notes": "Batch 5. Wan'Dale Robinson on his own, for a 2nd (from N33).",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Fair",
+      "matt_now": [
+        "Fair"
+      ]
     },
     {
       "id": "N40",
@@ -1427,8 +1441,11 @@
         ]
       },
       "notes": "Batch 5. Mark Andrews on his own, for a 2nd and a 3rd (compare N23 and N33).",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Jebus, edge to clear win",
+      "matt_now": [
+        "Slight edge: Jebus",
+        "Clear win: Jebus"
+      ]
     },
     {
       "id": "T3",
