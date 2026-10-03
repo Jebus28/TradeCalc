@@ -111,14 +111,20 @@ function makeModel(data, cfg) {
     const round = Math.ceil(s.overall / teams), slot = s.overall - (round - 1) * teams;
     return [s.overall, (market.get(s.overall) ?? 0) * ladderFactor(round, tierOfSlot(slot))];
   }));
-  function pickParts(year, overalls) {
+  function pickParts(year, overalls, round) {
     const k = Math.max(0, year - pk.first_year);
     const base = mean(overalls.map((n) => slotValue.get(n) ?? 0));
     const bal = base * (1 - pc.future_year_discount) ** k * (1 + pc.class_rating_step * (pc.class_ratings[year] || 0));
     const lt = mean(overalls) <= pc.long_term_boost_through_overall ? bal * (1 + pc.long_term_boost) : bal;
-    /* Picks have no points: before Balanced they get the anchor's market
-       share of their value; Balanced all of it; Long-Term the boost. */
-    const at = (a, i) => (a.pos < balancedPos ? bal * hzc[i].market : a.key === "long_term" ? lt : bal);
+    /* Picks have no points. An anchor listed in picks.anchor_share keeps
+       that share of the pick's Balanced value, by round; any other anchor
+       before Balanced keeps its market share. Balanced gets all of it,
+       Long-Term the boost. */
+    const at = (a, i) => {
+      const sh = pc.anchor_share?.[a.key];
+      if (sh) return bal * (sh[round] ?? sh.later ?? 1);
+      return a.pos < balancedPos ? bal * hzc[i].market : a.key === "long_term" ? lt : bal;
+    };
     return { mk: anchors.map(at), pts: anchors.map(() => 0), wm: null, k };
   }
 
@@ -134,11 +140,11 @@ function makeModel(data, cfg) {
       const slots = tier === "any" ? Array.from({ length: teams }, (_, i) => i + 1) : pk.tiers[tier];
       const overall = slots.map((s) => (round - 1) * teams + s);
       const name = tier === "any" ? `${year} ${ORD(round)}` : `${year} ${TIER_NAME[tier]} ${ORD(round)}`;
-      a = { key, kind: "pick", year, round, tier, overall, name, ...pickParts(year, overall) };
+      a = { key, kind: "pick", year, round, tier, overall, name, ...pickParts(year, overall, round) };
     } else if ((m = /^(\d{4})-(\d)\.(\d{1,2})$/.exec(key || "")) && +m[2] <= pk.rounds && +m[3] >= 1 && +m[3] <= teams) {
       const year = +m[1], round = +m[2], slot = +m[3];
       const overall = [(round - 1) * teams + slot];
-      a = { key, kind: "pick", year, round, slot, overall, name: `${year} ${round}.${String(slot).padStart(2, "0")}`, ...pickParts(year, overall) };
+      a = { key, kind: "pick", year, round, slot, overall, name: `${year} ${round}.${String(slot).padStart(2, "0")}`, ...pickParts(year, overall, round) };
     } else if ((m = /^faab:(\d+)$/.exec(key || "")) && +m[1] > 0) {
       /* D13: the whole starting budget is worth one pick of the configured
          round and tier in the next draft; less in proportion. */

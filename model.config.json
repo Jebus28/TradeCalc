@@ -123,7 +123,12 @@
       "1": { "early": 1.80, "mid": 1.00, "late": 0.80 }
     },
     "_stack_strength": "Matt, 3 October 2026: picks are discounted as you add them; two 2nds definitely don't make a 1st. On each side of a trade, picks go from most to least valuable. The first counts in full; each further one counts its value x (its value / a mid 1st in its own draft) to this power (at 3: a further mid 1st counts in full, a late 1st about half, an early 2nd about a quarter). Off (0) for now: at every strength tried (1, 2, 3) it fixed N42 but broke N5, N23, N31, N40 and N47, where Matt counted several picks for a player at close to full value. Batch 7 (3 October) again scored worse with it on at every strength (12-13 misses of 56 against 8): it suits N42 and N53 but not N55 or N56, so it stays off.",
-    "stack_strength": 0
+    "stack_strength": 0,
+    "_anchor_share": "How much of a pick's Balanced value it keeps at the anchors before Balanced, by round ('later' = 3rd round on). Matt, 3 October 2026: contenders who will part with picks still recognise their dynasty value, particularly 1sts. Win Now was the market share (0.45 for every round) and is now 1sts 1.00, 2nds 0.85, later 0.70. Redraft stays at 0.30: a redraft or keeper manager doesn't value future picks.",
+    "anchor_share": {
+      "redraft": { "1": 0.30, "2": 0.30, "later": 0.30 },
+      "win_now": { "1": 1.00, "2": 0.85, "later": 0.70 }
+    }
   },
 
   "_veteran": "Matt, 3 October 2026, after current trades N11, N33, N40, N46 and N47: older RBs, WRs and TEs are worth less than both the market and their future points say. From min_age, their market value and future points (not this season's) are multiplied by factor. Confirmed by batch 7: with it, N49, N50, N51 and N55 agree; without it, they are close or miss (29 against 24 agreements of 56). Aaron Jones (N24, N52) is the exception: Matt rates him as a current bell-cow back.",
