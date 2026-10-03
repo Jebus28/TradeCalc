@@ -442,6 +442,7 @@ def build_league(lg, cfg, shared):
             "replacement_ppg": {k: round(v, 2) for k, v in repl.items()},
             "qb_premium": lg.get("qb_premium", 1.0),
             "situations": lg.get("situations", {}),
+            "manager_names": names,
             "counts": {"players": len(rows), "fantasycalc": len(fc), "dynastyprocess": len(dp),
                        "dynastyprocess_unmatched": dp_unmatched, "both_sources": len(set(fc) & set(dp))},
             "notes": notes,
@@ -558,7 +559,7 @@ def main():
                         out["meta"]["notes"].append(f"Test trade {t['id']}: {asset.get('name', pid)} isn't in Sleeper's player list.")
         save(os.path.join(SITE_DATA, f"values-{lg['slug']}.json"), out)
         save(os.path.join(SITE_DATA, f"testset-{lg['slug']}.json"), {"trades": trades})
-        index.append({"slug": lg["slug"], "name": lg["name"], "built": built})
+        index.append({"slug": lg["slug"], "name": lg["name"], "sleeper_league_id": lg["sleeper_league_id"], "built": built})
         top = ", ".join(f"{r['name']} {r['fc']}" for r in out["players"][:5])
         print(f"{lg['slug']}: {len(out['players'])} players, {len(trades)} test trades. Top on FantasyCalc: {top}")
     save(os.path.join(SITE_DATA, "index.json"), {"built": built, "leagues": index})

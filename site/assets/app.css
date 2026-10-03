@@ -221,6 +221,30 @@ details[open] summary{margin-bottom:10px}
 .strip div{display:flex;flex-direction:column;gap:2px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2)}
 .strip b{font-size:15px}
 
+/* Sleeper link */
+.connect{margin-bottom:12px}
+.connect .controls{margin:0;padding-bottom:0}
+.connect .controls input[type=search]{width:200px}
+.quick{display:flex;flex-wrap:wrap;gap:8px}
+.linkbar select{min-width:150px}
+.connectmsg{margin:0;padding:8px 14px 12px}
+.connectmsg:empty{padding:0 0 14px}
+.teamline{margin:-6px 0 0}
+.roster summary{margin-bottom:6px}
+.rlist{list-style:none;margin:0;padding:0;max-height:340px;overflow-y:auto;border:1px solid var(--line);border-radius:8px}
+.rlist .rgroup{position:sticky;top:0;z-index:1;background:var(--surface-2);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:5px 10px;border-bottom:1px solid var(--line)}
+.rlist button{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:10px;width:100%;padding:7px 10px;border-bottom:1px solid var(--line);cursor:pointer}
+.rlist button:hover{background:var(--surface-2)}
+.rlist button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.rlist button[aria-pressed="true"]{background:var(--live-soft)}
+.rlist .who{flex:1;min-width:0}
+.rlist .num{font-size:13px;font-weight:600}
+.rlist .tick{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line-strong);color:var(--muted);font-weight:700;font-size:13px}
+.rlist button[aria-pressed="true"] .tick{background:var(--live);border-color:var(--live);color:#fff}
+.lu{margin:6px 0 0;font-size:15px}
+.won .lu b{color:var(--live)}
+.lost .lu b{color:var(--accent)}
+
 /* model lab */
 body.wide{--maxw:1320px}
 .labgrid{display:grid;grid-template-columns:340px minmax(0,1fr);gap:14px;align-items:start}

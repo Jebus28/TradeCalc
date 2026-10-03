@@ -39,6 +39,14 @@
   "_situation_horizons": "Where each situation sits on the horizon slider (0 = Win Now, 50 = Balanced, 100 = Long-Term). Matt: building is between Balanced and Long-Term. The model lab judges current test trades at these horizons.",
   "situation_horizons": { "contending": 0, "building": 75, "rebuilding": 100 },
 
+  "_team_context": "Phase 3, the Sleeper link. When the analyser is linked to a league, each pick is valued by where it's expected to land until the draft order is set; after that, at its exact slot.",
+  "team_context": {
+    "_record_share_at_season_end": "D8. The next draft's order comes from a blend of each team's roster strength (its best starting lineup, in projected points a week for the rest of the season) and its record. The record's share grows in a straight line from 0 before week 1 to this value at the end of the regular season; roster strength has the rest. The weakest team gets the 1st slot.",
+    "record_share_at_season_end": 1.0,
+    "_later_years": "Picks in the drafts after the next one, by the original owner's situation. Contenders' picks are expected late (test-set lesson 6, trade C). 'unknown' is for a team with no situation set. Each can be early, mid, late, or any (the average of every slot).",
+    "later_years": { "contending": "late", "building": "mid", "rebuilding": "early", "unknown": "mid" }
+  },
+
   "_market": "D3. Dynasty market = FantasyCalc (real trades) and DynastyProcess (experts), matched by rank then blended. Win Now uses FantasyCalc's redraft value as its market.",
   "market": {
     "fantasycalc_weight": 0.5,

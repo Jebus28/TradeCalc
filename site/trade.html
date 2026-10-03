@@ -28,7 +28,24 @@
 </nav>
 
 <main class="wrap">
-  <p class="lead">Add what each side gets. Each manager judges the trade on their own horizon and settings, so a contender and a rebuilder can both come out ahead.</p>
+  <p class="lead">Link your Sleeper league to trade from real rosters, or add players and picks by hand. Each manager judges the trade on their own horizon and settings, so a contender and a rebuilder can both come out ahead.</p>
+
+  <section class="card connect" aria-labelledby="connect-h">
+    <h2 id="connect-h" class="vh">Sleeper league</h2>
+    <form id="userform" class="controls">
+      <label>Sleeper username<input type="search" id="username" autocomplete="off" spellcheck="false" enterkeyhint="go"></label>
+      <button class="btn" type="submit">Find my leagues</button>
+      <span class="note">or</span>
+      <span id="quick" class="quick"></span>
+    </form>
+    <div id="linkbar" class="controls linkbar" hidden>
+      <label>League<select id="leaguesel"></select></label>
+      <label>Side A<select id="team-a"></select></label>
+      <label>Side B<select id="team-b"></select></label>
+      <button class="btn" type="button" id="general">Use general mode</button>
+    </div>
+    <p class="note connectmsg" id="connectmsg" role="status"></p>
+  </section>
 
   <datalist id="managers"></datalist>
   <div class="sides">
@@ -45,7 +62,7 @@
 
   <section class="card verdict" id="verdict" aria-live="polite"></section>
 
-  <p class="attrib">Values from <a href="https://fantasycalc.com" target="_blank" rel="noopener">FantasyCalc.com</a> and <a href="https://github.com/dynastyprocess/data" target="_blank" rel="noopener">DynastyProcess</a>; projections and stats from Sleeper. General mode: settings are entered by hand. Rosters, roster fit and the balancer arrive with the Sleeper link.</p>
+  <p class="attrib">Values from <a href="https://fantasycalc.com" target="_blank" rel="noopener">FantasyCalc.com</a> and <a href="https://github.com/dynastyprocess/data" target="_blank" rel="noopener">DynastyProcess</a>; projections, stats and rosters from Sleeper. Manager tendencies and the balancer are still to come.</p>
 </main>
 
 <template id="side-tpl">
@@ -53,19 +70,24 @@
     <label class="sidename"><span class="vh" data-id="name-label">Manager</span><input type="text" data-field="name" list="managers" autocomplete="off" spellcheck="false"></label>
     <span class="note">gets</span>
   </header>
+  <p class="note teamline" data-out="team" hidden></p>
   <div class="combo">
     <label class="vh" data-id="search-label">Add a player or pick</label>
     <input type="search" data-field="search" placeholder="Add a player or pick (e.g. 2027 1st)" autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list">
     <ul class="results" role="listbox" hidden></ul>
   </div>
   <ul class="assets"></ul>
+  <details class="roster" open hidden>
+    <summary></summary>
+    <ul class="rlist"></ul>
+  </details>
   <div class="settings">
     <label class="horizon"><span>Horizon: <output data-out="hz">Balanced</output></span>
       <input type="range" data-field="hz" min="0" max="100" value="50" step="1">
       <span class="ends"><span>Win Now</span><span>Balanced</span><span>Long-Term</span></span>
     </label>
     <div class="sliders" data-group="main"></div>
-    <details>
+    <details class="more-settings">
       <summary>More settings</summary>
       <div class="sliders" data-group="more"></div>
     </details>
@@ -82,6 +104,7 @@
 </footer>
 <script src="assets/model.js"></script>
 <script src="assets/shared.js"></script>
+<script src="assets/league.js"></script>
 <script src="assets/trade.js"></script>
 </body>
 </html>

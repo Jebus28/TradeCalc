@@ -18,13 +18,14 @@ function horizonName(hz) {
 }
 
 /* The league's values plus the effective config: model.config.json with the
-   league's own QB premium folded in. */
-async function loadLeague() {
-  const slug = new URLSearchParams(location.search).get("league");
+   league's own QB premium folded in. data.leagues lists every league the
+   site has values for. */
+async function loadLeague(slug = new URLSearchParams(location.search).get("league")) {
   const index = await fetch("data/index.json", { cache: "no-cache" }).then((r) => r.json());
   const lg = index.leagues.find((l) => l.slug === slug) || index.leagues[0];
   const data = await fetch(`data/values-${lg.slug}.json`, { cache: "no-cache" }).then((r) => r.json());
   data.config = { ...data.config, qb_premium: data.meta.qb_premium };
+  data.leagues = index.leagues;
   showStatus(data.meta);
   return data;
 }

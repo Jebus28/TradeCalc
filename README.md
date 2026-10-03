@@ -5,8 +5,11 @@ starting with the Jessica Alba Dynasty League. It costs nothing to run.
 
 The site has three pages:
 
-- **Trade analyser** (`trade.html`): build a trade by hand, set each
-  manager's horizon and sliders, and see the verdict from both sides.
+- **Trade analyser** (`trade.html`): link a Sleeper league (by username, or
+  straight to a league the site covers) and trade from both teams' live
+  rosters and picks, or build a trade by hand in general mode. Set each
+  manager's horizon and sliders and see the verdict from both sides, plus
+  each team's starting lineup before and after and its roster space.
 - **Values** (`index.html`): every player and pick at any horizon.
 - **Model lab** (`lab.html`): replays the test-set trades in `testset.json`
   and scores the model against Matt's verdicts as you change the weights.
@@ -25,7 +28,10 @@ The decisions behind the model are in the
 3. GitHub Pages serves `site/`. In the browser, `site/assets/model.js` blends
    the ingredients by horizon and applies the manager sliders, the star value
    rule and the verdict bands.
-4. A scheduled Action runs steps 1 and 2 every four hours and publishes the result.
+4. When a league is linked, `site/assets/league.js` asks Sleeper for its
+   rosters, records and traded picks, works out each team's best lineup and
+   projects where its picks will land (D8).
+5. A scheduled Action runs steps 1 and 2 every four hours and publishes the result.
 
 ## Changing the model
 
