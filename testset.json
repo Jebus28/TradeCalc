@@ -1,5 +1,5 @@
 {
-  "_comment": "Matt's test set (D16), from the feasibility study. The model lab replays these trades with today's values. 'gets' lists what each side received. Players use their Sleeper ID (name alongside for reading). A pick already used gives the player chosen under 'became'; the lab can value it as that player or as the same slot in the next draft. matt_now lists the verdicts that count as agreeing with Matt: 'Fair', or 'Slight edge: X', 'Clear win: X', 'Fleece: X'. Past trades give each side's situation at the time as horizon: win_now, balanced or long_term. Current trades take it from the manager's situation in model.config.json. kind 'past' = a real trade judged with hindsight, shown in the lab but not scored. kind 'current' = today's players and picks, judged as if offered today; these are scored for Gate 2. A current trade with an empty matt_now is awaiting Matt's verdict, and the lab hides the model's answer until it's filled in. Picks without a tier are an unknown slot. motive (optional) is why each side might make the trade. unlikely (optional) says why Matt thinks the trade wouldn't happen; the verdict still counts as a value judgement.",
+  "_comment": "Matt's test set (D16), from the feasibility study. The model lab replays these trades with today's values. 'gets' lists what each side received. Players use their Sleeper ID (name alongside for reading). A pick already used gives the player chosen under 'became'; the lab can value it as that player or as the same slot in the next draft. matt_now lists the verdicts that count as agreeing with Matt: 'Fair', or 'Slight edge: X', 'Clear win: X', 'Fleece: X'. Past trades give each side's situation at the time as horizon: win_now, balanced or long_term. Current trades take it from the manager's situation in model.config.json. kind 'past' = a real trade judged with hindsight, shown in the lab but not scored. kind 'current' = today's players and picks, judged as if offered today; these are scored for Gate 2. A current trade with an empty matt_now is awaiting Matt's verdict, and the lab hides the model's answer until it's filled in. Picks without a tier are an unknown slot. motive (optional) is why each side might make the trade. unlikely (optional) says why Matt thinks the trade wouldn't happen; the verdict still counts as a value judgement. matt_extra (optional) records anything else Matt said about the trade, such as what he'd add to balance it or whether a manager would do it.",
   "trades": [
     {
       "id": "N1",
@@ -1480,8 +1480,11 @@
         ]
       },
       "notes": "Batch 6, pick tiers. Tiers are projections: on current form Rich would pick 2nd in 2027 and Chris 10th.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Neil, edge to clear",
+      "matt_now": [
+        "Slight edge: Neil",
+        "Clear win: Neil"
+      ]
     },
     {
       "id": "N42",
@@ -1516,8 +1519,10 @@
         ]
       },
       "notes": "Batch 6, pick tiers. Two early 2nds for a mid 1st.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Rich, clear win",
+      "matt_now": [
+        "Clear win: Rich"
+      ]
     },
     {
       "id": "N43",
@@ -1545,8 +1550,10 @@
         ]
       },
       "notes": "Batch 6, lineup fit between two contenders: judge it as both managers would, for this season's title.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Chris, fleece",
+      "matt_now": [
+        "Fleece: Chris"
+      ]
     },
     {
       "id": "N44",
@@ -1574,8 +1581,10 @@
         ]
       },
       "notes": "Batch 6, lineup fit between two contenders: judge it as both managers would, for this season's title.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Alex, fleece",
+      "matt_now": [
+        "Fleece: Alex"
+      ]
     },
     {
       "id": "N45",
@@ -1604,8 +1613,11 @@
         ]
       },
       "notes": "Batch 6, balancer. Also: if it's uneven, what would you ask Mike to add?",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Mike, fleece",
+      "matt_now": [
+        "Fleece: Mike"
+      ],
+      "matt_extra": "To make it fair Mike would need to add a mid-to-high tier WR."
     },
     {
       "id": "N46",
@@ -1634,8 +1646,11 @@
         ]
       },
       "notes": "Batch 6, balancer. Also: if it's uneven, what would you ask Chris to add?",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Chris, clear win",
+      "matt_now": [
+        "Clear win: Chris"
+      ],
+      "matt_extra": "To make it fair Chris would add another 2nd."
     },
     {
       "id": "N47",
@@ -1669,8 +1684,11 @@
         ]
       },
       "notes": "Batch 6, Neil's trade history. Also: would Neil do it?",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Neil, fleece",
+      "matt_now": [
+        "Fleece: Neil"
+      ],
+      "matt_extra": "Neil would do it."
     },
     {
       "id": "N48",
@@ -1704,8 +1722,11 @@
         ]
       },
       "notes": "Batch 6, Jebus's trade history. Also: would you do it?",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Ross, edge (based on mid 1sts)",
+      "matt_now": [
+        "Slight edge: Ross"
+      ],
+      "matt_extra": "Matt would do it if he thought he could get value for Jeanty from Chris or Alex."
     },
     {
       "id": "T3",
