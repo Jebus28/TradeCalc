@@ -62,7 +62,7 @@
 
   <section class="card verdict" id="verdict" aria-live="polite"></section>
 
-  <p class="attrib">Values from <a href="https://fantasycalc.com" target="_blank" rel="noopener">FantasyCalc.com</a> and <a href="https://github.com/dynastyprocess/data" target="_blank" rel="noopener">DynastyProcess</a>; projections, stats and rosters from Sleeper. Manager tendencies and the balancer are still to come.</p>
+  <p class="attrib">Values from <a href="https://fantasycalc.com" target="_blank" rel="noopener">FantasyCalc.com</a> and <a href="https://github.com/dynastyprocess/data" target="_blank" rel="noopener">DynastyProcess</a>; projections, stats, rosters and trade history from Sleeper.</p>
 </main>
 
 <template id="side-tpl">
@@ -79,6 +79,7 @@
   <ul class="assets"></ul>
   <details class="roster" open hidden>
     <summary></summary>
+    <form class="faabform" hidden><label><span></span><input type="number" min="1" step="1" inputmode="numeric" placeholder="$"></label><button class="btn" type="submit">Add</button></form>
     <ul class="rlist"></ul>
   </details>
   <div class="settings">
@@ -105,6 +106,7 @@
 <script src="assets/model.js"></script>
 <script src="assets/shared.js"></script>
 <script src="assets/league.js"></script>
+<script src="assets/balancer.js"></script>
 <script src="assets/trade.js"></script>
 </body>
 </html>

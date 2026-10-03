@@ -7,7 +7,8 @@ Layer 2  market value  - FantasyCalc and DynastyProcess, matched by rank.
 The site does layers 3 and 4 in the browser (site/assets/model.js): the
 horizon blend, manager sliders, the star value rule and verdicts. That way
 the model lab can re-run them with other weights. The build also copies
-testset.json for the lab.
+testset.json for the lab, and measures each manager's trading style from
+his Sleeper trades for his default sliders (D10).
 
 Run:  python scripts/build_values.py
 """
@@ -443,6 +444,7 @@ def build_league(lg, cfg, shared):
             "qb_premium": lg.get("qb_premium", 1.0),
             "situations": lg.get("situations", {}),
             "manager_names": names,
+            "waiver_budget": (league.get("settings") or {}).get("waiver_budget") or 0,
             "counts": {"players": len(rows), "fantasycalc": len(fc), "dynastyprocess": len(dp),
                        "dynastyprocess_unmatched": dp_unmatched, "both_sources": len(set(fc) & set(dp))},
             "notes": notes,
@@ -522,6 +524,146 @@ def build_picks(lg, cfg, data, fmt, fc_dyn, dp_rows, vkey, season, names, users)
     return out, owned
 
 
+# ---------------------------------------------------------------- tendencies
+
+def load_transactions(slug):
+    """Every saved season of a league's transactions, by season. A season in
+    data/history wins over a stale copy in data/cache."""
+    seasons = {}
+    for folder in (CACHE, HISTORY):
+        for name in sorted(os.listdir(folder)) if os.path.isdir(folder) else []:
+            m = re.match(rf"transactions_{re.escape(slug)}_(\d{{4}})\.json$", name)
+            if m:
+                seasons[int(m.group(1))] = load(os.path.join(folder, name))
+    return seasons
+
+
+def half_up(x):
+    """Round halves away from zero (Python's round() sends 0.5 to 0)."""
+    return int(math.copysign(math.floor(abs(x) + 0.5), x))
+
+
+def measure_tendencies(lg, cfg, players, history, state):
+    """D10: each manager's trading style from his Sleeper trades, turned into
+    default pick, rookie and star sliders.
+
+    For each trade and each roster in it: players received and given (a
+    player dropped to make room, with nobody receiving him, isn't a piece),
+    picks received and given. A player is a rookie if the trade is in or
+    before his first NFL season; a pick is a rookie pick if it's in the next
+    rookie draft (this season's if the trade came before this season's draft
+    was finished, else next season's) and in the first rookie_pick_rounds."""
+    tc = cfg["tendencies"]
+    rookie_rounds = cfg["sliders"]["rookie_pick_rounds"]
+    current = int(state["season"])
+    seasons = load_transactions(lg["slug"])
+    if not seasons:
+        return None
+    names = lg.get("manager_names", {})
+
+    # First NFL season: from Sleeper's years of experience, or the first season
+    # with stats if earlier (a retired player's experience stops counting up).
+    first_stats = {}
+    for s in sorted(history, key=int):
+        for pid in history[s]:
+            first_stats.setdefault(pid, int(s))
+
+    def first_season(pid):
+        p = players.get(pid) or {}
+        years = [first_stats[pid]] if pid in first_stats else []
+        if p.get("exp") is not None:
+            years.append(current - int(p["exp"]))
+        return min(years) if years else None
+
+    def age(pid, when):
+        p = players.get(pid)
+        return age_on(p, when) if p else None
+
+    tally, others = {}, {}
+    n_trades = 0
+    for season, d in sorted(seasons.items()):
+        owners, users = d.get("owners", {}), d.get("users", {})
+        finished = [x["last_picked"] for x in d.get("drafts", []) if x.get("status") == "complete" and x.get("last_picked")]
+        draft_done = max(finished) if finished else None
+        for t in d["transactions"]:
+            if t["type"] != "trade":
+                continue
+            n_trades += 1
+            when = dt.datetime.fromtimestamp(t["created"] / 1000, dt.timezone.utc).date()
+            next_draft = season + 1 if draft_done and t["created"] >= draft_done else season
+            adds, drops, dps = t.get("adds") or {}, t.get("drops") or {}, t.get("draft_picks") or []
+            for rid in t["roster_ids"]:
+                owner = owners.get(str(rid))
+                name = names.get(owner)
+                if not name:
+                    who = users.get(owner) or f"roster {rid}"
+                    others[who] = others.get(who, 0) + 1
+                    continue
+                got = [pid for pid, r in adds.items() if r == rid]
+                gave = [pid for pid, r in drops.items() if r == rid and adds.get(pid) not in (None, rid)]
+                pg = [p for p in dps if p["owner_id"] == rid and p["previous_owner_id"] != rid]
+                pv = [p for p in dps if p["previous_owner_id"] == rid and p["owner_id"] != rid]
+                m = tally.setdefault(name, {"trades": 0, "picks": 0, "premium": 0, "rookies": 0, "ages": [], "extra": 0})
+                m["trades"] += 1
+                m["picks"] += len(pg) - len(pv)
+                prem = tc["premium_through_round"]
+                m["premium"] += sum(p["round"] <= prem for p in pg) - sum(p["round"] <= prem for p in pv)
+
+                def rookies(pids, picks):
+                    return (sum((first_season(pid) or 0) >= season for pid in pids)
+                            + sum(int(p["season"]) == next_draft and p["round"] <= rookie_rounds for p in picks))
+
+                m["rookies"] += rookies(got, pg) - rookies(gave, pv)
+                a_in = [a for a in (age(pid, when) for pid in got) if a is not None]
+                a_out = [a for a in (age(pid, when) for pid in gave) if a is not None]
+                if a_in and a_out:
+                    m["ages"].append(statistics.fmean(a_in) - statistics.fmean(a_out))
+                m["extra"] += (len(gave) + len(pv)) - (len(got) + len(pg))
+
+    def slider(score, step, weight):
+        return max(-2, min(2, half_up(score / step * weight)))
+
+    managers = {}
+    for name, m in sorted(tally.items(), key=lambda kv: -kv[1]["trades"]):
+        n = m["trades"]
+        weight = min(1.0, n / tc["full_weight_trades"])
+        pick_score = m["picks"] / n + tc["premium_weight"] * m["premium"] / n
+        extra = m["extra"] / n
+        managers[name] = {
+            "trades": n,
+            "net_picks": m["picks"],
+            "net_premium": m["premium"],
+            "net_rookies": m["rookies"],
+            "age_diff": round(statistics.fmean(m["ages"]), 1) if m["ages"] else None,
+            "extra_pieces": round(extra, 2),
+            "weight": round(weight, 2),
+            "sliders": {
+                "pick": slider(pick_score, tc["pick_per_step"], weight),
+                "rookie": slider(m["rookies"] / n, tc["rookie_per_step"], weight),
+                "star": slider(extra, tc["star_per_step"], weight),
+            },
+        }
+    return {
+        "from_season": min(seasons), "to_season": max(seasons),
+        "trades": n_trades, "managers": managers, "former_managers": others,
+    }
+
+
+def print_tendencies(slug, td):
+    if not td:
+        print(f"{slug}: no transactions saved, so no manager tendencies")
+        return
+    print(f"{slug} tendencies: {td['trades']} trades, {td['from_season']}-{td['to_season']}")
+    print(f"  {'manager':<8} {'trades':>6} {'picks':>6} {'1st2nd':>6} {'rookie':>6} {'age':>5} {'extra':>6} {'weight':>6}  pick rookie star")
+    for name, m in td["managers"].items():
+        s = m["sliders"]
+        age_txt = "-" if m["age_diff"] is None else f"{m['age_diff']:+.1f}"
+        print(f"  {name:<8} {m['trades']:>6} {m['net_picks']:>+6} {m['net_premium']:>+6} {m['net_rookies']:>+6} "
+              f"{age_txt:>5} {m['extra_pieces']:>+6.2f} {m['weight']:>6.2f}  {s['pick']:>+4} {s['rookie']:>+6} {s['star']:>+4}")
+    if td["former_managers"]:
+        print("  not current managers (left out): " + ", ".join(f"{k} {v}" for k, v in td["former_managers"].items()))
+
+
 def main():
     cfg = config()
     state = load(os.path.join(CACHE, "state.json"))
@@ -548,6 +690,7 @@ def main():
         out["meta"]["built"] = built
         out["meta"]["fetch_failures"] = failures
         out["age_curves"] = shared["curves"]
+        out["tendencies"] = measure_tendencies(lg, cfg, players, history, state)
         # Everything but the league list, notes included: the lab shows them.
         out["config"] = {k: v for k, v in cfg.items() if k != "leagues"}
         trades = [t for t in testset["trades"] if t.get("league") == lg["slug"]]
@@ -562,6 +705,7 @@ def main():
         index.append({"slug": lg["slug"], "name": lg["name"], "sleeper_league_id": lg["sleeper_league_id"], "built": built})
         top = ", ".join(f"{r['name']} {r['fc']}" for r in out["players"][:5])
         print(f"{lg['slug']}: {len(out['players'])} players, {len(trades)} test trades. Top on FantasyCalc: {top}")
+        print_tendencies(lg["slug"], out["tendencies"])
     save(os.path.join(SITE_DATA, "index.json"), {"built": built, "leagues": index})
     for pos, c in shared["curves"].items():
         print(f"age curve {pos}: peak {c['peak_age']}, cliff {c['cliff_age']}")

@@ -10,6 +10,9 @@ The site has three pages:
   rosters and picks, or build a trade by hand in general mode. Set each
   manager's horizon and sliders and see the verdict from both sides, plus
   each team's starting lineup before and after and its roster space.
+  Linked, each manager's sliders start from their JADL trade history, FAAB
+  can be traded, warnings flag trades that rarely happen, and the balancer
+  suggests one or two pieces that would make an uneven trade fair.
 - **Values** (`index.html`): every player and pick at any horizon.
 - **Model lab** (`lab.html`): replays the test-set trades in `testset.json`
   and scores the model against Matt's verdicts as you change the weights.
@@ -20,7 +23,7 @@ The decisions behind the model are in the
 ## How it works
 
 1. `scripts/fetch_data.py` pulls everything into `data/`: leagues, players,
-   projections and past stats from Sleeper; trade-market values from
+   projections, past stats and every past trade and waiver claim from Sleeper; trade-market values from
    FantasyCalc; expert values and player IDs from DynastyProcess.
 2. `scripts/build_values.py` turns that into each player's ingredients (points
    above replacement and market values) and each pick slot's market value, and

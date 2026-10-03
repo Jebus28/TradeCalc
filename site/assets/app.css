@@ -231,6 +231,11 @@ details[open] summary{margin-bottom:10px}
 .connectmsg:empty{padding:0 0 14px}
 .teamline{margin:-6px 0 0}
 .roster summary{margin-bottom:6px}
+.faabform{display:flex;align-items:center;gap:8px;margin:0 0 8px}
+.faabform label{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink-2)}
+.faabform input{width:90px;font:14px "IBM Plex Mono",monospace;color:var(--ink);background:var(--surface-2);border:1px solid var(--line-strong);border-radius:6px;padding:5px 8px}
+.faabform .btn{padding:5px 12px;font-size:13px}
+.faabform[hidden]{display:none}
 .rlist{list-style:none;margin:0;padding:0;max-height:340px;overflow-y:auto;border:1px solid var(--line);border-radius:8px}
 .rlist .rgroup{position:sticky;top:0;z-index:1;background:var(--surface-2);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);padding:5px 10px;border-bottom:1px solid var(--line)}
 .rlist button{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:10px;width:100%;padding:7px 10px;border-bottom:1px solid var(--line);cursor:pointer}
@@ -241,6 +246,12 @@ details[open] summary{margin-bottom:10px}
 .rlist .num{font-size:13px;font-weight:600}
 .rlist .tick{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line-strong);color:var(--muted);font-weight:700;font-size:13px}
 .rlist button[aria-pressed="true"] .tick{background:var(--live);border-color:var(--live);color:#fff}
+.warns{margin:0;padding:0 0 0 18px;display:flex;flex-direction:column;gap:6px;color:var(--ink-2);font-size:14px}
+.warns li::marker{color:var(--warn)}
+.bal{list-style:none;margin:8px 0 0;padding:0;border-top:1px solid var(--line)}
+.bal li{display:flex;align-items:center;gap:10px;padding:8px 2px;border-bottom:1px solid var(--line)}
+.bal .who{flex:1;min-width:0}
+.bal .btn{padding:6px 12px;font-size:13px}
 .lu{margin:6px 0 0;font-size:15px}
 .won .lu b{color:var(--live)}
 .lost .lu b{color:var(--accent)}

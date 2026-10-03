@@ -14,11 +14,11 @@ const FIXED_SLOTS = ["QB", "RB", "WR", "TE", "K", "DEF"];
 const FLEX_FILL = [["WRRB_FLEX", ["WR", "RB"]], ["REC_FLEX", ["WR", "TE"]], ["FLEX", ["RB", "WR", "TE"]], ["SUPER_FLEX", ["QB", "RB", "WR", "TE"]]];
 const POS_ORDER = ["QB", "RB", "WR", "TE", "K", "DEF"];
 const PICK_KEY = /^(\d{4})-(\d)-r(\d+)$/;
+const FAAB_KEY = /^faab:(\d+)$/;
 
 async function sleeper(path) {
   const r = await fetch(SLEEPER_API + path);
-  if (!r.ok) throw new Error(`Sleeper didn't answer (error ${r.status}).`);
-  return r.json();
+  if (!r.ok) throw new Error(`Sleeper didn't answer (error ${r.status}).`);  return r.json();
 }
 
 /* A username's leagues this season. */
@@ -37,7 +37,7 @@ async function sleeperLeague(id) {
   return { league, users: users || [], rosters: rosters || [], traded: traded || [], drafts: drafts || [] };
 }
 
-function makeLeague(live, data) {
+function makeLeague(live, data, model) {
   const cfg = data.config, tc = cfg.team_context, meta = data.meta, pk = data.picks;
   const byId = new Map(data.players.map((p) => [p.id, p]));
   const names = meta.manager_names || {};
@@ -83,6 +83,37 @@ function makeLeague(live, data) {
   });
   const byRid = new Map(teams.map((t) => [t.rid, t]));
   const n = teams.length;
+  const rostered = new Set(teams.flatMap((t) => t.players));
+
+  /* What a point a week is worth (D14): across every team's starters, how
+     much Win Now value rises with each point a week scored above a
+     bench-level player at the position (the three best who start for
+     nobody). A straight-line fit, so it's the price of one more point. */
+  const starting = new Set(teams.flatMap((t) => [...lineup(t.players).starters]));
+  const bench = {};
+  for (const pos of SKILL_POS) {
+    const best = data.players.filter((p) => p.pos === pos && !starting.has(p.id)).map((p) => perWeek(p.id)).sort((x, y) => y - x).slice(0, 3);
+    bench[pos] = best.length ? mean(best) : 0;
+  }
+  const fitRows = [...starting].map((id) => byId.get(id)).filter((p) => p && SKILL_POS.includes(p.pos))
+    .map((p) => ({ e: perWeek(p.id) - bench[p.pos], v: model.value(model.asset(p.id), 0) })).filter((r) => r.e > 0);
+  let perPoint = 0;
+  if (fitRows.length > 2) {
+    const me = mean(fitRows.map((r) => r.e)), mv = mean(fitRows.map((r) => r.v));
+    const varE = sum(fitRows.map((r) => (r.e - me) ** 2));
+    perPoint = varE ? Math.max(0, sum(fitRows.map((r) => (r.e - me) * (r.v - mv))) / varE) : 0;
+  }
+
+  /* Free agents (on no roster) and each team's likely cuts if it's over the
+     limit now: its lowest-valued players in roster spots. */
+  const freeAgents = data.players.filter((p) => !rostered.has(p.id) && SKILL_POS.includes(p.pos));
+  teams.forEach((t) => {
+    const over = t.active - limit;
+    t.cuts = over > 0
+      ? new Set(t.players.filter((id) => !t.reserve.has(id) && !t.taxi.has(id))
+        .sort((x, y) => model.value(model.asset(x), 50) - model.value(model.asset(y), 50)).slice(0, over))
+      : new Set();
+  });
 
   /* D8: the next draft's order from roster strength and record. */
   const winPct = (t) => { const g = t.wins + t.losses + t.ties; return g ? (t.wins + t.ties / 2) / g : 0.5; };
@@ -146,8 +177,9 @@ function makeLeague(live, data) {
   /* A team's lineup and roster space before and after a trade. */
   function change(rid, givesKeys, getsKeys) {
     const t = byRid.get(rid);
-    const outIds = new Set(givesKeys.filter((k) => !PICK_KEY.test(k)));
-    const inIds = getsKeys.filter((k) => !PICK_KEY.test(k));
+    const isPlayer = (k) => !PICK_KEY.test(k) && !FAAB_KEY.test(k);
+    const outIds = new Set(givesKeys.filter(isPlayer));
+    const inIds = getsKeys.filter(isPlayer);
     const before = lineup(t.players), after = lineup([...t.players.filter((id) => !outIds.has(id)), ...inIds]);
     const freed = [...outIds].filter((id) => !t.reserve.has(id) && !t.taxi.has(id)).length;
     return {
@@ -159,13 +191,18 @@ function makeLeague(live, data) {
   }
 
   return {
-    teams, limit, weeksLeft, recordShare,
+    teams, limit, weeksLeft, recordShare, perPoint, freeAgents,
     league: live.league,
     team: (rid) => byRid.get(+rid) || null,
     isPick: (key) => PICK_KEY.test(key),
     pickInfo,
     resolve: (key) => pickInfo(key)?.model ?? key,
-    owns: (rid, key) => { const t = byRid.get(+rid); return Boolean(t) && (PICK_KEY.test(key) ? owner.get(key) === t.rid : t.players.includes(key)); },
+    owns: (rid, key) => {
+      const t = byRid.get(+rid), f = FAAB_KEY.exec(key);
+      if (!t) return false;
+      if (f) return +f[1] <= (t.faab || 0);
+      return PICK_KEY.test(key) ? owner.get(key) === t.rid : t.players.includes(key);
+    },
     /* A team's tradeable assets: players by position then value, then picks. */
     assets: (rid, valueOf) => {
       const t = byRid.get(+rid);

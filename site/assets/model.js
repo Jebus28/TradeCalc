@@ -6,7 +6,7 @@
 
    Asset keys: a Sleeper player ID ("4866", or "DEN" for a defence); a pick
    by tier, "2027-1-early" / "-mid" / "-late" / "-any"; or an exact slot,
-   "2027-1.05". */
+   "2027-1.05"; or FAAB dollars, "faab:100". */
 
 const ANCHORS = ["win_now", "balanced", "long_term"];
 const STARTER_SLOTS = ["QB", "RB", "WR", "TE", "FLEX", "WRRB_FLEX", "REC_FLEX", "SUPER_FLEX"];
@@ -89,6 +89,12 @@ function makeModel(data, cfg) {
       const year = +m[1], round = +m[2], slot = +m[3];
       const overall = [(round - 1) * teams + slot];
       a = { key, kind: "pick", year, round, slot, overall, name: `${year} ${round}.${String(slot).padStart(2, "0")}`, ...pickParts(year, overall) };
+    } else if ((m = /^faab:(\d+)$/.exec(key || "")) && +m[1] > 0) {
+      /* D13: the whole starting budget is worth one pick of the configured
+         round and tier in the next draft; less in proportion. */
+      const fc = cfg.faab || {}, budget = meta.waiver_budget || 0;
+      const pick = `${pk.first_year}-${Math.min(fc.pick_round || pk.rounds, pk.rounds)}-${fc.pick_tier || "mid"}`;
+      a = { key, kind: "faab", amount: +m[1], name: `$${m[1]} FAAB`, pick, share: budget ? Math.min(1, +m[1] / budget) : 0 };
     }
     cache.set(key, a);
     return a;
@@ -102,6 +108,7 @@ function makeModel(data, cfg) {
   /* An asset's value at a horizon, through one manager's sliders. */
   function value(a, hz, s = NEUTRAL) {
     if (!a) return 0;
+    if (a.kind === "faab") return a.share * value(asset(a.pick), hz);
     let mk = along(a.mk, hz), pts = along(a.pts, hz);
     if (s.market && a.wm) {
       const wm = along(a.wm, hz);
@@ -168,24 +175,33 @@ function makeModel(data, cfg) {
     return { gap, band, grade, label: gap >= 0 ? BAND_WIN[band] : BAND_LOSS[band] };
   }
 
+  /* D14: the starting-lineup change counts a little at Win Now, fading to
+     nothing at Balanced. fit is the change priced in full (points a week x
+     the league's value of a point a week); a gain adds to what the side
+     gets, a loss to what it gives. */
+  const lineupWeight = cfg.team_context?.lineup_weight_win_now || 0;
+  const fitAt = (fit, hz) => (fit || 0) * along([lineupWeight, 0, 0], hz);
+
   /* One manager's view: what they get against what they give, at their
      horizon, through their sliders. */
-  function sideView(gets, gives, hz, s = NEUTRAL) {
+  function sideView(gets, gives, hz, s = NEUTRAL, fit = 0) {
     const ga = gets.map(asset), va = gives.map(asset);
     const gVals = ga.map((a) => value(a, hz, s)), vVals = va.map((a) => value(a, hz, s));
     const c = counted(gVals, vVals, hz, s.star);
-    const get = sum(c.get), give = sum(c.give);
+    const f = fitAt(fit, hz);
+    const get = sum(c.get) + Math.max(0, f), give = sum(c.give) + Math.max(0, -f);
     const gap = Math.max(get, give) > 0 ? (get - give) / Math.max(get, give) : 0;
     const items = (keys, assets, vals, cnt) => keys.map((key, i) => ({ key, asset: assets[i], value: vals[i], counted: cnt[i] }));
-    return { get, give, line: c.line, gets: items(gets, ga, gVals, c.get), gives: items(gives, va, vVals, c.give), ...verdict(gap) };
+    return { get, give, fit: f, line: c.line, gets: items(gets, ga, gVals, c.get), gives: items(gives, va, vVals, c.give), ...verdict(gap) };
   }
 
-  /* t = {a: {gets, hz, s}, b: {gets, hz, s}}; each side gets its own list. */
+  /* t = {a: {gets, hz, s, fit}, b: {gets, hz, s, fit}}; each side gets its
+     own list. fit is optional (only a linked league has lineups). */
   function judge(t) {
     return {
-      a: sideView(t.a.gets, t.b.gets, t.a.hz, t.a.s),
-      b: sideView(t.b.gets, t.a.gets, t.b.hz, t.b.s),
-      strip: [0, 50, 100].map((hz) => ({ hz, ...sideView(t.a.gets, t.b.gets, hz) })),
+      a: sideView(t.a.gets, t.b.gets, t.a.hz, t.a.s, t.a.fit),
+      b: sideView(t.b.gets, t.a.gets, t.b.hz, t.b.s, t.b.fit),
+      strip: [0, 50, 100].map((hz) => ({ hz, ...sideView(t.a.gets, t.b.gets, hz, NEUTRAL, t.a.fit) })),
     };
   }
 

@@ -44,7 +44,17 @@
     "_record_share_at_season_end": "D8. The next draft's order comes from a blend of each team's roster strength (its best starting lineup, in projected points a week for the rest of the season) and its record. The record's share grows in a straight line from 0 before week 1 to this value at the end of the regular season; roster strength has the rest. The weakest team gets the 1st slot.",
     "record_share_at_season_end": 1.0,
     "_later_years": "Picks in the drafts after the next one, by the original owner's situation. Contenders' picks are expected late (test-set lesson 6, trade C). 'unknown' is for a team with no situation set. Each can be early, mid, late, or any (the average of every slot).",
-    "later_years": { "contending": "late", "building": "mid", "rebuilding": "early", "unknown": "mid" }
+    "later_years": { "contending": "late", "building": "mid", "rebuilding": "early", "unknown": "mid" },
+    "_lineup_weight_win_now": "D14, decided 3 October 2026: the starting-lineup change counts a little at Win Now. A point a week is priced at how much the league's starters' Win Now value rises with each extra point a week they score above a bench-level player (about 770 in JADL on 3 October 2026); this share of the lineup change, so priced, is added to (or taken from) the side's verdict. It fades in a straight line to nothing at Balanced, so Long-Term managers ignore it.",
+    "lineup_weight_win_now": 0.25,
+    "_warnings": "Shown with the verdict, never counted in it (decided 3 October 2026). rb_rebuilder_min_pieces: a rebuilding manager sending at least this many pieces, a pick among them, for a running back gets Matt's rebuilder-RB warning.",
+    "rb_rebuilder_min_pieces": 2
+  },
+
+  "_faab": "D13, decided 3 October 2026. In a normal league (JADL) FAAB is worth a 5th-round pick at best: a league's whole starting budget is worth one pick of this round and tier in the next draft, and less in proportion (in JADL, $1,000 = a mid 5th, so $100 is a tenth of one). Chopped leagues will get their own rule, priced from their winning bids, once the site covers one.",
+  "faab": {
+    "pick_round": 5,
+    "pick_tier": "mid"
   },
 
   "_market": "D3. Dynasty market = FantasyCalc (real trades) and DynastyProcess (experts), matched by rank then blended. Win Now uses FantasyCalc's redraft value as its market.",
@@ -131,6 +141,22 @@
     "market_trust_step": 0.20,
     "qb_step": 0.05,
     "te_step": 0.05
+  },
+
+  "_tendencies": "D10. Each manager's default pick, rookie and star sliders, learned from every Sleeper trade they've made in the league (back to 2020). Each tendency is a score per trade, turned into slider steps, then scaled down for managers with few trades so a quiet trader stays near neutral. Rounded to the nearest whole step and kept within -2 to +2.",
+  "tendencies": {
+    "_full_weight_trades": "D10. A manager needs this many trades for his tendencies to count in full. With fewer, they're scaled down in proportion (6 trades = 6/15 of the full effect).",
+    "full_weight_trades": 15,
+    "_premium_weight": "D10. Pick slider: how much extra a 1st or 2nd counts on top of counting as a pick. 1.0 = a 1st or 2nd counts twice.",
+    "premium_weight": 1.0,
+    "_premium_through_round": "D10. Which rounds count as premium picks for premium_weight. 2 = 1sts and 2nds.",
+    "premium_through_round": 2,
+    "_pick_per_step": "D10. Pick slider: picks gained per trade, on average (premium picks counted extra), for each step. Gaining a quarter of a pick a trade = +1; giving them away = -1 and below.",
+    "pick_per_step": 0.25,
+    "_rookie_per_step": "D10. Rookie slider: rookies gained per trade, on average, for each step. Rookies are players in their first NFL season plus picks in the next rookie draft up to the sliders' rookie_pick_rounds.",
+    "rookie_per_step": 0.15,
+    "_star_per_step": "D10. Star slider: extra pieces paid per trade, on average, to get fewer, better ones, for each step. Giving 0.3 more pieces (players and picks) than he gets = +1; taking extra pieces = -1 and below.",
+    "star_per_step": 0.3
   },
 
   "_verdict": "D7. The gap is (what a side gets - what it gives) / the larger of the two, so it runs from -100% to +100%. Under fair_below is Fair; then Slight edge, Clear win, and Fleece from clear_below up. Grades: the first threshold the gap reaches, else F.",
