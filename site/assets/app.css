@@ -102,7 +102,10 @@ main.wrap{padding-top:20px;padding-bottom:40px}
 .chips button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
 .horizon{flex:1 1 280px;min-width:240px}
 .horizon input{width:100%;accent-color:var(--accent)}
-.horizon .ends{display:flex;justify-content:space-between;font-size:12px;font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0}
+.horizon .ends{position:relative;display:block;height:1.4em;margin:0 9px;font-size:12px;font-weight:600;color:var(--muted);text-transform:none;letter-spacing:0}
+.horizon .ends span{position:absolute;top:0;transform:translateX(-50%);white-space:nowrap}
+.horizon .ends span:first-child{transform:translateX(-9px)}
+.horizon .ends span:last-child{transform:translateX(calc(-100% + 9px))}
 .horizon output{font-family:"Roboto Slab",serif;font-size:15px;color:var(--ink);text-transform:none;letter-spacing:0}
 .attrib{font-size:12px;color:var(--muted);margin:6px 2px 0}
 
@@ -217,7 +220,7 @@ details[open] summary{margin-bottom:10px}
 .tug .give{background:var(--accent);opacity:.8}
 .tugkey{display:flex;justify-content:space-between;font-size:13px;color:var(--ink-2);margin-top:4px}
 .vside .note{margin:8px 0 0}
-.strip{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
 .strip div{display:flex;flex-direction:column;gap:2px;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2)}
 .strip b{font-size:15px}
 

@@ -8,7 +8,7 @@
    by tier, "2027-1-early" / "-mid" / "-late" / "-any"; or an exact slot,
    "2027-1.05"; or FAAB dollars, "faab:100". */
 
-const ANCHORS = ["win_now", "balanced", "long_term"];
+const ANCHOR_NAMES = { redraft: "Redraft", win_now: "Win Now", balanced: "Balanced", long_term: "Long-Term" };
 const STARTER_SLOTS = ["QB", "RB", "WR", "TE", "FLEX", "WRRB_FLEX", "REC_FLEX", "SUPER_FLEX"];
 const SKILL_POS = ["QB", "RB", "WR", "TE"];
 const SLIDERS = ["rookie", "pick", "star", "risk", "market", "qb", "te"];
@@ -22,15 +22,33 @@ const mean = (xs) => xs.reduce((s, x) => s + x, 0) / xs.length;
 const sum = (xs) => xs.reduce((s, x) => s + x, 0);
 const clamp = (x, lo, hi) => Math.min(hi, Math.max(lo, x));
 
-/* Straight lines between the anchors: 0 = Win Now, 50 = Balanced, 100 = Long-Term. */
-function along(arr, hz) {
-  if (hz <= 50) return arr[0] + (arr[1] - arr[0]) * (hz / 50);
-  return arr[1] + (arr[2] - arr[1]) * ((hz - 50) / 50);
+/* The horizon slider's anchors, left to right: [{key, pos, name}], from
+   horizon_positions in the config (Redraft 0, Win Now 25, Balanced 50,
+   Long-Term 100). */
+function anchorsOf(cfg) {
+  const pos = cfg.horizon_positions || { win_now: 0, balanced: 50, long_term: 100 };
+  return Object.keys(pos).filter((k) => cfg.horizons[k]).sort((x, y) => pos[x] - pos[y])
+    .map((key) => ({ key, pos: pos[key], name: ANCHOR_NAMES[key] || key }));
+}
+
+/* Straight lines between the anchors: arr holds one value per anchor. */
+function alongAnchors(anchors, arr, hz) {
+  if (hz <= anchors[0].pos) return arr[0];
+  for (let i = 1; i < anchors.length; i++) {
+    if (hz <= anchors[i].pos) {
+      const a = anchors[i - 1].pos, b = anchors[i].pos;
+      return arr[i - 1] + (arr[i] - arr[i - 1]) * ((hz - a) / (b - a));
+    }
+  }
+  return arr[arr.length - 1];
 }
 
 function makeModel(data, cfg) {
   const { meta, picks: pk } = data;
-  const hzc = ANCHORS.map((h) => cfg.horizons[h]);
+  const anchors = anchorsOf(cfg);
+  const along = (arr, hz) => alongAnchors(anchors, arr, hz);
+  const hzc = anchors.map((a) => cfg.horizons[a.key]);
+  const balancedPos = anchors.find((a) => a.key === "balanced")?.pos ?? 50;
   const { market: mkt, picks: pc, sliders: sl, star, verdict: vd } = cfg;
   const byId = new Map(data.players.map((p) => [p.id, p]));
   const teams = pk.teams;
@@ -53,19 +71,20 @@ function makeModel(data, cfg) {
      market trust slider can move weight between them. wm is the market's
      share of the mix; null means the slider doesn't apply. */
   function playerParts(p) {
-    if (p.pos === "K" || p.pos === "DEF") return { mk: [0, 0, 0], pts: [p.kd, p.kd, p.kd], wm: null };
+    if (p.pos === "K" || p.pos === "DEF") return { mk: hzc.map(() => 0), pts: hzc.map(() => p.kd), wm: null };
     const dyn = blend(p.fc, p.dp);
     const prem = p.pos === "QB" ? 1 + (cfg.qb_premium - 1) * qbPremiumShare(p.age) : 1;
     /* Older veterans count for less than the market and their future points
        say; this season's points are left alone. */
     const vet = cfg.veteran;
     const old = vet && p.age != null && p.age >= vet.min_age && vet.positions.includes(p.pos) ? vet.factor : 1;
-    /* Win Now's market is FantasyCalc's redraft value, partly blended
-       with the dynasty market (market.win_now_dynasty_share). */
-    const ds = mkt.win_now_dynasty_share || 0;
-    const now = (1 - ds) * (p.red || 0) + ds * dyn * old;
+    /* Each anchor's market blends FantasyCalc's redraft value with the
+       dynasty market (market.dynasty_share: none at Redraft, all from
+       Balanced on). */
+    const ds = mkt.dynasty_share || {};
+    const marketAt = (key) => { const d = ds[key] ?? 1; return (1 - d) * (p.red || 0) + d * dyn * old; };
     return {
-      mk: hzc.map((w, i) => w.market * (i === 0 ? now : dyn * old) * prem),
+      mk: hzc.map((w, i) => w.market * marketAt(anchors[i].key) * prem),
       pts: hzc.map((w) => (w.points_this_season * p.p_now + (w.points_years_1_3 * p.p_13 + w.points_years_4_plus * p.p_4) * old) * prem),
       wm: hzc.map((w) => w.market),
     };
@@ -97,7 +116,10 @@ function makeModel(data, cfg) {
     const base = mean(overalls.map((n) => slotValue.get(n) ?? 0));
     const bal = base * (1 - pc.future_year_discount) ** k * (1 + pc.class_rating_step * (pc.class_ratings[year] || 0));
     const lt = mean(overalls) <= pc.long_term_boost_through_overall ? bal * (1 + pc.long_term_boost) : bal;
-    return { mk: [bal * hzc[0].market, bal, lt], pts: [0, 0, 0], wm: null, k };
+    /* Picks have no points: before Balanced they get the anchor's market
+       share of their value; Balanced all of it; Long-Term the boost. */
+    const at = (a, i) => (a.pos < balancedPos ? bal * hzc[i].market : a.key === "long_term" ? lt : bal);
+    return { mk: anchors.map(at), pts: anchors.map(() => 0), wm: null, k };
   }
 
   const cache = new Map();
@@ -203,12 +225,12 @@ function makeModel(data, cfg) {
     return { gap, band, grade, label: gap >= 0 ? BAND_WIN[band] : BAND_LOSS[band] };
   }
 
-  /* D14: the starting-lineup change counts a little at Win Now, fading to
-     nothing at Balanced. fit is the change priced in full (points a week x
-     the league's value of a point a week); a gain adds to what the side
-     gets, a loss to what it gives. */
-  const lineupWeight = cfg.team_context?.lineup_weight_win_now || 0;
-  const fitAt = (fit, hz) => (fit || 0) * along([lineupWeight, 0, 0], hz);
+  /* D14: the starting-lineup change counts a little at Redraft and Win Now,
+     nothing from Balanced on (team_context.lineup_weight, by anchor). fit is
+     the change priced in full (points a week x the league's value of a point
+     a week); a gain adds to what the side gets, a loss to what it gives. */
+  const lineupWeights = anchors.map((a) => cfg.team_context?.lineup_weight?.[a.key] || 0);
+  const fitAt = (fit, hz) => (fit || 0) * along(lineupWeights, hz);
 
   /* One manager's view: what they get against what they give, at their
      horizon, through their sliders. */
@@ -245,7 +267,7 @@ function makeModel(data, cfg) {
     return {
       a: sideView(t.a.gets, t.b.gets, t.a.hz, t.a.s, t.a.fit),
       b: sideView(t.b.gets, t.a.gets, t.b.hz, t.b.s, t.b.fit),
-      strip: [0, 50, 100].map((hz) => ({ hz, ...sideView(t.a.gets, t.b.gets, hz, NEUTRAL, t.a.fit) })),
+      strip: anchors.map(({ pos: hz }) => ({ hz, ...sideView(t.a.gets, t.b.gets, hz, NEUTRAL, t.a.fit) })),
     };
   }
 
@@ -263,5 +285,5 @@ function makeModel(data, cfg) {
     return rows;
   }
 
-  return { asset, value, judge, sideView, verdict, winnerLabel, qualityLine, pickRows, risky, starters };
+  return { asset, value, judge, sideView, verdict, winnerLabel, qualityLine, pickRows, risky, starters, anchors };
 }

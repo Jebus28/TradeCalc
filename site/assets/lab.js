@@ -4,16 +4,15 @@
    Edits stay in this page; "Copy changes" lists them for model.config.json.
    Needs model.js and shared.js. */
 
-const HZ = { win_now: 0, balanced: 50, long_term: 100 };
 const INGREDIENTS = [
   ["points_this_season", "This season"],
   ["points_years_1_3", "Next 1–3"],
   ["points_years_4_plus", "4+ out"],
   ["market", "Market"],
 ];
-const ANCHOR_NAMES = { win_now: "Win Now", balanced: "Balanced", long_term: "Long-Term" };
 
 let DATA = null, BASE = null, CFG = null, MODEL = null, TRADES = [], FIELDS = [];
+let ANCHORS = []; // the horizon slider's anchors (model.js anchorsOf)
 const ui = { hz: 50, used: "player" };
 
 const getAt = (obj, path) => path.reduce((o, k) => o?.[k], obj);
@@ -25,6 +24,10 @@ async function load() {
   BASE = structuredClone(DATA.config);
   CFG = structuredClone(BASE);
   TRADES = (await fetch(`data/testset-${DATA.meta.slug}.json`, { cache: "no-cache" }).then((r) => r.json())).trades;
+  ANCHORS = anchorsOf(BASE);
+  $("#compare").innerHTML = ANCHORS.map((a) => `<button type="button" role="radio" aria-checked="${a.pos === ui.hz}" data-hz="${a.pos}">${esc(a.name)}</button>`).join("");
+  const heads = ANCHORS.map((a) => `<th class="r hide-sm">${esc(a.name)}</th>`).join("");
+  $$(".lab thead th.anchors").forEach((th) => th.outerHTML = heads);
   buildFields();
   $("#compare").addEventListener("click", (e) => {
     const b = e.target.closest("[data-hz]"); if (!b) return;
@@ -48,9 +51,8 @@ function buildFields() {
   const groups = [
     { title: "Market and QBs", note: BASE._market, items: [
       { path: ["market", "fantasycalc_weight"], label: "FantasyCalc share of the market (DynastyProcess gets the rest)", step: 0.05, min: 0, max: 1 },
-      ...(BASE.market.win_now_dynasty_share != null ? [
-        { path: ["market", "win_now_dynasty_share"], label: "Win Now market: dynasty share (redraft gets the rest)", step: 0.05, min: 0, max: 1 },
-      ] : []),
+      ...ANCHORS.filter((a) => BASE.market.dynasty_share?.[a.key] != null && a.key !== "balanced" && a.key !== "long_term").map((a) => (
+        { path: ["market", "dynasty_share", a.key], label: `${a.name} market: dynasty share (redraft gets the rest)`, step: 0.05, min: 0, max: 1 })),
       { path: ["qb_premium"], label: "League QB premium (×)", step: 0.05, min: 0.5, max: 2, file: `leagues → ${DATA.meta.slug} → qb_premium` },
       ...(BASE.qb_premium_ages ? [
         { path: ["qb_premium_ages", "full_until"], label: "QB premium in full up to age", step: 1, min: 20, max: 40 },
@@ -79,7 +81,7 @@ function buildFields() {
       { path: ["star", "extra_pieces_only"], label: "Only the extra pieces on the bigger side", type: "checkbox" },
     ] },
     { title: "Manager situations", note: BASE._situation_horizons, items: [
-      { path: ["situation_horizons", "contending"], label: "Contending: horizon (0 Win Now – 100 Long-Term)", step: 5, min: 0, max: 100 },
+      { path: ["situation_horizons", "contending"], label: `Contending: horizon (${ANCHORS.map((a) => `${a.pos} ${a.name}`).join(", ")})`, step: 5, min: 0, max: 100 },
       { path: ["situation_horizons", "building"], label: "Building: horizon", step: 5, min: 0, max: 100 },
       { path: ["situation_horizons", "rebuilding"], label: "Rebuilding: horizon", step: 5, min: 0, max: 100 },
     ] },
@@ -92,9 +94,9 @@ function buildFields() {
   FIELDS = [];
   const mix = `<fieldset><legend>Horizon mix</legend>
     <div class="tablewrap"><table class="mix"><thead><tr><th></th>${INGREDIENTS.map(([, l]) => `<th class="r">${l}</th>`).join("")}<th class="r">Total</th></tr></thead><tbody>
-    ${Object.keys(HZ).map((h) => `<tr><th scope="row">${ANCHOR_NAMES[h]}</th>${INGREDIENTS.map(([k, l]) => {
-      FIELDS.push({ path: ["horizons", h, k], label: `${ANCHOR_NAMES[h]}: ${l.toLowerCase()}`, step: 0.05, min: 0, max: 1 });
-      return `<td><input type="number" data-f="${FIELDS.length - 1}" step="0.05" min="0" max="1" aria-label="${ANCHOR_NAMES[h]}, ${l}"></td>`;
+    ${ANCHORS.map(({ key: h, name }) => `<tr><th scope="row">${esc(name)}</th>${INGREDIENTS.map(([k, l]) => {
+      FIELDS.push({ path: ["horizons", h, k], label: `${name}: ${l.toLowerCase()}`, step: 0.05, min: 0, max: 1 });
+      return `<td><input type="number" data-f="${FIELDS.length - 1}" step="0.05" min="0" max="1" aria-label="${esc(name)}, ${l}"></td>`;
     }).join("")}<td class="r num" data-sum="${h}"></td></tr>`).join("")}
     </tbody></table></div>
     <details><summary>What this does</summary><p class="note">${esc(BASE._horizons)}</p></details></fieldset>`;
@@ -175,7 +177,7 @@ const STATUS = { agree: "Agrees", close: "Close", miss: "Miss" };
 function sideHz(t, side) {
   const s = DATA.meta.situations?.[side.manager];
   if (t.kind !== "past" && s && CFG.situation_horizons?.[s] != null) return CFG.situation_horizons[s];
-  return HZ[side.horizon] ?? 50;
+  return ANCHORS.find((a) => a.key === side.horizon)?.pos ?? 50;
 }
 
 /* One table row; status is null while a current trade awaits Matt's verdict,
@@ -192,7 +194,7 @@ function tradeRow(t) {
       ${missing ? `<div class="note warntext">${missing} asset${missing > 1 ? "s" : ""} not found in this build.</div>` : ""}</td>`;
   if (!t.matt_now?.length) {
     return { status: null, html: `<tr class="lab-pending">${head}<td class="muted">Awaiting Matt's verdict</td>
-      <td colspan="6" class="muted">Hidden until Matt has judged it.</td></tr>` };
+      <td colspan="${ANCHORS.length + 3}" class="muted">Hidden until Matt has judged it.</td></tr>` };
   }
   const short = (v) => (v.band === "fair" ? `Fair ${pct(v.gap)}` : `${v.gap > 0 ? A : B} ${pct(v.gap)}`);
   const at = (hz) => MODEL.sideView(ka, kb, hz);
@@ -206,7 +208,7 @@ function tradeRow(t) {
   return { status: st, html: `<tr class="lab-${st}">${head}
     <td>${esc(t.matt_now_text)}<div class="note">Counts as agreeing: ${t.matt_now.map(esc).join(" or ")}</div></td>
     <td><span class="chip ${st}">${STATUS[st]}</span><div><b>${esc(label)}</b> <span class="muted num">${pct(cmp.gap)}</span></div></td>
-    ${[0, 50, 100].map((hz) => `<td class="r num hide-sm${hz === ui.hz ? " cur" : ""}">${esc(short(at(hz)))}</td>`).join("")}
+    ${ANCHORS.map(({ pos: hz }) => `<td class="r num hide-sm${hz === ui.hz ? " cur" : ""}">${esc(short(at(hz)))}</td>`).join("")}
     <td class="hide-sm small">${own(A, ha, va)}${own(B, hb, vb)}</td>
     <td><a class="open" href="trade.html${location.search}#${q}" title="Open in the trade analyser">Open</a></td></tr>` };
 }
@@ -215,7 +217,7 @@ function run() {
   MODEL = makeModel(DATA, CFG);
   const current = TRADES.filter((t) => t.kind !== "past").map(tradeRow);
   const past = TRADES.filter((t) => t.kind === "past").map(tradeRow);
-  $("#lab-current tbody").innerHTML = current.map((r) => r.html).join("") || '<tr><td colspan="8" class="muted">No current trades yet.</td></tr>';
+  $("#lab-current tbody").innerHTML = current.map((r) => r.html).join("") || `<tr><td colspan="${ANCHORS.length + 5}" class="muted">No current trades yet.</td></tr>`;
   $("#lab-past tbody").innerHTML = past.map((r) => r.html).join("");
   const judged = current.filter((r) => r.status);
   const counts = { agree: 0, close: 0, miss: 0 };
@@ -227,7 +229,7 @@ function run() {
       <span class="note">· ${counts.close} close (right side, different size) · ${counts.miss} miss${counts.miss === 1 ? "" : "es"}${wait}</span>`
     : `<b class="big">No current trades judged yet</b><span class="note">${wait}</span>`;
   $("#lineinfo").textContent = `Quality line at ${horizonName(ui.hz)}: ${fmt(MODEL.qualityLine(ui.hz))}, the value of the ${ORD(MODEL.starters)}-best player.`;
-  Object.keys(HZ).forEach((h) => {
+  ANCHORS.forEach(({ key: h }) => {
     const total = INGREDIENTS.reduce((s, [k]) => s + CFG.horizons[h][k], 0);
     const cell = $(`[data-sum="${h}"]`);
     cell.textContent = total.toFixed(2);

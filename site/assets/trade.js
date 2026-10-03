@@ -224,6 +224,7 @@ function setupSide(x) {
   });
   $$("[data-slider]", el).forEach((inp) => inp.addEventListener("input", () => { state[x].s[inp.dataset.slider] = +inp.value; render(); }));
   $('[data-field="hz"]', el).addEventListener("input", (e) => { state[x].hz = +e.target.value; render(); });
+  $('[data-out="ends"]', el).innerHTML = horizonEnds();
 
   const box = $('[data-field="search"]', el);
   const list = $(".results", el);
@@ -557,7 +558,8 @@ function balancerHtml(j, t) {
 function lineupHtml(t) {
   if (!t.lineups.a || !t.lineups.b) return "";
   const nm = (id) => MODEL.asset(id)?.name || "Unknown player";
-  const w = DATA.config.team_context?.lineup_weight_win_now || 0;
+  const lw = DATA.config.team_context?.lineup_weight || {};
+  const counts = MODEL.anchors.filter((a) => lw[a.key]).map((a) => `${Math.round(lw[a.key] * 100)}% at ${a.name}`);
   const cards = SIDES.map((x) => {
     const c = t.lineups[x];
     const d = c.after - c.before;
@@ -572,7 +574,7 @@ function lineupHtml(t) {
       <p class="note">${esc(moves)}</p>${space}</div>`;
   }).join("");
   const why = LG.weeksLeft
-    ? `Best lineup from each roster, in projected points a week over the last ${LG.weeksLeft} weeks of the regular season (Sleeper's projections in this league's scoring). In the verdict, a point a week is priced at ${fmt(LG.perPoint)}: across the league's starters, that's how much value rises with each extra point a week. ${Math.round(w * 100)}% of that counts at Win Now, fading to nothing at Balanced.`
+    ? `Best lineup from each roster, in projected points a week over the last ${LG.weeksLeft} weeks of the regular season (Sleeper's projections in this league's scoring). In the verdict, a point a week is priced at ${fmt(LG.perPoint)}: across the league's starters, that's how much value rises with each extra point a week. ${counts.length ? `It counts ${nameList(counts)}, fading to nothing at Balanced.` : "It isn't counted in the verdict."}`
     : "Lineups aren't projected outside the regular season.";
   return `<h3>Starting lineups</h3><div class="vgrid">${cards}</div><p class="note">${why}</p>`;
 }

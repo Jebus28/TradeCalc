@@ -1755,8 +1755,12 @@
         ]
       },
       "notes": "Batch 7, older veterans.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Chris, edge to clear win",
+      "matt_now": [
+        "Slight edge: Chris",
+        "Clear win: Chris"
+      ],
+      "unlikely": "A contender wouldn't strengthen a rival."
     },
     {
       "id": "N50",
@@ -1785,8 +1789,11 @@
         ]
       },
       "notes": "Batch 7, older veterans.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Alex, clear win",
+      "matt_now": [
+        "Clear win: Alex"
+      ],
+      "unlikely": "A contender wouldn't strengthen a rival, least of all in the same conference."
     },
     {
       "id": "N51",
@@ -1814,8 +1821,11 @@
         ]
       },
       "notes": "Batch 7, older veterans.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Chris, edge to clear win",
+      "matt_now": [
+        "Slight edge: Chris",
+        "Clear win: Chris"
+      ]
     },
     {
       "id": "N52",
@@ -1844,8 +1854,12 @@
         ]
       },
       "notes": "Batch 7, older veterans (compare N24).",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Lee, clear win to fleece",
+      "matt_now": [
+        "Clear win: Lee",
+        "Fleece: Lee"
+      ],
+      "matt_extra": "Aaron Jones is the bell-cow back at the moment; a 3rd is too low."
     },
     {
       "id": "N53",
@@ -1880,8 +1894,12 @@
         ]
       },
       "notes": "Batch 7, picks for a pick.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Rich, edge to clear win",
+      "matt_now": [
+        "Slight edge: Rich",
+        "Clear win: Rich"
+      ],
+      "matt_extra": "If it became clear that Chris's pick is the 1.09 or 1.10 and Rich's the 2.01 or 2.02, it would move to Neil, edge to clear win."
     },
     {
       "id": "N54",
@@ -1915,8 +1933,10 @@
         ]
       },
       "notes": "Batch 7, picks for a player.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Ross, fleece",
+      "matt_now": [
+        "Fleece: Ross"
+      ]
     },
     {
       "id": "N55",
@@ -1950,8 +1970,12 @@
         ]
       },
       "notes": "Batch 7, older veteran for two picks.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Lee, edge to clear win",
+      "matt_now": [
+        "Slight edge: Lee",
+        "Clear win: Lee"
+      ],
+      "unlikely": "As with QBs, a contender needs a reliable backup TE in case of injury. Chris has very little TE depth, and the picks wouldn't buy a replacement."
     },
     {
       "id": "N56",
@@ -1986,8 +2010,10 @@
         ]
       },
       "notes": "Batch 7, picks for a pick. On current form Jebus's 2027 1st is the 1st overall pick.",
-      "matt_now_text": "",
-      "matt_now": []
+      "matt_now_text": "Gareth, clear win",
+      "matt_now": [
+        "Clear win: Gareth"
+      ]
     },
     {
       "id": "T3",

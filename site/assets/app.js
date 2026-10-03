@@ -9,17 +9,22 @@ const PAGE = 100;
 const state = { q: "", pos: "All", owner: "", hz: 50, sort: "v", dir: -1, limit: PAGE, open: new Set() };
 let DATA = null, MODEL = null;
 
-/* Horizon slider: 0 = Win Now, 50 = Balanced, 100 = Long-Term; straight lines between anchors. */
-const valueAt = (p, hz) => along([p.win, p.bal, p.lt], hz);
+/* Horizon slider: Redraft, Win Now, Balanced and Long-Term anchors (model.js),
+   straight lines between them. p.h0, p.h1... hold each anchor's value. */
+const valueAt = (p, hz) => alongAnchors(MODEL.anchors, MODEL.anchors.map((a, i) => p[`h${i}`]), hz);
+const anchorHeads = (sortable) => MODEL.anchors.map((a, i) => `<th class="r${sortable ? " hide-sm" : ""}">${sortable ? `<button data-sort="h${i}">${esc(a.name)}</button>` : esc(a.name)}</th>`).join("");
 
 async function load() {
   DATA = await loadLeague();
   MODEL = makeModel(DATA, DATA.config);
-  DATA.players.forEach((p) => { [p.win, p.bal, p.lt] = [0, 50, 100].map((hz) => MODEL.value(MODEL.asset(p.id), hz)); });
+  DATA.players.forEach((p) => { MODEL.anchors.forEach((a, i) => { p[`h${i}`] = MODEL.value(MODEL.asset(p.id), a.pos); }); });
   setup();
 }
 
 function setup() {
+  $("#hzends").innerHTML = horizonEnds();
+  $('#players thead [data-sort="v"]').parentElement.insertAdjacentHTML("afterend", anchorHeads(true));
+  $("#pickvalues thead th:nth-child(2)").insertAdjacentHTML("afterend", anchorHeads(false));
   $("#pos").innerHTML = POSITIONS.map((p) => `<button type="button" aria-pressed="${p === state.pos}" data-pos="${p}">${p}</button>`).join("");
   const owners = [...new Set(DATA.players.map((p) => p.owner).filter(Boolean))].sort();
   $("#owner").innerHTML = `<option value="">Everyone</option><option value="-">Free agents</option>` +
@@ -89,7 +94,8 @@ function filtered() {
 
 function renderPlayers() {
   const rows = filtered();
-  const top = Math.max(1, ...DATA.players.map((p) => Math.max(p.win, p.bal, p.lt)));
+  const top = Math.max(1, ...DATA.players.map((p) => Math.max(...MODEL.anchors.map((a, i) => p[`h${i}`]))));
+  const cols = 6 + MODEL.anchors.length;
   const shown = rows.slice(0, state.limit);
   $("#players tbody").innerHTML = shown.map((p, i) => {
     const w = Math.max(0.5, (p.v / top) * 100);
@@ -101,33 +107,31 @@ function renderPlayers() {
       <td><div class="who"><b>${esc(p.name)}${inj}</b><span>${esc(sub)}<span class="hide-lg">${p.owner ? " · " + esc(p.owner) : ""}</span></span></div></td>
       <td class="hide-sm">${p.owner ? esc(p.owner) : '<span class="muted">Free agent</span>'}</td>
       <td class="valcell"><div class="bar"><i style="width:${w.toFixed(1)}%"></i><span>${fmt(p.v)}</span></div></td>
-      <td class="r num hide-sm">${fmt(p.win)}</td>
-      <td class="r num hide-sm">${fmt(p.bal)}</td>
-      <td class="r num hide-sm">${fmt(p.lt)}</td>
+      ${MODEL.anchors.map((a, j) => `<td class="r num hide-sm">${fmt(p[`h${j}`])}</td>`).join("")}
       <td class="r num hide-sm muted">${fmt(p.fc)}</td>
       <td class="r num hide-sm muted">${fmt(p.dp)}</td>
-    </tr>${open ? detailRow(p) : ""}`;
-  }).join("") || `<tr><td colspan="9" class="muted">No players match.</td></tr>`;
+    </tr>${open ? detailRow(p, cols) : ""}`;
+  }).join("") || `<tr><td colspan="${cols}" class="muted">No players match.</td></tr>`;
   $("#more").hidden = rows.length <= state.limit;
 }
 
-function detailRow(p) {
+function detailRow(p, cols) {
   const h = DATA.config.horizons;
   const item = (label, value) => `<div><dt>${label}</dt><dd>${value}</dd></div>`;
   const parts = p.pos === "K" || p.pos === "DEF"
-    ? item("Rest-of-season points", p.ros) + item("Value", `${fmt(p.bal)} (points only, capped)`)
+    ? item("Rest-of-season points", p.ros) + item("Value", `${fmt(p.h0)} (points only, capped)`)
     : item("Points this season (on value scale)", fmt(p.p_now)) +
       item("Points next 1–3 seasons", fmt(p.p_13)) +
       item("Points 4+ seasons out", fmt(p.p_4)) +
       item("Dynasty market (blend)", fmt(blend(p))) +
-      item("Redraft market (Win Now)", fmt(p.red)) +
+      item("Redraft market (this season only)", fmt(p.red)) +
       item("Baseline points per game", p.ppg ?? "–") +
       item("Projected ppg this season", p.proj ?? "–") +
       item("Last 3 seasons ppg", p.hist ?? "–") +
       item("Rest-of-season points", p.ros);
   const mix = (k) => `${Math.round(h[k].points_this_season * 100)}/${Math.round(h[k].points_years_1_3 * 100)}/${Math.round(h[k].points_years_4_plus * 100)}/${Math.round(h[k].market * 100)}`;
-  return `<tr class="detail"><td></td><td colspan="8"><dl class="parts">${parts}</dl>
-    <p class="note">Mix (this season / 1–3 / 4+ / market): Win Now ${mix("win_now")}, Balanced ${mix("balanced")}, Long-Term ${mix("long_term")}.${p.pos === "QB" && DATA.meta.qb_premium !== 1 ? ` Includes the league QB premium (×${DATA.meta.qb_premium}).` : ""}</p></td></tr>`;
+  return `<tr class="detail"><td></td><td colspan="${cols - 1}"><dl class="parts">${parts}</dl>
+    <p class="note">Mix (this season / 1–3 / 4+ / market): ${MODEL.anchors.map((a) => `${a.name} ${mix(a.key)}`).join(", ")}.${p.pos === "QB" && DATA.meta.qb_premium !== 1 ? ` Includes the league QB premium (×${DATA.meta.qb_premium}).` : ""}</p></td></tr>`;
 }
 
 function blend(p) {
@@ -154,10 +158,10 @@ function renderPicks() {
     return `<tr>
     <td>${esc(k.name)}${k.tier === "any" ? ' <span class="muted">(any slot)</span>' : ""}</td>
     <td class="r num muted">${first === last ? first : `${first}–${last}`}</td>
-    <td class="r num">${fmt(k.mk[0])}</td><td class="r num">${fmt(k.mk[1])}</td><td class="r num">${fmt(k.mk[2])}</td></tr>`;
+    ${k.mk.map((v) => `<td class="r num">${fmt(v)}</td>`).join("")}</tr>`;
   }).join("");
   const anyVal = {};
-  rows.filter((k) => k.tier === "any").forEach((k) => { anyVal[`${k.year}-${k.round}`] = k.mk[1]; });
+  rows.filter((k) => k.tier === "any").forEach((k) => { anyVal[`${k.year}-${k.round}`] = MODEL.value(k, 50); });
   const byOwner = {};
   DATA.owned_picks.forEach((k) => { (byOwner[k.owner] ||= []).push(k); });
   const owners = Object.entries(byOwner).map(([o, list]) => ({ o, list, total: list.reduce((s, k) => s + (anyVal[`${k.year}-${k.round}`] || 0), 0) }))
@@ -219,20 +223,22 @@ function renderHow() {
   const { meta: m, config: c } = DATA;
   const pct = (v) => `${Math.round(v * 100)}%`;
   const hz = c.horizons;
-  const row = (label, key) => `<tr><td>${label}</td>${["win_now", "balanced", "long_term"].map((h) => `<td class="r num">${pct(hz[h][key])}</td>`).join("")}</tr>`;
+  const row = (label, key) => `<tr><td>${label}</td>${MODEL.anchors.map((a) => `<td class="r num">${pct(hz[a.key][key])}</td>`).join("")}</tr>`;
+  const ds = c.market.dynasty_share || {};
+  const dsText = MODEL.anchors.map((a) => `${a.name} ${pct(ds[a.key] ?? 1)}`).join(", ");
   const repl = Object.entries(m.replacement_ppg).map(([k, v]) => `${k} ${v}`).join(", ");
   $("#how").innerHTML = `
     <h3>What a value is made of</h3>
     <p>Each player's value blends two things: <b>points</b> (projected fantasy points above a replacement starter, in ${esc(m.league)}'s own scoring) and <b>market value</b> (what managers pay in trades). The horizon slider decides the mix.</p>
-    <div class="tablewrap"><table><thead><tr><th>Ingredient</th><th class="r">Win Now</th><th class="r">Balanced</th><th class="r">Long-Term</th></tr></thead><tbody>
+    <div class="tablewrap"><table><thead><tr><th>Ingredient</th>${anchorHeads(false)}</tr></thead><tbody>
       ${row("Points this season", "points_this_season")}${row("Points next 1–3 seasons (age-curved)", "points_years_1_3")}${row("Points 4+ seasons out (age-curved)", "points_years_4_plus")}${row("Market value", "market")}
     </tbody></table></div>
-    <p>Points are put on the same scale as the market by rank: the 10th-best points total gets the 10th-highest market value. Win Now uses FantasyCalc's redraft values as its market; the other horizons use the dynasty market, ${pct(c.market.fantasycalc_weight)} FantasyCalc and ${pct(c.market.dynastyprocess_weight)} DynastyProcess.</p>
+    <p>Points are put on the same scale as the market by rank: the 10th-best points total gets the 10th-highest market value. The market blends FantasyCalc's redraft values (this season only) with the dynasty market, ${pct(c.market.fantasycalc_weight)} FantasyCalc and ${pct(c.market.dynastyprocess_weight)} DynastyProcess. The dynasty share at each anchor: ${esc(dsText)}.</p>
     <h3>This league</h3>
     <p>Format ${esc(m.format.key)}, ${m.format.teams} teams. Replacement starter, points per game: ${esc(repl)}.${m.qb_premium !== 1 ? ` QBs carry a league premium of ×${m.qb_premium}.` : ""}
     ${m.counts.both_sources} players are valued by both market sources; ${m.counts.fantasycalc} by FantasyCalc and ${m.counts.dynastyprocess} by DynastyProcess.</p>
     <h3>Trades</h3>
-    <p>The <a href="trade.html">trade analyser</a> adds each manager's sliders and the star value rule on top of these values, and the <a href="lab.html">model lab</a> replays the test-set trades. Roster fit, slot projections for future picks and the balancer come with the Sleeper link in Phase 3.</p>
+    <p>The <a href="trade.html">trade analyser</a> adds each manager's sliders and the star value rule on top of these values, and the <a href="lab.html">model lab</a> replays the test-set trades. Linked to a Sleeper league, the analyser also shows roster fit, projects where future picks will land and suggests how to balance a trade.</p>
     ${m.notes.length || m.fetch_failures.length ? `<h3>Problems in this build</h3><p>${[...m.notes, ...m.fetch_failures.map((f) => `Fetching ${f} failed; the last good copy was used where there was one.`)].map(esc).join("<br>")}</p>` : ""}
     <h3>Sources</h3>
     <p>Trade-market values from <a href="https://fantasycalc.com" target="_blank" rel="noopener">FantasyCalc.com</a>. Expert values and the player ID map from <a href="https://github.com/dynastyprocess/data" target="_blank" rel="noopener">DynastyProcess</a>. Leagues, rosters, projections and stats from the <a href="https://docs.sleeper.com/" target="_blank" rel="noopener">Sleeper API</a>. Rebuilt every four hours.</p>`;

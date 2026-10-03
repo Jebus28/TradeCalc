@@ -9,12 +9,24 @@ const fmt = (n) => (n == null ? "–" : Math.round(n).toLocaleString("en-GB"));
 const pct = (x) => `${Math.round(Math.abs(x) * 100)}%`;
 const signedPct = (x) => `${x < 0 ? "−" : "+"}${pct(x)}`;
 
+/* The slider's anchors (Redraft, Win Now, Balanced, Long-Term), set when a
+   league loads. A point near an anchor takes its name; further out it's
+   "Leaning" towards the nearer one. */
+let HORIZON_ANCHORS = [{ pos: 0, name: "Win Now" }, { pos: 50, name: "Balanced" }, { pos: 100, name: "Long-Term" }];
 function horizonName(hz) {
-  if (hz <= 10) return "Win Now";
-  if (hz < 40) return "Leaning Win Now";
-  if (hz <= 60) return "Balanced";
-  if (hz < 90) return "Leaning Long-Term";
-  return "Long-Term";
+  const A = HORIZON_ANCHORS;
+  if (hz <= A[0].pos) return A[0].name;
+  for (let i = 1; i < A.length; i++) {
+    if (hz > A[i].pos) continue;
+    const t = (hz - A[i - 1].pos) / (A[i].pos - A[i - 1].pos);
+    return t <= 0.2 ? A[i - 1].name : t < 0.5 ? `Leaning ${A[i - 1].name}` : t < 0.8 ? `Leaning ${A[i].name}` : A[i].name;
+  }
+  return A[A.length - 1].name;
+}
+
+/* Labels under a 0-100 horizon slider, each at its anchor's position. */
+function horizonEnds() {
+  return HORIZON_ANCHORS.map((a) => `<span style="left:${a.pos}%">${esc(a.name)}</span>`).join("");
 }
 
 /* The league's values plus the effective config: model.config.json with the
@@ -26,6 +38,7 @@ async function loadLeague(slug = new URLSearchParams(location.search).get("leagu
   const data = await fetch(`data/values-${lg.slug}.json`, { cache: "no-cache" }).then((r) => r.json());
   data.config = { ...data.config, qb_premium: data.meta.qb_premium };
   data.leagues = index.leagues;
+  HORIZON_ANCHORS = anchorsOf(data.config);
   showStatus(data.meta);
   return data;
 }
