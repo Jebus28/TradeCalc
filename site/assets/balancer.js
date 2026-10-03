@@ -2,8 +2,9 @@
 /* The balancer (Phase 3): when one side loses on its own horizon, look
    through what the other side could still send for one or two more pieces
    that bring the trade to Fair for it, without tipping the trade so far the
-   other way that the giver loses. Single pieces come first, then the ones
-   that cost the giver's starting lineup least and help the receiver's most.
+   other way that the giver loses. Single pieces come first, then those that
+   only just close the gap, then the ones that cost the giver's starting
+   lineup least and help the receiver's most.
 
    candidates: keys the behind side could get, most valuable first.
    evaluate(keys) -> { gap, otherGap, cost, gain } after adding keys: the
@@ -28,7 +29,11 @@ function findBalancers(candidates, evaluate, fair, max = 3, pairPool = 30) {
         if (ok(r)) found.push({ keys: [pool[i], pool[j]], ...r });
       }
   }
+  /* Just enough first: the behind side's new gap in bands as wide as Fair,
+     so a piece that only just closes the gap beats one that overshoots;
+     within a band, the lineup decides. */
+  const band = (r) => Math.floor((r.gap + fair) / (2 * fair));
   const lineupScore = (r) => Math.round((r.cost - r.gain) * 2) / 2; // to the nearest half point a week
-  found.sort((p, q) => p.keys.length - q.keys.length || lineupScore(p) - lineupScore(q) || Math.abs(p.gap) - Math.abs(q.gap));
+  found.sort((p, q) => p.keys.length - q.keys.length || band(p) - band(q) || lineupScore(p) - lineupScore(q) || p.gap - q.gap);
   return found.slice(0, max);
 }

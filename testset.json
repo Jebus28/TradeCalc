@@ -1448,6 +1448,266 @@
       ]
     },
     {
+      "id": "N41",
+      "date": "3 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Neil",
+        "motive": "Building; packages two lesser 1sts into a likely top-three pick.",
+        "gets": [
+          {
+            "pick": "2027 1st",
+            "from": "Rich",
+            "tier": "early"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Rich",
+        "motive": "Rebuilding and a pick collector; turns one 1st into two.",
+        "gets": [
+          {
+            "pick": "2027 1st",
+            "from": "Chris",
+            "tier": "late"
+          },
+          {
+            "pick": "2028 1st",
+            "from": "Neil",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 6, pick tiers. Tiers are projections: on current form Rich would pick 2nd in 2027 and Chris 10th.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N42",
+      "date": "3 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Ross",
+        "motive": "Rebuilding; wants more picks in the 2027 draft.",
+        "gets": [
+          {
+            "pick": "2027 2nd",
+            "from": "Rich",
+            "tier": "early"
+          },
+          {
+            "pick": "2027 2nd",
+            "from": "Jebus",
+            "tier": "early"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Rich",
+        "motive": "Rebuilding; consolidates two 2nds into a 1st.",
+        "gets": [
+          {
+            "pick": "2027 1st",
+            "from": "Ross",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 6, pick tiers. Two early 2nds for a mid 1st.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N43",
+      "date": "3 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Mike",
+        "motive": "Contending; deep at RB (Taylor, Kyren Williams, Skattebo, Swift) but weak at TE.",
+        "gets": [
+          {
+            "player": "8130",
+            "name": "Trey McBride"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Chris",
+        "motive": "Contending; needs a young RB with Derrick Henry 32.",
+        "gets": [
+          {
+            "player": "9509",
+            "name": "Bijan Robinson"
+          }
+        ]
+      },
+      "notes": "Batch 6, lineup fit between two contenders: judge it as both managers would, for this season's title.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N44",
+      "date": "3 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Lee",
+        "motive": "Contending; four good WRs, thin at RB behind McCaffrey and Barkley.",
+        "gets": [
+          {
+            "player": "7588",
+            "name": "Javonte Williams"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Alex",
+        "motive": "Contending; wants a WR1 alongside Smith-Njigba and Lamb.",
+        "gets": [
+          {
+            "player": "6794",
+            "name": "Justin Jefferson"
+          }
+        ]
+      },
+      "notes": "Batch 6, lineup fit between two contenders: judge it as both managers would, for this season's title.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N45",
+      "date": "3 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Mike",
+        "motive": "Contending; wants a WR for the run-in.",
+        "gets": [
+          {
+            "player": "7569",
+            "name": "Nico Collins"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Ross",
+        "motive": "Rebuilding; selling a 27-year-old WR for a future 1st.",
+        "gets": [
+          {
+            "pick": "2029 1st",
+            "from": "Mike",
+            "tier": "late"
+          }
+        ]
+      },
+      "notes": "Batch 6, balancer. Also: if it's uneven, what would you ask Mike to add?",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N46",
+      "date": "3 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Chris",
+        "motive": "Contending; wants a veteran WR.",
+        "gets": [
+          {
+            "player": "2133",
+            "name": "Davante Adams"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Rich",
+        "motive": "Rebuilding; selling a 33-year-old.",
+        "gets": [
+          {
+            "pick": "2027 2nd",
+            "from": "Chris",
+            "tier": "late"
+          }
+        ]
+      },
+      "notes": "Batch 6, balancer. Also: if it's uneven, what would you ask Chris to add?",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N47",
+      "date": "3 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Dave",
+        "motive": "Contending; wants a TE for the run-in.",
+        "gets": [
+          {
+            "player": "4217",
+            "name": "George Kittle"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Neil",
+        "motive": "Building; Neil collects picks more than anyone in JADL.",
+        "gets": [
+          {
+            "pick": "2029 1st",
+            "from": "Dave",
+            "tier": "late"
+          },
+          {
+            "pick": "2027 2nd",
+            "from": "Dave",
+            "tier": "late"
+          }
+        ]
+      },
+      "notes": "Batch 6, Neil's trade history. Also: would Neil do it?",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N48",
+      "date": "3 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Jebus",
+        "motive": "Rebuilding; a 22-year-old RB to build around, or to flip later.",
+        "gets": [
+          {
+            "player": "12527",
+            "name": "Ashton Jeanty"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Ross",
+        "motive": "Rebuilding; RBs fade fast, so would rather hold two 1sts.",
+        "gets": [
+          {
+            "pick": "2027 1st",
+            "from": "Lee",
+            "tier": "mid"
+          },
+          {
+            "pick": "2027 1st",
+            "from": "Mike",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 6, Jebus's trade history. Also: would you do it?",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
       "id": "T3",
       "date": "Dec 2025",
       "league": "jadl",
