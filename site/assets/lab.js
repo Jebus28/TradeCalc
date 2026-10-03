@@ -48,6 +48,9 @@ function buildFields() {
   const groups = [
     { title: "Market and QBs", note: BASE._market, items: [
       { path: ["market", "fantasycalc_weight"], label: "FantasyCalc share of the market (DynastyProcess gets the rest)", step: 0.05, min: 0, max: 1 },
+      ...(BASE.market.win_now_dynasty_share != null ? [
+        { path: ["market", "win_now_dynasty_share"], label: "Win Now market: dynasty share (redraft gets the rest)", step: 0.05, min: 0, max: 1 },
+      ] : []),
       { path: ["qb_premium"], label: "League QB premium (×)", step: 0.05, min: 0.5, max: 2, file: `leagues → ${DATA.meta.slug} → qb_premium` },
       ...(BASE.qb_premium_ages ? [
         { path: ["qb_premium_ages", "full_until"], label: "QB premium in full up to age", step: 1, min: 20, max: 40 },
@@ -60,7 +63,16 @@ function buildFields() {
       { path: ["picks", "class_rating_step"], label: "Each class rating step", step: 0.05, min: 0, max: 0.5 },
       { path: ["picks", "long_term_boost"], label: "Long-Term boost for early picks", step: 0.05, min: 0, max: 1 },
       { path: ["picks", "long_term_boost_through_overall"], label: "Boost goes up to overall pick", step: 1, min: 0, max: 50 },
+      ...["early", "late"].filter((t) => BASE.picks.ladder?.["1"]?.[t] != null).map((t) => (
+        { path: ["picks", "ladder", "1", t], label: `Ladder: ${t} 1st, as a share of a mid 1st`, step: 0.05, min: 0, max: 3 })),
+      ...(BASE.picks.stack_strength != null ? [
+        { path: ["picks", "stack_strength"], label: "Extra picks on one side: discount strength (0 = off)", step: 0.5, min: 0, max: 6 },
+      ] : []),
     ] },
+    ...(BASE.veteran ? [{ title: "Older veterans", note: BASE._veteran, items: [
+      { path: ["veteran", "min_age"], label: `From age (${BASE.veteran.positions.join(", ")})`, step: 1, min: 25, max: 40 },
+      { path: ["veteran", "factor"], label: "Market and future points × (1 = off)", step: 0.05, min: 0.3, max: 1 },
+    ] }] : []),
     { title: "Star value", note: BASE._star, items: [
       { path: ["star", "strength"], label: "Strength (0 = off)", step: 0.25, min: 0, max: 5 },
       { path: ["star", "quality_line_share_of_starters"], label: "Quality line, as a share of the league's starters", step: 0.1, min: 0.2, max: 3 },

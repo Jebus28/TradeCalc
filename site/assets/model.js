@@ -56,14 +56,42 @@ function makeModel(data, cfg) {
     if (p.pos === "K" || p.pos === "DEF") return { mk: [0, 0, 0], pts: [p.kd, p.kd, p.kd], wm: null };
     const dyn = blend(p.fc, p.dp);
     const prem = p.pos === "QB" ? 1 + (cfg.qb_premium - 1) * qbPremiumShare(p.age) : 1;
+    /* Older veterans count for less than the market and their future points
+       say; this season's points are left alone. */
+    const vet = cfg.veteran;
+    const old = vet && p.age != null && p.age >= vet.min_age && vet.positions.includes(p.pos) ? vet.factor : 1;
+    /* Win Now's market is FantasyCalc's redraft value, partly blended
+       with the dynasty market (market.win_now_dynasty_share). */
+    const ds = mkt.win_now_dynasty_share || 0;
+    const now = (1 - ds) * (p.red || 0) + ds * dyn * old;
     return {
-      mk: hzc.map((w, i) => w.market * (i === 0 ? p.red || 0 : dyn) * prem),
-      pts: hzc.map((w) => (w.points_this_season * p.p_now + w.points_years_1_3 * p.p_13 + w.points_years_4_plus * p.p_4) * prem),
+      mk: hzc.map((w, i) => w.market * (i === 0 ? now : dyn * old) * prem),
+      pts: hzc.map((w) => (w.points_this_season * p.p_now + (w.points_years_1_3 * p.p_13 + w.points_years_4_plus * p.p_4) * old) * prem),
       wm: hzc.map((w) => w.market),
     };
   }
 
-  const slotValue = new Map(pk.slots.map((s) => [s.overall, blend(s.fc, s.dp)]));
+  /* Matt's pick ladder: each tier's average is set to his value for it,
+     relative to a mid 1st, keeping the market's shape inside the tier. A
+     tier he didn't price uses the nearest priced tier's adjustment in its
+     round; a round he didn't price stays at market value. */
+  const market = new Map(pk.slots.map((s) => [s.overall, blend(s.fc, s.dp)]));
+  const TIERS = ["early", "mid", "late"];
+  const tierOfSlot = (slot) => TIERS.find((t) => pk.tiers[t].includes(slot));
+  const tierMean = (round, tier) => mean(pk.tiers[tier].map((s) => market.get((round - 1) * teams + s) ?? 0));
+  const ladder = pc.ladder || {};
+  function ladderFactor(round, tier) {
+    const listed = TIERS.filter((t) => ladder[round]?.[t] != null);
+    if (!listed.length) return 1;
+    const near = ladder[round][tier] != null ? tier
+      : listed.sort((x, y) => Math.abs(TIERS.indexOf(x) - TIERS.indexOf(tier)) - Math.abs(TIERS.indexOf(y) - TIERS.indexOf(tier)))[0];
+    const m = tierMean(round, near);
+    return m > 0 ? ladder[round][near] * tierMean(1, "mid") / m : 1;
+  }
+  const slotValue = new Map(pk.slots.map((s) => {
+    const round = Math.ceil(s.overall / teams), slot = s.overall - (round - 1) * teams;
+    return [s.overall, (market.get(s.overall) ?? 0) * ladderFactor(round, tierOfSlot(slot))];
+  }));
   function pickParts(year, overalls) {
     const k = Math.max(0, year - pk.first_year);
     const base = mean(overalls.map((n) => slotValue.get(n) ?? 0));
@@ -184,10 +212,26 @@ function makeModel(data, cfg) {
 
   /* One manager's view: what they get against what they give, at their
      horizon, through their sliders. */
+  /* Matt, 3 October 2026: picks are discounted as you add them, so two 2nds
+     never make a 1st. On each side, picks go from most to least valuable;
+     the first counts in full and each further one counts value x (value / a
+     mid 1st in its own draft)^stack_strength, so further 1sts lose little
+     and further 2nds and 3rds a lot. */
+  function stacked(assets, vals, hz, s) {
+    const out = vals.slice();
+    const k = pc.stack_strength || 0;
+    if (!k) return out;
+    assets.map((a, i) => i).filter((i) => assets[i]?.kind === "pick").sort((x, y) => vals[y] - vals[x]).slice(1).forEach((i) => {
+      const line = value(asset(`${assets[i].year}-1-mid`), hz, s);
+      if (line > 0) out[i] = vals[i] * Math.min(1, vals[i] / line) ** k;
+    });
+    return out;
+  }
+
   function sideView(gets, gives, hz, s = NEUTRAL, fit = 0) {
     const ga = gets.map(asset), va = gives.map(asset);
     const gVals = ga.map((a) => value(a, hz, s)), vVals = va.map((a) => value(a, hz, s));
-    const c = counted(gVals, vVals, hz, s.star);
+    const c = counted(stacked(ga, gVals, hz, s), stacked(va, vVals, hz, s), hz, s.star);
     const f = fitAt(fit, hz);
     const get = sum(c.get) + Math.max(0, f), give = sum(c.give) + Math.max(0, -f);
     const gap = Math.max(get, give) > 0 ? (get - give) / Math.max(get, give) : 0;

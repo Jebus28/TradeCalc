@@ -1729,6 +1729,267 @@
       "matt_extra": "Matt would do it if he thought he could get value for Jeanty from Chris or Alex."
     },
     {
+      "id": "N49",
+      "date": "3 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Chris",
+        "motive": "Contending; wants a veteran WR for the run-in.",
+        "gets": [
+          {
+            "player": "2216",
+            "name": "Mike Evans"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Mike",
+        "motive": "Contending but deep at WR (Nacua, Olave, Golden, Burden, Diggs); sells a 33-year-old for a future pick.",
+        "gets": [
+          {
+            "pick": "2028 2nd",
+            "from": "Chris",
+            "tier": "late"
+          }
+        ]
+      },
+      "notes": "Batch 7, older veterans.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N50",
+      "date": "3 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Alex",
+        "motive": "Contending; wants WR depth with Malik Nabers hurt.",
+        "gets": [
+          {
+            "player": "5927",
+            "name": "Terry McLaurin"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Dave",
+        "motive": "Contending and deep at WR; sells a 31-year-old.",
+        "gets": [
+          {
+            "pick": "2029 2nd",
+            "from": "Alex",
+            "tier": "late"
+          }
+        ]
+      },
+      "notes": "Batch 7, older veterans.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N51",
+      "date": "3 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Lee",
+        "motive": "Contending; wants Derrick Henry's production for the title run.",
+        "gets": [
+          {
+            "player": "3198",
+            "name": "Derrick Henry"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Chris",
+        "motive": "Contending; swaps a 32-year-old RB for a younger one.",
+        "gets": [
+          {
+            "player": "4866",
+            "name": "Saquon Barkley"
+          }
+        ]
+      },
+      "notes": "Batch 7, older veterans.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N52",
+      "date": "3 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Lee",
+        "motive": "Contending; thin at RB.",
+        "gets": [
+          {
+            "player": "4199",
+            "name": "Aaron Jones"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Jebus",
+        "motive": "Rebuilding; sells a 31-year-old RB.",
+        "gets": [
+          {
+            "pick": "2027 3rd",
+            "from": "Lee",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 7, older veterans (compare N24).",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N53",
+      "date": "3 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Rich",
+        "motive": "Rebuilding; consolidates two 2nds into a 1st.",
+        "gets": [
+          {
+            "pick": "2027 1st",
+            "from": "Chris",
+            "tier": "late"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Neil",
+        "motive": "Building and the league's biggest pick collector; two picks for one.",
+        "gets": [
+          {
+            "pick": "2027 2nd",
+            "from": "Ross",
+            "tier": "mid"
+          },
+          {
+            "pick": "2027 2nd",
+            "from": "Rich",
+            "tier": "early"
+          }
+        ]
+      },
+      "notes": "Batch 7, picks for a pick.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N54",
+      "date": "3 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Ross",
+        "motive": "Rebuilding; buys a 24-year-old WR with picks.",
+        "gets": [
+          {
+            "player": "11635",
+            "name": "Ladd McConkey"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Gareth",
+        "motive": "Building and a pick optimist; sells a WR for two 2nds.",
+        "gets": [
+          {
+            "pick": "2028 2nd",
+            "from": "Ross",
+            "tier": "early"
+          },
+          {
+            "pick": "2027 2nd",
+            "from": "Lee",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 7, picks for a player.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N55",
+      "date": "3 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Lee",
+        "motive": "Contending; Kelce is 36, so wants another TE.",
+        "gets": [
+          {
+            "player": "5022",
+            "name": "Dallas Goedert"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Chris",
+        "motive": "Contending with McBride at TE; sells his backup for picks.",
+        "gets": [
+          {
+            "pick": "2027 3rd",
+            "from": "Lee",
+            "tier": "mid"
+          },
+          {
+            "pick": "2028 3rd",
+            "from": "Lee",
+            "tier": "late"
+          }
+        ]
+      },
+      "notes": "Batch 7, older veteran for two picks.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
+      "id": "N56",
+      "date": "3 Oct 2026",
+      "league": "jadl",
+      "kind": "current",
+      "a": {
+        "manager": "Gareth",
+        "motive": "Building; trades up for the projected first overall pick.",
+        "gets": [
+          {
+            "pick": "2027 1st",
+            "from": "Jebus",
+            "tier": "early"
+          }
+        ]
+      },
+      "b": {
+        "manager": "Rich",
+        "motive": "Rebuilding and a pick collector; trades down for two picks.",
+        "gets": [
+          {
+            "pick": "2027 1st",
+            "from": "Gareth",
+            "tier": "mid"
+          },
+          {
+            "pick": "2027 2nd",
+            "from": "Gareth",
+            "tier": "mid"
+          }
+        ]
+      },
+      "notes": "Batch 7, picks for a pick. On current form Jebus's 2027 1st is the 1st overall pick.",
+      "matt_now_text": "",
+      "matt_now": []
+    },
+    {
       "id": "T3",
       "date": "Dec 2025",
       "league": "jadl",

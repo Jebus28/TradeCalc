@@ -29,15 +29,15 @@
     }
   ],
 
-  "_horizons": "D2. Shares of each ingredient at the three anchor points. The slider on the site blends between them. Each row adds up to 1. Picks have no points of their own: they get the market share of their value at Win Now and all of it at Balanced and Long-Term. Balanced changed on 2 October 2026 from 0.25/0.25/0/0.50 after current trades N1-N9: this season's points made veterans beat picks and young players, because the market had already priced their age. Batch 2 broadly confirmed it.",
+  "_horizons": "D2. Shares of each ingredient at the three anchor points. The slider on the site blends between them. Each row adds up to 1. Picks have no points of their own: they get the market share of their value at Win Now and all of it at Balanced and Long-Term. Balanced changed on 2 October 2026 from 0.25/0.25/0/0.50 after current trades N1-N9: this season's points made veterans beat picks and young players, because the market had already priced their age. Batch 2 broadly confirmed it. Win Now narrowed on 3 October 2026 (Matt: Win Now is too far from Balanced; Long-Term may be too, to look at later): was 0.70/0/0/0.30, now halfway to Balanced, and its market is half dynasty (market.win_now_dynasty_share). Picks keep about 45% of their Balanced value at Win Now, up from 30%.",
   "horizons": {
-    "win_now":   { "points_this_season": 0.70, "points_years_1_3": 0.00, "points_years_4_plus": 0.00, "market": 0.30 },
+    "win_now":   { "points_this_season": 0.40, "points_years_1_3": 0.10, "points_years_4_plus": 0.05, "market": 0.45 },
     "balanced":  { "points_this_season": 0.05, "points_years_1_3": 0.25, "points_years_4_plus": 0.10, "market": 0.60 },
     "long_term": { "points_this_season": 0.05, "points_years_1_3": 0.15, "points_years_4_plus": 0.20, "market": 0.60 }
   },
 
-  "_situation_horizons": "Where each situation sits on the horizon slider (0 = Win Now, 50 = Balanced, 100 = Long-Term). Matt: building is between Balanced and Long-Term. The model lab judges current test trades at these horizons.",
-  "situation_horizons": { "contending": 0, "building": 75, "rebuilding": 100 },
+  "_situation_horizons": "Where each situation sits on the horizon slider (0 = Win Now, 50 = Balanced, 100 = Long-Term); each linked manager's default. Matt: building is between Balanced and Long-Term. Contending moved from 0 to 25 on 3 October 2026: in contender-v-contender trades N43 and N44, judged for this season's title, Matt's verdicts matched Balanced and were the opposite of full Win Now.",
+  "situation_horizons": { "contending": 25, "building": 75, "rebuilding": 100 },
 
   "_team_context": "Phase 3, the Sleeper link. When the analyser is linked to a league, each pick is valued by where it's expected to land until the draft order is set; after that, at its exact slot.",
   "team_context": {
@@ -59,10 +59,11 @@
     "pick_tier": "mid"
   },
 
-  "_market": "D3. Dynasty market = FantasyCalc (real trades) and DynastyProcess (experts), matched by rank then blended. Win Now uses FantasyCalc's redraft value as its market.",
+  "_market": "D3. Dynasty market = FantasyCalc (real trades) and DynastyProcess (experts), matched by rank then blended. Win Now's market is FantasyCalc's redraft value blended with this dynasty market: win_now_dynasty_share is the dynasty part (0.5 from 3 October 2026, was 0, to narrow the gap between Win Now and Balanced).",
   "market": {
     "fantasycalc_weight": 0.5,
-    "dynastyprocess_weight": 0.5
+    "dynastyprocess_weight": 0.5,
+    "win_now_dynasty_share": 0.5
   },
 
   "_points": "D4. Baseline points per game = projection blended with the last three seasons (50/30/20). A past season played for a different NFL team counts at role_change_weight.",
@@ -112,8 +113,17 @@
     "class_ratings": { "2027": 0, "2028": 0, "2029": 0 },
     "long_term_boost": 0.15,
     "long_term_boost_through_overall": 13,
-    "years_ahead": 3
+    "years_ahead": 3,
+    "_ladder": "Matt's pick ladder, 3 October 2026: each tier's value as a share of a mid 1st in the same draft (mid 1st = 1.00). Each tier's average is set to this; the market's shape is kept inside the tier. A tier not listed in a listed round takes the nearest listed tier's adjustment; a round not listed stays at market value. The yearly discount and class ratings still apply on top (Matt's 2028 and 2029 mid 1sts, 0.90 and 0.80, already matched them). Matt also gave round 2 as early 0.65, mid 0.50, late 0.35 and a mid 3rd as 0.15 (the market has 0.46, 0.34, 0.27 and 0.19). Those 2nd-round values turned five earlier agreements into misses (N5, N10, N16, N32, N39: veterans for 2nds that Matt called fair), so round 2 stays at market until batch 7 tests it. Round 1 alone: 24 agree, 17 close, 7 miss of 48.",
+    "ladder": {
+      "1": { "early": 1.80, "mid": 1.00, "late": 0.80 }
+    },
+    "_stack_strength": "Matt, 3 October 2026: picks are discounted as you add them; two 2nds definitely don't make a 1st. On each side of a trade, picks go from most to least valuable. The first counts in full; each further one counts its value x (its value / a mid 1st in its own draft) to this power (at 3: a further mid 1st counts in full, a late 1st about half, an early 2nd about a quarter). Off (0) for now: at every strength tried (1, 2, 3) it fixed N42 but broke N5, N23, N31, N40 and N47, where Matt counted several picks for a player at close to full value. Batch 7 tests picks-for-a-pick against picks-for-a-player.",
+    "stack_strength": 0
   },
+
+  "_veteran": "Matt, 3 October 2026, after current trades N11, N33, N40, N46 and N47: older RBs, WRs and TEs are worth less than both the market and their future points say. From min_age, their market value and future points (not this season's) are multiplied by factor. To be confirmed by a fresh batch of test trades.",
+  "veteran": { "min_age": 31, "positions": ["RB", "WR", "TE"], "factor": 0.8 },
 
   "_kdef": "D12. Kickers and defences get a small points-only value: points above replacement for the rest of the season times value_per_point, capped.",
   "kdef": {
