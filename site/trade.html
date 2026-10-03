@@ -30,6 +30,21 @@
 <main class="wrap">
   <p class="lead">Link your Sleeper league to trade from real rosters, or add players and picks by hand. Each manager judges the trade on their own horizon and settings, so a contender and a rebuilder can both come out ahead.</p>
 
+  <details class="card help">
+    <summary>How to use it</summary>
+    <ul>
+      <li><b>Link your league.</b> Type your Sleeper username, or tap the league's button. Your team goes on side A; choose who you're trading with on side B.</li>
+      <li><b>Build the trade.</b> Each side lists what it could get from the other team: tap players and picks to add them, or search. You can add FAAB too.</li>
+      <li><b>Horizon.</b> Each manager is judged on their own horizon: Redraft (this season only), Win Now, Balanced or Long-Term. It starts from where the commissioner has each team (contending, building or rebuilding); move it if you see it differently.</li>
+      <li><b>Sliders</b> start from each manager's JADL trade history, such as how much they like picks or rookies. Change them under each side.</li>
+      <li><b>Verdict.</b> The trade from each side's point of view, then the same trade at every horizon. A contender and a rebuilder can both come out ahead.</li>
+      <li><b>Balancer.</b> If one side loses, it suggests one or two of the other team's pieces that would make it fair.</li>
+      <li><b>Worth knowing</b> lists things that don't change the verdict, such as a rebuilder paying picks for a running back.</li>
+      <li><b>Picks</b> are projected early, mid or late from each team's roster strength and record until the draft order is set.</li>
+      <li><b>Copy link</b> gives a link to this exact trade, to share or to send with feedback.</li>
+    </ul>
+  </details>
+
   <section class="card connect" aria-labelledby="connect-h">
     <h2 id="connect-h" class="vh">Sleeper league</h2>
     <form id="userform" class="controls">
@@ -42,6 +57,7 @@
       <label>League<select id="leaguesel"></select></label>
       <label>Side A<select id="team-a"></select></label>
       <label>Side B<select id="team-b"></select></label>
+      <button class="btn" type="button" id="other">Another league</button>
       <button class="btn" type="button" id="general">Use general mode</button>
     </div>
     <p class="note connectmsg" id="connectmsg" role="status"></p>

@@ -71,6 +71,7 @@ function setupConnect() {
   });
   $("#leaguesel").addEventListener("change", (e) => openLeague(e.target.value, MY_LEAGUES?.user.user_id));
   SIDES.forEach((x) => $(`#team-${x}`).addEventListener("change", (e) => { setTeam(x, +e.target.value); render(); }));
+  $("#other").addEventListener("click", () => { $("#userform").hidden = false; $("#username").focus(); });
   $("#general").addEventListener("click", () => {
     LG = null;
     state.a = blankSide(); state.b = blankSide();
@@ -121,8 +122,11 @@ async function connect(id) {
   say("");
 }
 
+/* Linked, the username box folds away (Another league brings it back), so
+   on a phone the rosters come up sooner. */
 function showLink() {
   $("#linkbar").hidden = !LG;
+  $("#userform").hidden = Boolean(LG);
   if (!LG) return;
   const yours = MY_LEAGUES?.leagues || [];
   const ids = new Set(DATA.leagues.map((l) => l.sleeper_league_id));
