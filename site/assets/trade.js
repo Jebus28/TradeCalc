@@ -395,8 +395,10 @@ function renderTeamLine(x, el) {
   line.hidden = !t;
   if (!t) return;
   const rec = `${t.wins}–${t.losses}${t.ties ? `–${t.ties}` : ""}`;
-  const sit = t.situation ? `${t.situation[0].toUpperCase()}${t.situation.slice(1)} (horizon defaults to ${horizonName(defaultHz(t))})`
-    : "No situation set: horizon defaults to Balanced, so set it by hand";
+  const hzText = horizonName(defaultHz(t));
+  const sit = t.guessed
+    ? `Looks ${t.situation} from roster strength and record, so the horizon starts at ${hzText}: set it if you know better`
+    : `${t.situation[0].toUpperCase()}${t.situation.slice(1)} (horizon defaults to ${hzText})`;
   const bits = [sit, `${rec}, ${ORD(t.recordRank)} on record`];
   if (LG.weeksLeft) bits.push(`lineup ${ORD(t.strengthRank)} best (${t.strength.toFixed(1)} a week)`);
   bits.push(`${t.active} of ${LG.limit} roster spots`);

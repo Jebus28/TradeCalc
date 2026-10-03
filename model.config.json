@@ -43,9 +43,11 @@
   "team_context": {
     "_record_share_at_season_end": "D8. The next draft's order comes from a blend of each team's roster strength (its best starting lineup, in projected points a week for the rest of the season) and its record. The record's share grows in a straight line from 0 before week 1 to this value at the end of the regular season; roster strength has the rest. The weakest team gets the 1st slot.",
     "record_share_at_season_end": 1.0,
-    "_later_years": "Picks in the drafts after the next one, by the original owner's situation. Contenders' picks are expected late (test-set lesson 6, trade C). 'unknown' is for a team with no situation set. Each can be early, mid, late, or any (the average of every slot).",
-    "later_years": { "contending": "late", "building": "mid", "rebuilding": "early", "unknown": "mid" },
-    "_lineup_weight_win_now": "D14, decided 3 October 2026: the starting-lineup change counts a little at Win Now. A point a week is priced at how much the league's starters' Win Now value rises with each extra point a week they score above a bench-level player (about 770 in JADL on 3 October 2026); this share of the lineup change, so priced, is added to (or taken from) the side's verdict. It fades in a straight line to nothing at Balanced, so Long-Term managers ignore it.",
+    "_later_years": "Picks in the drafts after the next one, by the original owner's situation (set, or guessed as below). Contenders' picks are expected late (test-set lesson 6, trade C). Each can be early, mid, late, or any (the average of every slot).",
+    "later_years": { "contending": "late", "building": "mid", "rebuilding": "early" },
+    "_auto_situation": "For a team with no situation in 'situations' (any league but JADL, or a new manager), the site guesses one from the same ranking that orders the next draft (roster strength blended with record). The top contending_share of teams count as contending, the bottom rebuilding_share as rebuilding, the rest as building. The page flags the guess so the user can set the horizon (test-set lesson 7: horizon comes from intent; unclear managers are flagged).",
+    "auto_situation": { "contending_share": 0.4, "rebuilding_share": 0.3 },
+    "_lineup_weight_win_now": "D14, decided 3 October 2026: the starting-lineup change counts a little at Win Now. A point a week is priced at how much the league's starters' Win Now value rises with each extra point a week they score above a bench-level player (about 950 in JADL on 3 October 2026); this share of the lineup change, so priced, is added to (or taken from) the side's verdict. It fades in a straight line to nothing at Balanced, so Long-Term managers ignore it.",
     "lineup_weight_win_now": 0.25,
     "_warnings": "Shown with the verdict, never counted in it (decided 3 October 2026). rb_rebuilder_min_pieces: a rebuilding manager sending at least this many pieces, a pick among them, for a running back gets Matt's rebuilder-RB warning.",
     "rb_rebuilder_min_pieces": 2
@@ -155,7 +157,7 @@
     "pick_per_step": 0.25,
     "_rookie_per_step": "D10. Rookie slider: rookies gained per trade, on average, for each step. Rookies are players in their first NFL season plus picks in the next rookie draft up to the sliders' rookie_pick_rounds.",
     "rookie_per_step": 0.15,
-    "_star_per_step": "D10. Star slider: extra pieces paid per trade, on average, to get fewer, better ones, for each step. Giving 0.3 more pieces (players and picks) than he gets = +1; taking extra pieces = -1 and below.",
+    "_star_per_step": "D10. Star slider: extra pieces paid per trade, on average, to get fewer, better ones, for each step. Giving 0.3 more pieces (players and picks) than he gets = +1; taking extra pieces = -1 and below. Matt, 3 October 2026: keep it learned from history, even though a positive star slider partly switches the star rule back on for that manager (each step adds the star block's slider_step to its strength).",
     "star_per_step": 0.3
   },
 

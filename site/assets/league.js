@@ -123,8 +123,17 @@ function makeLeague(live, data, model) {
   const regular = Math.max(1, (settings.playoff_week_start || cfg.points.last_regular_week + 1) - 1);
   const recordShare = tc.record_share_at_season_end * Math.min(1, played / regular);
   const blendRank = (t) => (1 - recordShare) * t.strengthRank + recordShare * t.recordRank;
-  [...teams].sort((x, y) => blendRank(x) - blendRank(y) || x.strengthRank - y.strengthRank)
-    .forEach((t, i) => { t.projSlot = n - i; });
+  const ranked = [...teams].sort((x, y) => blendRank(x) - blendRank(y) || x.strengthRank - y.strengthRank);
+  ranked.forEach((t, i) => { t.projSlot = n - i; });
+
+  /* A team with no situation set gets a guess from the same ranking, which
+     the page flags (lesson 7: unclear managers are flagged). */
+  const auto = tc.auto_situation || {};
+  ranked.forEach((t, i) => {
+    if (t.situation) return;
+    t.guessed = true;
+    t.situation = i < n * (auto.contending_share ?? 0.4) ? "contending" : i >= n * (1 - (auto.rebuilding_share ?? 0.3)) ? "rebuilding" : "building";
+  });
 
   /* Once Sleeper has a draft order for a coming draft, picks use it. */
   const exact = {};
@@ -162,9 +171,9 @@ function makeLeague(live, data, model) {
       model = `${year}-${round}-${tier}`;
       how = `Projected ${tier}: on current form ${from.name} would pick ${ORD(from.projSlot)}`;
     } else {
-      tier = tc.later_years[from.situation || "unknown"] || "any";
+      tier = tc.later_years[from.situation] || "any";
       model = `${year}-${round}-${tier}`;
-      how = tier === "any" ? "Slot unknown" : `Expected ${tier}: ${from.name} ${from.situation ? `is ${from.situation}` : "has no situation set"}`;
+      how = tier === "any" ? "Slot unknown" : `Expected ${tier}: ${from.name} ${from.guessed ? "looks" : "is"} ${from.situation}`;
     }
     return { year, round, from, tier, slot, model, how };
   }
